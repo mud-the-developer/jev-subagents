@@ -1,5 +1,5 @@
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import { planHasActivity, renderPlan, type PlanView } from "./plan-presentation.ts";
+import { planHasActivity, renderPlan, type PlanView, type PlanTaskLabels } from "./plan-presentation.ts";
 import { planReceipt } from "./plan-state.ts";
 
 const FRAME_MS = 120; // ~8fps, only while the supplied view describes live work.
@@ -16,14 +16,14 @@ export function registerPlanWidgets(pi: ExtensionAPI) {
     // Effect-local accessibility policy; never part of a receipt or execution packet.
     const staticSafe = process.env.NO_COLOR !== undefined || process.env.TERM === "dumb";
     let closed = false, mounted = false, terminal = false, sessionId: string | undefined;
-    let view: PlanView | undefined, displayed: PlanView | undefined, requestRender: (() => void) | undefined;
+    let view: PlanView | undefined, displayed: PlanView | undefined, taskLabels: PlanTaskLabels | undefined, requestRender: (() => void) | undefined;
     let observedAt = 0, tick = 0, timer: ReturnType<typeof setInterval> | undefined;
     try { sessionId = ctx.sessionManager.getSessionId(); } catch { /* A missing session cannot receive a widget. */ }
     const stopTimer = () => { clearInterval(timer); timer = undefined; };
     const close = () => {
       if (closed) return;
       closed = true; stopTimer(); signal?.removeEventListener("abort", close);
-      view = undefined; displayed = undefined; requestRender = undefined;
+      view = undefined; displayed = undefined; taskLabels = undefined; requestRender = undefined;
       const remove = mounted; mounted = false;
       if (clearCurrent === close) clearCurrent = undefined;
       if (remove) { try { ctx.ui.setWidget("jev-execution-plan", undefined); } catch { /* UI disposal cannot change task settlement. */ } }
@@ -55,12 +55,16 @@ export function registerPlanWidgets(pi: ExtensionAPI) {
     if (signal?.aborted) close();
     return {
       isCurrent: current,
-      update(value: PlanView) {
+      update(value: PlanView, labels?: PlanTaskLabels) {
         if (!current() || terminal) return;
         try {
           if (ctx.mode !== "tui" || !ctx.hasUI || typeof ctx.ui.setWidget !== "function") { if (mounted) close(); return; }
           // Explicit projection strips private titles and any undeclared properties before retention.
           view = structuredClone(planReceipt(value)); displayed = view; observedAt = performance.now();
+          taskLabels = value.version === 3 && labels ? Object.fromEntries(view.nodes.flatMap(node => {
+            const text: unknown = Object.getOwnPropertyDescriptor(labels, node.id)?.value;
+            return node.kind === "task" && typeof text === "string" && text.trim() ? [[node.id, text.slice(0, 120)]] : [];
+          })) : undefined;
           terminal = view.phase === "finished" || view.phase === "stopped";
           if (!animated()) { stopTimer(); tick = 0; }
           if (!mounted) {
@@ -71,7 +75,7 @@ export function registerPlanWidgets(pi: ExtensionAPI) {
               return {
                 render(width) {
                   if (!current() || !displayed) return [];
-                  try { return renderPlan(displayed, width, staticSafe ? undefined : theme, true, animated() ? { tick } : undefined); }
+                  try { return renderPlan(displayed, width, staticSafe ? undefined : theme, true, animated() ? { tick } : undefined, taskLabels); }
                   catch { close(); return []; }
                 },
                 // Stateless themed rendering: invalidation cannot retain old ANSI colors.

@@ -45,6 +45,8 @@ export type PlanView = {
 export type PlanTheme = Pick<Theme, "fg"> & Partial<Pick<Theme, "bg" | "bold">>;
 /** Supplied by the ephemeral widget, never stored in a view or receipt. */
 export type PlanFrame = { readonly tick: number };
+/** Reviewed human-only labels travel separately from transcript-safe plan data. */
+export type PlanTaskLabels = Readonly<Record<string, string>>;
 export function planHasActivity(view: PlanView): boolean {
   return ["running", "selecting", "checking"].includes(view.phase);
 }
@@ -117,7 +119,7 @@ const noPrefix: Prefix = { text: "", columns: 0 };
  * eight columns only an ellipsis fits usefully. Long fields show their head plus
  * an explicit omission marker; all in-contract A/B choices retain separate rows.
  * The same bounded layout is used by planText, with no ANSI in unthemed output. */
-export function renderPlan(view: PlanView, width: number, theme?: PlanTheme, summary = false, frame?: PlanFrame): string[] {
+export function renderPlan(view: PlanView, width: number, theme?: PlanTheme, summary = false, frame?: PlanFrame, taskLabels?: PlanTaskLabels): string[] {
   if (!Number.isSafeInteger(width) || width <= 0) return [];
   const columns = Math.min(width, 120);
   if (columns < 8) return ["…"];
@@ -279,14 +281,24 @@ export function renderPlan(view: PlanView, width: number, theme?: PlanTheme, sum
       const status = pill(badge, `[${badge.label}]`), heading = `${name} · ${status}`;
       if (visualLines(heading, inner - head.columns).length <= 2) row(heading, head, 2, tail);
       else { row(name, head, 2, tail); row(status, tail, Number.MAX_SAFE_INTEGER); }
-      row(paint("muted", `MODEL ${source(node.model ?? "pending")} · EFFORT ${source(node.thinking ?? "pending")}`), tail, 3);
+      const label: unknown = taskLabels ? Object.getOwnPropertyDescriptor(taskLabels, node.id)?.value : undefined;
+      const labeled = typeof label === "string" && label.trim().length > 0;
+      if (labeled) {
+        const text = paint("muted", `MODEL ${source(node.model ?? "pending")} — ${source(label.slice(0, 120))}`);
+        const available = inner - tail.columns, wrapped = visualLines(text, available);
+        if (wrapped.length > 1) {
+          omitted = true;
+          row(visualLines(text, available - 2)[0]! + paint("warning", " …"), tail, 1);
+        } else row(text, tail, 1);
+      } else row(paint("muted", `MODEL ${source(node.model ?? "pending")} · EFFORT ${source(node.thinking ?? "pending")}`), tail, 3);
       if (node.after.length) row(paint("dim", `DEPENDENCY ← ${node.after.map(id => source(id)).join(", ")}`), tail, 2);
       const references = edges.filter(edge => edge.kind === "reference" && edge.to === node.id);
       if (references.length) {
         const selected = references.filter(edge => edge.status === "active").map(edge => source(edge.from));
         row(paint("dim", `REFERENCES ${selected.length ? selected.join(", ") : references.some(edge => edge.status === "pending") ? "pending" : "none"}`), tail, 2);
       }
-      if (node.modelCalls !== undefined) row(paint("dim", `OBSERVED SDK ${validCount(node.modelCalls) ? node.modelCalls : "unknown"}`), tail, 2);
+      if (node.modelCalls !== undefined) row(paint("dim", `${labeled ? `EFFORT ${source(node.thinking ?? "pending")} · ` : ""}OBSERVED SDK ${validCount(node.modelCalls) ? node.modelCalls : "unknown"}`), tail, 2);
+      else if (labeled) row(paint("dim", `EFFORT ${source(node.thinking ?? "pending")}`), tail, 2);
       if ((depths.get(node.id) ?? 1) >= displayDepth && below.length) {
         below.forEach(node => shown.add(node.id));
         row(paint("muted", `… ${below.length} hidden descendant${below.length === 1 ? "" : "s"} · ${stateCounts(below)}`), tail, Number.MAX_SAFE_INTEGER);

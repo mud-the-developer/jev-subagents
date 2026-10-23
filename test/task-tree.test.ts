@@ -28,6 +28,14 @@ test("closed tree schema rejects malformed, cyclic, over-bound and caller author
   assert.equal(f.counts().preparations, 0); assert.equal(f.counts().confirmations, 0);
   for (const property of ["grant", "events", "state", "memory", "parallelRead"]) assert.equal(Value.Check(DelegateToolInputSchema, { tree: f.input, [property]: {} }), false);
 });
+test("human-only display labels name declared tasks and never widen transcript receipt fields", () => {
+  const f = treeFixture();
+  assert.equal(validTaskTree({ ...f.input, display: { labels: { a: "Inspect the approved source" } } }), true);
+  for (const labels of [{ missing: "Inspect source" }, { a: " " }, { a: "x".repeat(121) }, { a: 1 }, { a: "Inspect", b: "Read", c: "Review", d: "Extra" }])
+    assert.equal(validTaskTree({ ...f.input, display: { labels } }), false);
+  const view = taskTreeView(f.tree, { phase: "approval", tree: f.tree, reviews: 0 }, 0);
+  assert.equal(validPlanReceipt({ ...planReceipt(view), display: { labels: { a: "DISPLAY_ONLY" } } }), false);
+});
 test("task dependency depth defaults to3, is order-independent, and uses the maximum join predecessor", () => {
   const f = treeFixture();
   for (const edges of [

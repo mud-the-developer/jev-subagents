@@ -3,7 +3,12 @@
   "sdk": "0.85.1",
   "columns": 112,
   "sourceSha256": {
-    "src/plan-presentation.ts": "6ca95b5206659d8cbb96bb46c90247090cf75750339b76cdb1ec14b37553e678",
+    "src/plan-presentation.ts": "71fc9be9beb0cf7ad74ea805987c401319860baf3907f750e779917fbb4f8a04",
+    "src/plan-widget.ts": "ce32a5b55f770d35dd3d228b8e03caced45ef49ced5eb2f88fd7368772b8d622",
+    "src/plan-state.ts": "6cf091537c8d46d36cb0305ee9a6209929f73f896e9b99b2ac68ead9d5014284",
+    "src/task-tree.ts": "6063778eb28d28f963f8cb6dff70e7c253b879f23efd61ba27c77c9669e6a08f",
+    "src/task-tree-effects.ts": "78fcc9843cf775fd1ac44a86ffcede4b505e75ac052b750d090c65ce5fea3eee",
+    "src/index.ts": "c1124851aa51d8b5382aa7bc52f9af22a2456a9f8104cdf4b9833df19eab518f",
     "src/context-approval.ts": "8370c98f2f43f6586a266d97be66b7de9ff2b9b47835057dd9f300082adab38a",
     "src/native-task-review.ts": "d31847234a89555d6a378e58d2fc912d7bc3113c4dd464e9edef75d386b5d896",
     "src/task-review-machine.ts": "67891a1547623f3038c5bf54a3020dbde83dc81efbb4f1e4c031fe7eba999b19"
@@ -16,12 +21,15 @@
   "networkAttempts": 0,
   "animationFrames": 25,
   "systemToolsOnly": true,
+  "dependencyLevels": 3,
+  "declaredTasks": 3,
+  "englishHumanOnlyTaskLabels": true,
   "ownershipCleanupConfirmed": true,
   "assets": [
     {
       "name": "task-tree.png",
-      "bytes": 37700,
-      "sha256": "e83dfe28f5ab8589745169a0b0b400e22124a18e7a4ae3230729136c25c29b41"
+      "bytes": 46374,
+      "sha256": "71304a00b04313722796e317ec1f06517bbda8d7f0f94ef806b3cd973d97bce0"
     },
     {
       "name": "source-review.png",
@@ -30,13 +38,13 @@
     },
     {
       "name": "ended-unverified.png",
-      "bytes": 42208,
-      "sha256": "b787b667dde535e653b767220531e0b3085036a16844e3572ed1308b7ff52d8d"
+      "bytes": 46645,
+      "sha256": "6664aaa21076749f5f1668b54d1e1e14256f82f8b39c54a83e384de13e7bc2e4"
     },
     {
       "name": "workflow.gif",
-      "bytes": 724043,
-      "sha256": "1f0252cc58d6302673f6f835cb822aece35c2fcdb51c000cf65ab2ed9492ba1d"
+      "bytes": 790229,
+      "sha256": "df2cbecbb01b59292d9b729d5553e502a4349542bbae5b5e19e249aae423c76e"
     }
   ],
   "limitations": [

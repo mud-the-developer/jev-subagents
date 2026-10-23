@@ -28,7 +28,7 @@ const GraphReceiptSchema = Type.Object({ ...ReceiptSchema.properties, version: T
   edges: Type.Array(Type.Object({ from: id, to: id, when: Type.Optional(id), status: choice("active", "inactive", "pending") }, closed), { maxItems: 32 }),
 }, closed);
 const TreeReceiptSchema = Type.Object({ ...ReceiptSchema.properties, version: Type.Literal(3), modelCallsKnown: Type.Optional(Type.Boolean()),
-  display: Type.Optional(TreeDisplaySchema),
+  display: Type.Optional(Type.Object({ maxDepth: TreeDisplaySchema.properties.maxDepth, animations: TreeDisplaySchema.properties.animations }, closed)),
   nodes: Type.Array(Type.Object({ id, title: id, kind: choice("task", "info"), after: Type.Array(id, { maxItems: 2, uniqueItems: true }),
     state: choice("pending", "selecting", "running", "completed_unverified", "stopped", "ready"), modelCalls: Type.Optional(Type.Union([count, Type.Null()])),
     agent: Type.Optional(label), model: Type.Optional(label), thinking: ReceiptSchema.properties.nodes.items.properties.thinking,

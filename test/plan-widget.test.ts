@@ -72,6 +72,22 @@ test("one native component per lease requests renders at ~8fps without streaming
   const before = f.counts(); f.callbacks.forEach(callback => callback()); panel.update(view); panel.close(); assert.deepEqual(f.counts(), before);
 });
 
+test("human-only labels render locally, never private titles, and clear with the next update or closed lease", t => {
+  const f = fixture(t), panel = f.open(f.ctx);
+  panel.update(view, { a: "Inspect the approved module" });
+  f.advance();
+  assert.match(f.frames.at(-1)!.map(stripVTControlCharacters).join("\n"), /MODEL offline\/model — Inspect the approved module/);
+  assert.doesNotMatch(f.frames.at(-1)!.join("\n"), /PRIVATE_TASK/);
+  panel.update(view);
+  assert.doesNotMatch(f.frames.at(-1)!.join("\n"), /Inspect the approved module/);
+  let getters = 0;
+  const labels = Object.create({ a: "INHERITED_LABEL" }) as Record<string, string>;
+  panel.update(view, labels); assert.doesNotMatch(f.frames.at(-1)!.join("\n"), /INHERITED_LABEL/);
+  Object.defineProperty(labels, "a", { get() { getters++; throw new Error("Getter must not run"); } });
+  panel.update(view, labels); assert.equal(getters, 0); assert.equal(panel.isCurrent(), true);
+  panel.close(); const before = f.counts(); panel.update(view, { a: "STALE_LABEL" }); f.callbacks.forEach(callback => callback());
+  assert.deepEqual(f.counts(), before);
+});
 test("theme invalidation rebuilds fg/bg/bold colors on the mounted component, including reduced-motion widgets", t => {
   const f = fixture(t), panel = f.open(f.ctx);
   panel.update({ ...view, display: { animations: false } });

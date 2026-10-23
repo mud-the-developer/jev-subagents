@@ -3,7 +3,7 @@ import { accessFixture } from "./helpers/delegation-access-fixture.ts";
 import { test } from "node:test";
 import { taskTree, taskTreeApproval } from "../src/task-tree-effects.ts";
 import { taskTreeOwner } from "../src/task-tree-owner.ts";
-import { treeTasks, treeOptions } from "../src/task-tree.ts";
+import { treeTasks, treeOptions, treeRequest, treeDigest } from "../src/task-tree.ts";
 import { treeFixture, treeRouting } from "./helpers/task-tree-fixture.ts";
 import type { TreeWorkerInput } from "../src/task-tree-protocol.ts";
 import { DirectoryValidationError } from "../src/directory-diagnostics.ts";
@@ -21,6 +21,35 @@ function mutationFixture() {
   };
   return f;
 }
+test("reviewed English labels travel only to the human observer, never plans, routing or child packets", async t => {
+  const f = treeFixture(); let approvals = 0;
+  const observations: { view: unknown; labels: Readonly<Record<string, string>> | undefined; approvals: number }[] = [];
+  f.input.display = { labels: { a: "DISPLAY_ONLY_INSPECT", b: "DISPLAY_ONLY_TESTS", c: "DISPLAY_ONLY_REVIEW" } };
+  f.ctx.ui.confirm = async (_title, packet) => { assert.match(packet, /DISPLAY_ONLY_INSPECT/); approvals++; return true; };
+  const result = await taskTree(f.input, f.ctx, t.signal, f.io, (view, labels) => {
+    observations.push({ view: structuredClone(view), labels: labels ? { ...labels } : undefined, approvals });
+  });
+  assert.equal(result.status, "completed_unverified"); assert.ok(observations.some(row => row.labels));
+  for (const row of observations) {
+    assert.doesNotMatch(JSON.stringify(row.view), /DISPLAY_ONLY|PRIVATE_TASK/);
+    if (row.labels) { assert.equal(row.approvals, 1); assert.equal(row.labels.a, "DISPLAY_ONLY_INSPECT"); }
+    else assert.equal(row.approvals, 0);
+  }
+  assert.doesNotMatch(JSON.stringify(result), /DISPLAY_ONLY/);
+  assert.doesNotMatch(JSON.stringify(f.packets), /DISPLAY_ONLY/);
+  assert.doesNotMatch(JSON.stringify(treeRequest(f.tree, "a")), /DISPLAY_ONLY/);
+  const changed = structuredClone(f.tree); changed.input.display!.labels!.a = "Different reviewed label";
+  assert.notEqual(treeDigest(changed), treeDigest(f.tree));
+});
+test("unlabelled legacy trees use fixed English role text rather than private task summaries", async t => {
+  for (const mutation of [false, true]) {
+    const f = mutation ? mutationFixture() : treeFixture(), seen: string[] = [];
+    const result = await taskTree(f.input, f.ctx, t.signal, f.io, (_view, labels) => { if (labels) seen.push(...Object.values(labels)); });
+    assert.equal(result.status, "completed_unverified"); assert.ok(seen.length > 0);
+    assert.ok(seen.every(text => text === (mutation ? "Apply approved file-ID changes" : "Read assigned source")));
+    assert.doesNotMatch(seen.join("\n"), /PRIVATE_TASK/);
+  }
+});
 test("tree freshness reads overlap without acquiring ownership or dispatching from partial checks", { timeout: 5000 }, async t => {
   const f = mutationFixture();
   let contextStarted = false, filesStarted = false, releaseContext!: () => void, releaseFiles!: () => void;

@@ -12,6 +12,7 @@ import { delegateResultView } from "../src/delegate-presentation.ts";
 const tick = () => new Promise<void>(resolve => setImmediate(resolve));
 for (const stop of ["complete", "abort", "session_before_switch", "session_before_fork", "session_before_tree", "session_before_compact", "session_shutdown"]) test(`registered native task-tree TUI updates and clears on ${stop}`, { timeout: 10000 }, async t => {
   const f = treeFixture(), tools: ToolDefinition[] = [], hooks = new Map<string, (() => void | Promise<void>)[]>(), panels: (string | undefined)[] = [];
+  f.input.display = { labels: { a: "Inspect approved source", b: "Read declared tests", c: "Review declared changes" } };
   const controller = new AbortController(), releases: (() => void)[] = []; let starts = 0, aborts = 0, reviews = 0, mounts = 0, renders = 0;
   let widget: { render(width: number): string[]; dispose?(): void } | undefined;
   const requestRender = () => {
@@ -50,7 +51,8 @@ for (const stop of ["complete", "abort", "session_before_switch", "session_befor
   while (starts < 2) await tick(); assert.equal(reviews, 1);
   assert.ok(panels.some(text => text?.includes("TASK TREE") && text.includes("DEPENDENCY") && text.includes("RUNNING")));
   assert.ok(panels.some(text => text?.includes("OBSERVED SDK 1") && text.includes("offline/synthetic")));
-  assert.doesNotMatch(JSON.stringify(updates), /PRIVATE_REPORT|PRIVATE_REVIEWED|PRIVATE_TASK/);
+  assert.doesNotMatch(JSON.stringify(updates), /PRIVATE_REPORT|PRIVATE_REVIEWED|PRIVATE_TASK|Inspect approved source|Read declared tests|Review declared changes/);
+  assert.ok(panels.some(text => text?.includes("MODEL offline/synthetic — Inspect approved source")));
   await assert.rejects(tool.execute("other", { parallelRead: { task: "Read independent files.", tasks: [{ id: "x", agent: "scout", summary: "Read only." }], limits: { seconds: 60 } } }, t.signal, undefined, ctx), /closed, busy or uncertain/);
   let navigation: Promise<unknown> | undefined;
   if (stop === "abort") controller.abort();
@@ -61,6 +63,7 @@ for (const stop of ["complete", "abort", "session_before_switch", "session_befor
   assert.equal(mounts, 1); assert.ok(renders > 2, "Updates must render the existing component, not remount it");
   if (stop === "complete") {
     const result = await work; const plan = (result.details as { plan: unknown }).plan; assert.equal(validPlanReceipt(plan), true);
+    assert.doesNotMatch(JSON.stringify(plan), /Inspect approved source|Read declared tests|Review declared changes/);
     assert.ok(panels.some(text => text?.includes("COMPLETED / UNVERIFIED"))); assert.equal(starts, 3);
   } else assert.equal(starts, 2);
 });

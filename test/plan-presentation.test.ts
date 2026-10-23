@@ -31,6 +31,19 @@ function measuredWidth(line: string): number {
   }
   return low;
 }
+test("tree task labels are one-line human-only text with bounded columns and escaped controls", () => {
+  const view: PlanView = { version: 3, phase: "running", elapsedMs: 1, seconds: 120, modelCalls: 1,
+    nodes: [{ id: "inspect", title: "PRIVATE_SOURCE_TITLE", kind: "task", after: [], state: "running", model: "demo/scout", thinking: "low", modelCalls: 1 }], edges: [] };
+  for (const width of [24, 48, 80, 120]) {
+    const lines = renderPlan(view, width, undefined, true, undefined, { inspect: "Inspect the approved source and identify the exact parser boundary without edits" });
+    assert.ok(lines.every(line => measuredWidth(line) <= width));
+    assert.match(lines.join("\n"), /MODEL/); assert.doesNotMatch(lines.join("\n"), /PRIVATE_SOURCE_TITLE/);
+    if (width < 120) assert.match(lines.join("\n"), /…/);
+  }
+  const escaped = renderPlan(view, 120, undefined, true, undefined, { inspect: "Inspect\n\u001b[31mtext https://example.invalid" }).join("\n");
+  assert.doesNotMatch(escaped, /\u001b|https?:/); assert.match(escaped, /\\n/);
+  assert.doesNotMatch(renderPlan(view, 120, undefined, true).join("\n"), /Inspect the approved source/);
+});
 function frozen<T>(value: T): T {
   if (value !== null && typeof value === "object") {
     Object.freeze(value);

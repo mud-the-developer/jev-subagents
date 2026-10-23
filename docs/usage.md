@@ -41,6 +41,28 @@ Review the exact model, thinking, effective tools, workspace, file IDs, source a
 
 One permitted plan skips JEV selection, not authorization. Multiple candidates are selected only within the approved packet. No duplicate routing, paid width planner, automatic retry/escalation or arbitrary model changes. Generated downstream references need their existing disclosure authority and remain untrusted reference data.
 
+## English task labels and visible depth — current main only
+
+This development UI is newer than the immutable RC1 ZIP. For a declared tree, optional reviewed labels are keyed by its existing task IDs:
+
+```json
+{
+  "display": {
+    "maxDepth": 3,
+    "animations": true,
+    "labels": {
+      "inspect": "Inspect the approved module",
+      "edit": "Apply the declared file-ID edit",
+      "review": "Review the declared changes"
+    }
+  }
+}
+```
+
+Use short English, non-sensitive descriptions: at most3labels/120characters each, declared task IDs only. Labels bind to the source approval but appear only through the human widget channel after authorization; worker inputs, JEV routing and transcript-safe receipts do not receive them. Missing labels use fixed English read/mutation text, never raw task summaries. The model and task description share one compact line, with thinking/observed SDK metadata retained below. Long lines show their head plus an omission marker; control/address text cannot forge terminal rows.
+
+A three-level chain still executes at most3workers total. Display depth does not create new tasks, recursive agents, wider concurrency, model requests or restored approval. Narrow/collapsed views retain hidden-state counts and exact source review stays authoritative.
+
 ## Permission modes
 
 ```text

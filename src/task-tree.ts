@@ -26,6 +26,8 @@ const depth = Type.Integer({ minimum: 1, maximum: 3 });
 export const TreeDisplaySchema = Type.Object({
   maxDepth: Type.Optional({ ...depth, description: "Visible depth in the compact widget; default 3. Does not limit execution or expanded review." }),
   animations: Type.Optional(Type.Boolean({ description: "Animate the native TUI widget (default true). Set false for reduced motion. No effect outside TUI." })),
+  labels: Type.Optional(Type.Record(id, prose(120), { maxProperties: 3, additionalProperties: false,
+    description: "Optional short English task descriptions keyed by declared task IDs. Reviewed human-only UI labels; never source, credentials or private details. Not sent to routing, worker input or transcript receipts." })),
 }, closed);
 export const TaskTreeInputSchema = Type.Object({ task: prose(LIMITS.task), nodes: Type.Array(Type.Union([TreeTaskSchema, TreeInfoSchema]), { minItems: 1, maxItems: 11 }),
   edges: Type.Array(TreeEdgeSchema, { maxItems: 32 }), files: Type.Optional(Type.Array(Type.Object({ path: prose(512), access: Type.Union([Type.Literal("read"), Type.Literal("read_write")]) }, closed), { minItems: 1, maxItems: 16 })),
@@ -74,6 +76,7 @@ export function validTaskTree(value: unknown): value is TaskTreeInput {
     const tasks = treeTasks(value), infos = treeInfos(value), ids = value.nodes.map(node => node.id);
     if (!tasks.length || tasks.length > value.limits.workerRuns || infos.length > 8 || new Set(ids).size !== ids.length || new Set(tasks.flatMap(task => task.agents)).size > 8 ||
       tasks.some(task => !task.summary.trim() || !task.query.trim() || task.agents.length * referenceSelections(value, task.id).length > LIMITS.agents)) return false;
+    if (Object.entries(value.display?.labels ?? {}).some(([id, text]) => !tasks.some(task => task.id === id) || !text.trim())) return false;
     const pairs = new Set<string>();
     for (const edge of value.edges) {
       const from = value.nodes.find(node => node.id === edge.from), to = value.nodes.find(node => node.id === edge.to), pair = `${edge.from}:${edge.to}`;

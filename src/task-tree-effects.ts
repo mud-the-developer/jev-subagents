@@ -24,7 +24,7 @@ import { reduceTaskTree, treeLive, treeTasks, treeInfos, treeReferences, treeDig
   type TreePrepared, type TaskTreeInput, type TreeEvent, type TreeEffect, type TreeSelection, type TreeUpdate, type TreeState } from "./task-tree.ts";
 import { treeOwner, treeLock, treePrompts, validTreeWorker, type TreeWorkerInput } from "./task-tree-protocol.ts";
 import { taskTreeView } from "./task-tree-view.ts";
-import type { PlanView } from "./plan-presentation.ts";
+import type { PlanView, PlanTaskLabels } from "./plan-presentation.ts";
 
 export const TREE_ERROR = "Task tree stopped. No automatic retry, fallback, grant extension or rollback.";
 const fail = (): never => { throw new Error(TREE_ERROR); };
@@ -102,7 +102,7 @@ export type TreeResult = { readonly authorization?: "full_access"; readonly kind
   readonly reports: readonly { taskId: string; text: string; truncated: boolean }[] };
 /** I/O interpreter: concurrent owned work returns events; only the reducer admits work or changes graph data. */
 export async function taskTree(input: unknown, ctx: ExtensionContext, signal?: AbortSignal, io = taskTreeIO,
-  onPlan?: (view: PlanView) => void, parent?: TreeParent, observeUi?: ApprovalUiObserver, access?: FullAccessLease): Promise<TreeResult> {
+  onPlan?: (view: PlanView, labels?: PlanTaskLabels) => void, parent?: TreeParent, observeUi?: ApprovalUiObserver, access?: FullAccessLease): Promise<TreeResult> {
   let state: TreeState = { phase: "idle" }, tree: TreePrepared | undefined, fingerprint: string | undefined, owner: GoalProjectOwner | undefined;
   let connection: JevConnection | null = null, timer: ReturnType<typeof setTimeout> | undefined, ownerAttempted = false, cleanup = true, retained = false;
   const controller = new AbortController(), combined = AbortSignal.any([controller.signal, ...(signal ? [signal] : []), ...(access ? [access.signal] : [])]);
@@ -110,7 +110,17 @@ export async function taskTree(input: unknown, ctx: ExtensionContext, signal?: A
   // Windows file-scope reads hold exclusive handles; serialize them without caching freshness.
   let fileChecks = Promise.resolve();
   const readState = (): TreeState => state;
-  const display = () => { if (tree) { try { onPlan?.(taskTreeView(tree, state, Date.now())); } catch { /* Observer-only. */ } } };
+  const display = () => {
+    if (!tree) return;
+    try {
+      const configured = tree.input.display?.labels;
+      const labels = treeLive(state) ? Object.fromEntries(treeTasks(tree.input).map(task => {
+        const text: unknown = configured ? Object.getOwnPropertyDescriptor(configured, task.id)?.value : undefined;
+        return [task.id, typeof text === "string" ? text : task.mode === "read" ? "Read assigned source" : "Apply approved file-ID changes"];
+      })) : undefined;
+      onPlan?.(taskTreeView(tree, state, Date.now()), labels);
+    } catch { /* Observer-only. */ }
+  };
   const send = (event: TreeEvent) => { const step = reduceTaskTree(state, event); state = step.state; queue.push(...step.effects); display(); };
   const cancelled = () => send({ type: "stop", reason: "cancelled_or_expired" });
   const current = async (files = treeLive(state)?.files) => {

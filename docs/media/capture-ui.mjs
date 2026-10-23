@@ -75,21 +75,22 @@ function segments(line) {
 assert.equal(segments('\x1b[38;2;10;20;30mhi\x1b[39m!')[0].fg, '#0a141e');
 assert.equal(segments('<source>')[0].text, '<source>');
 
+const labels = { inspect: 'Inspect the approved module', edit: 'Apply the declared file-ID edit', review: 'Review the declared changes' };
 function view(stage, tick = 0) {
-  const done = stage >= 2, finished = stage === 4;
-  return { version: 3, entry: 'inspect', display: { maxDepth: 3, animations: true }, phase: ['approval', 'running', 'checking', 'running', 'finished'][stage],
-    elapsedMs: [0, 1200 + tick * 120, 4200, 5500 + tick * 120, 8600][stage], seconds: 120,
-    modelCalls: [0, 2, 4, 5, 6][stage], ...(stage === 3 ? { currentTool: 'scope_edit' } : {}),
+  const inspected = stage >= 2, edited = stage >= 4, finished = stage === 5;
+  return { version: 3, entry: 'inspect', display: { maxDepth: 3, animations: true }, phase: ['approval', 'running', 'checking', 'running', 'running', 'finished'][stage],
+    elapsedMs: [0, 1200 + tick * 120, 3200, 4500 + tick * 120, 6600 + tick * 120, 8600][stage], seconds: 120,
+    modelCalls: [0, 1, 2, 3, 5, 6][stage], ...(stage === 3 ? { currentTool: 'scope_edit' } : stage === 4 ? { currentTool: 'read' } : {}),
     nodes: [
-      { id: 'inspect', kind: 'task', title: 'Inspect the approved module', after: [], state: stage === 0 ? 'pending' : done ? 'completed_unverified' : 'running', agent: 'scout', model: 'demo/scout', thinking: 'low', modelCalls: done ? 2 : stage ? 1 : 0 },
-      { id: 'check', kind: 'task', title: 'Read the declared tests', after: [], state: stage === 0 ? 'pending' : done ? 'completed_unverified' : 'running', agent: 'scout', model: 'demo/scout', thinking: 'low', modelCalls: done ? 2 : stage ? 1 : 0 },
-      { id: 'edit', kind: 'task', title: 'Apply the declared file-ID edit', after: ['inspect', 'check'], state: finished ? 'completed_unverified' : stage === 3 ? 'running' : 'waiting', agent: 'worker', model: 'demo/worker', thinking: 'low', modelCalls: finished ? 2 : stage === 3 ? 1 : 0 },
-      { id: 'notes', kind: 'info', title: 'Reviewed reference', after: [], state: done ? 'ready' : 'pending' },
+      { id: 'inspect', kind: 'task', title: 'inspect', after: [], state: stage === 0 ? 'pending' : inspected ? 'completed_unverified' : 'running', ...(stage >= 1 ? { agent: 'scout', model: 'demo/scout', thinking: 'low' } : {}), modelCalls: inspected ? 2 : stage ? 1 : 0 },
+      { id: 'edit', kind: 'task', title: 'edit', after: ['inspect'], state: edited ? 'completed_unverified' : stage === 3 ? 'running' : 'pending', ...(stage >= 3 ? { agent: 'worker', model: 'demo/worker', thinking: 'low' } : {}), modelCalls: edited ? 2 : stage === 3 ? 1 : 0 },
+      { id: 'review', kind: 'task', title: 'review', after: ['edit'], state: finished ? 'completed_unverified' : stage === 4 ? 'running' : 'pending', ...(stage >= 4 ? { agent: 'worker_strong', model: 'demo/reviewer', thinking: 'low' } : {}), modelCalls: finished ? 2 : stage === 4 ? 1 : 0 },
+      { id: 'notes', kind: 'info', title: 'notes', after: [], state: inspected ? 'ready' : 'pending' },
     ], edges: [
-      { from: 'inspect', to: 'edit', kind: 'dependency', status: done ? 'active' : 'pending' },
-      { from: 'check', to: 'edit', kind: 'dependency', status: done ? 'active' : 'pending' },
-      { from: 'inspect', to: 'notes', kind: 'produced', status: done ? 'active' : 'pending' },
-      { from: 'notes', to: 'edit', kind: 'reference', status: done ? 'active' : 'pending' },
+      { from: 'inspect', to: 'edit', kind: 'dependency', status: inspected ? 'active' : 'pending' },
+      { from: 'edit', to: 'review', kind: 'dependency', status: edited ? 'active' : 'pending' },
+      { from: 'inspect', to: 'notes', kind: 'produced', status: inspected ? 'active' : 'pending' },
+      { from: 'notes', to: 'edit', kind: 'reference', status: stage >= 3 ? 'active' : 'pending' },
     ] };
 }
 function capture(name, label, lines, height = 720) {
@@ -100,8 +101,13 @@ function capture(name, label, lines, height = 720) {
   const frame = { name, label, width: 1280, height: Math.max(height, 168 + lines.length * 24), rows: lines.map(segments) };
   frames.push(frame); return frame;
 }
-const stages = [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4];
-for (const [i, stage] of stages.entries()) capture(`frame-${String(i).padStart(2, '0')}`, ['EXACT SCOPE / REVIEW', 'TWO READ LANES / IN PARALLEL', 'FRESH BOUNDARY CHECKS', 'EXCLUSIVE FILE-ID MUTATION', 'ENDED / STILL UNVERIFIED'][stage], renderPlan(view(stage, i % 8), columns, theme, true, { tick: i % 8 }));
+assert.deepEqual(view(5).nodes.filter(node => node.kind === 'task').map(node => node.after), [[], ['inspect'], ['edit']]);
+assert.deepEqual(Object.keys(labels), ['inspect', 'edit', 'review']);
+for (const label of Object.values(labels)) assert.match(label, /^[\x20-\x7e]{1,120}$/);
+const stages = [0, 0, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5];
+for (const [i, stage] of stages.entries()) capture(`frame-${String(i).padStart(2, '0')}`, ['EXACT SCOPE / REVIEW', 'LEVEL 1 / INSPECT', 'FRESH BOUNDARY CHECKS', 'LEVEL 2 / EXCLUSIVE FILE-ID EDIT', 'LEVEL 3 / REVIEW', 'ENDED / STILL UNVERIFIED'][stage], renderPlan(view(stage, i % 8), columns, theme, true, { tick: i % 8 }, stage ? labels : undefined));
+const animationHeight = Math.max(...frames.map(frame => frame.height));
+for (const frame of frames) frame.height = animationHeight;
 assert.equal(new Set(frames.map(f => f.height)).size, 1, 'Animation canvas must be stable.');
 const review = taskReviewContent({ cwd: '/workspace/demo-project', task: 'Inspect the declared file and update only the approved greeting. Do not delegate further.', seconds: 120, maxModelCalls: 2,
   model: { provider: 'demo', id: 'worker' }, agent: { name: 'worker', description: 'Edit only the approved source.', file: '/profiles/worker.md', systemPrompt: 'Use only the explicit scope. Report unverified completion and any uncertainty.', tools: ['read', 'edit'], model: { provider: 'demo', id: 'worker' }, thinking: 'low' } });
@@ -220,7 +226,7 @@ try{if($i.GetFrameCount([Drawing.Imaging.FrameDimension]::Time) -ne $Expected -o
 await fs.writeFile(path.join(work, 'validate.ps1'), validate);
 const decoded = await verifyWindows(root, { command: ps, args: ['-NoLogo', '-NoProfile', '-NonInteractive', '-File', path.join(work, 'validate.ps1'), path.join(work, 'workflow.gif'), String(images.length)], description: 'Decode the generated GIF frames only.' }, env, AbortSignal.timeout(60000), 30000);
 assert.equal(decoded.type, 'verified'); assert.equal(decoded.result?.status, 'passed'); assert.equal(networkAttempts, 0);
-const names = [['task-tree.png', 'frame-06.png'], ['source-review.png', 'source-review.png'], ['ended-unverified.png', 'frame-24.png'], ['workflow.gif', 'workflow.gif']];
+const names = [['task-tree.png', 'frame-18.png'], ['source-review.png', 'source-review.png'], ['ended-unverified.png', 'frame-24.png'], ['workflow.gif', 'workflow.gif']];
 const assets = [];
 for (const [name, source] of names) {
   const bytes = await fs.readFile(path.join(work, source));
@@ -228,10 +234,11 @@ for (const [name, source] of names) {
   await fs.writeFile(path.join(output, name), bytes);
   assets.push({ name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
 }
-const sources = ['src/plan-presentation.ts', 'src/context-approval.ts', 'src/native-task-review.ts', 'src/task-review-machine.ts'];
+const sources = ['src/plan-presentation.ts', 'src/plan-widget.ts', 'src/plan-state.ts', 'src/task-tree.ts', 'src/task-tree-effects.ts', 'src/index.ts', 'src/context-approval.ts', 'src/native-task-review.ts', 'src/task-review-machine.ts'];
 const sourceSha256 = Object.fromEntries(await Promise.all(sources.map(async file => [file, createHash('sha256').update(await fs.readFile(path.join(root, file))).digest('hex')])));
 const report = { kind: 'offline_native_ui_previews', sdk: sdk.VERSION, columns, sourceSha256, renderer: 'Actual renderPlan + native exact-source editor, rasterized with Windows System.Drawing/Consolas',
   syntheticData: true, screenRecording: false, liveModels: false, approvalGranted: false, networkAttempts, animationFrames: images.length, systemToolsOnly: true,
+  dependencyLevels: 3, declaredTasks: 3, englishHumanOnlyTaskLabels: true,
   ownershipCleanupConfirmed: true, assets, limitations: ['Illustrative counters/timing, not a benchmark or real task result.', 'Documentation frame is not the full Pi terminal or physical user acceptance.', 'Existing release tag and ZIP are not altered.'] };
 await fs.writeFile(path.join(output, 'preview-report.json'), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report, null, 2));

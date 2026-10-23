@@ -4,11 +4,13 @@ These are **offline-rendered previews of the actual native UI components**, not 
 
 | File | Content |
 | --- | --- |
-| [workflow.gif](workflow.gif) |25native plan-renderer frames: review, overlapping reads, fresh checks, exclusive file-ID edit and unverified ending |
+| [workflow.gif](workflow.gif) |25native renderer frames: three dependency levels, inspection, exclusive file-ID edit, review and unverified ending; English model/task lines |
 | [task-tree.png](task-tree.png) |Static view for readers who prefer no animation |
 | [source-review.png](source-review.png) |The real native exact-source editor, scrolled to the top, never submitted; an ordinary-profile review separate from the tree example |
 | [ended-unverified.png](ended-unverified.png) |The native plan's explicit unverified completion and human-review warning |
 | [preview-report.json](preview-report.json) |Renderer source hashes, image hashes/sizes, synthetic/no-network/no-approval and owned-process cleanup observations |
+
+The current `main` previews include human-only task labels newer than RC1; the released ZIP and tag remain unchanged. Indented levels are dependencies among three declared tasks, not recursive agents or a larger worker budget. Labels are supplied separately from transcript-safe plan data and are not inferred from private task summaries.
 
 The preview calls the existing `renderPlan` and `confirmNativeTaskReview`/native editor code with synthetic data, denies the review and never starts a model or task worker. The real pinned SDK dark theme is rasterized in a documentation window with system fonts; dim intensity/font rasterization can differ from a physical terminal. The full review packet remains scrollable in the actual UI; a still viewport is not evidence that its source was reviewed or approved.
 

@@ -276,8 +276,8 @@ function registerJevToolsWithHarness(pi: ExtensionAPI): GraphExecutionHarness {
           return withActiveExecution(ctx, signal, (ownSignal, lease) => withJevSession(ctx, async () => {
             const panel = openPlan(ctx, ownSignal);
             try {
-              const result = await taskTree(params.tree, ctx, ownSignal, undefined, view => {
-                if (!ownSignal.aborted && panel.isCurrent()) { panel.update(view); updatePlan(onUpdate, view); }
+              const result = await taskTree(params.tree, ctx, ownSignal, undefined, (view, labels) => {
+                if (!ownSignal.aborted && panel.isCurrent()) { panel.update(view, labels); updatePlan(onUpdate, view); }
               }, parent, observeUi, lease);
               if (!result.cleanupConfirmed || result.lockRetained || result.metrics.reservedModelCalls !== 0 || result.metrics.reservedJevRequests > 0) executionUncertain = true;
               if (result.status === "stopped") captureFailure(ctx, "Task tree stopped; inspect accounting and cleanup. No retry or fallback.", generation);
