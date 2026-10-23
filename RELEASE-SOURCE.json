@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-rc.1",
-  "developmentSnapshot": "4db0f90de9d997d719da98bdc138ecbf98ac0999",
+  "developmentSnapshot": "5f11955be81a9e287a0014a31b62f0862a52ff8b",
   "sourceStatus": "Current main includes unreleased human-only task labels; published RC1 remains immutable at commit 3fd43886827a56e36f9430e3419472492ff078b3.",
   "runtimeScriptsAndTestsByteIdentical": true,
   "dependencyLockByteIdentical": true,
@@ -8,7 +8,7 @@
   "groupDigestAlgorithm": "SHA256 of sorted relative-path + NUL + file-SHA256-hex + LF records, UTF-8.",
   "preservedGroups": {
     "src": { "files": 107, "sha256": "eca2611b530c45cd6bf6da3c4a2237a6af8cef9b43b99b17e7f8e637a80b13af" },
-    "test": { "files": 122, "sha256": "ce96c1b9105fe903121cda6a8d16639e39a0d756d6f801f704dd2fc06ed1b2cc" },
+    "test": { "files": 122, "sha256": "02de04ce3523e3a2d0aa4dd6cc1a149b55ff343fb0f8e2c942588f855f0c9e87" },
     "scripts": { "files": 8, "sha256": "3a1c7c58046cdd8baa0c79cf1d47488ab8d27eb549dd58e2c5211fe29425599c" },
     "agents": { "files": 4, "sha256": "59499cc2f962066f2c1ab9b354780bffd6f1dd48e558e526e60226083e390fa6" },
     "eval": { "files": 4, "sha256": "8e52cc12a916ed2767f62f7e1e5665bb1cbcbdc2ffbc8b863de8eeeb100cda65" },
