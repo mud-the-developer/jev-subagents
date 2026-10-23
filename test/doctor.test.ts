@@ -22,8 +22,18 @@ test("Doctor run is one fixed read-only worker with no caller task/model/grant/v
 test("Doctor distinguishes metadata readiness from actual worker execution and keeps private fields out", () => {
   const text = doctorEnvironmentText({ runtime: { feature: "ordinary-scoped/v1", catalog: "scoped_visible", active: "yes", mode: "tui", approvalApi: "supported" },
     workspace: "refused_or_unconfirmed", blocked: "uncertain", cancelled: false, lastFailure: "FIXED_FAILURE" });
-  assert.match(text, /FIXED_FAILURE/); assert.match(text, /Workspace permissions.*refused/); assert.match(text, /Standalone Bun worker SDK import.*unconfirmed/);
+  assert.match(text, /FIXED_FAILURE/); assert.match(text, /Workspace permissions.*refused/); assert.match(text, /Standalone Bun worker SDK import.*not reported/);
+  assert.doesNotMatch(text, /Standalone Bun worker SDK import.*failed/);
   assert.match(text, /Real worker.*not requested/); assert.match(text, /new execution blocked/); assert.doesNotMatch(text, /overall success|preparation complete|approval complete/i);
+});
+test("Doctor distinguishes an absent environment report from an attempted SDK import", () => {
+  for (const [workerVersion, expected] of [[null, "failed/unconfirmed"], ["0.0.0", "pinned version mismatch"], ["0.85.1", "passed"]] as const) {
+    const text = doctorEnvironmentText({ runtime: { feature: "ordinary-scoped/v1", catalog: "scoped_visible", active: "yes", mode: "tui", approvalApi: "supported" },
+      workspace: "passed", blocked: undefined, cancelled: false, setup: { root: "/fixture", agentDir: "/agent", bun: "1.4.3", piVersion: "1.3.0",
+        testedVersion: "0.85.1", workerVersion, profiles: [], jevKeyPresent: false } });
+    assert.ok(text.includes(`Standalone Bun worker SDK import · ${expected}`));
+    assert.doesNotMatch(text, /not reported/);
+  }
 });
 test("collapsed legacy failure now shows exact call-limit cause, counts and partial accounting without private source", () => {
   const result = { status: "failed", error: MODEL_CALL_LIMIT_ERROR, PRIVATE: "PRIVATE_AUTH_SOURCE", metrics: { profile: { agent: "scout", model: { provider: "offline", id: "fixture" }, maxModelCalls: 6 },

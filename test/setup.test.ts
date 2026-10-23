@@ -242,6 +242,36 @@ test("known JavaScript Pi entries use the verified Bun runtime and sealed argume
   assert.equal(run.mock.callCount(), 1);
 });
 
+test("managed Bun Pi launcher resolves its existing Bun entry without executing the shell shim or Node bundle", { skip: process.platform !== "win32" }, async t => {
+  const f = await fixture(t), version = "1.3.0";
+  await rm(path.join(f.bin, "node_modules", "@earendil-works"), { recursive: true, force: true });
+  const install = path.join(f.dir, "install"), pkg = path.join(install, "releases", version, "node_modules", "@earendil-works", "pi-coding-agent");
+  const entry = path.join(pkg, "dist", "bun", "cli.js");
+  await mkdir(path.dirname(entry), { recursive: true }); await mkdir(path.join(pkg, "dist", "bundle"), { recursive: true });
+  await writeFile(path.join(install, "current-version"), version + "\n");
+  await writeFile(path.join(pkg, "package.json"), JSON.stringify({ name: "@earendil-works/pi-coding-agent", version, bin: { pi: "dist/bundle/cli.js" } }));
+  const marker = path.join(f.dir, "unapproved-entry-ran");
+  const forbidden = `require("node:fs").writeFileSync(${JSON.stringify(marker)}, "unexpected"); throw new Error("Unapproved entry ran");`;
+  await writeFile(path.join(pkg, "dist", "bundle", "cli.js"), forbidden);
+  await writeFile(path.join(f.bin, "pi-launcher.js"), forbidden);
+  const shim = '@ECHO off\r\nbun --smol --no-env-file --no-install --config=NUL "%~dp0pi-launcher.js" %*\r\n';
+  await writeFile(path.join(f.bin, "pi.cmd"), shim);
+  await writeFile(entry, `console.log(${JSON.stringify(version)});\n`);
+  const inspect = () => executeSetupEffect({ type: "inspect", root: f.root }, async () => assert.fail("Read-only preflight cannot approve installation"), t.signal, () => {});
+  const result = await inspect(); assert.equal(result.type, "checked"); if (result.type !== "checked") assert.fail();
+  assert.equal(result.context.pi, f.bun); assert.equal(result.context.piVersion, version);
+  assert.deepEqual(result.context.piArgs, [...f.bunArgs, await realpath(entry)]);
+  await writeFile(path.join(pkg, "package.json"), JSON.stringify({ name: "@earendil-works/pi-coding-agent", version, bin: { pi: 7 } }));
+  assert.equal((await inspect()).type, "failed");
+  await writeFile(path.join(pkg, "package.json"), JSON.stringify({ name: "@earendil-works/pi-coding-agent", version, bin: { pi: "dist/bundle/cli.js" } }));
+  await writeFile(path.join(f.bin, "pi.cmd"), shim.replace("--config=NUL", "--config=unapproved.toml"));
+  assert.equal((await inspect()).type, "failed");
+  await writeFile(path.join(f.bin, "pi.cmd"), shim);
+  await rm(entry); assert.equal((await inspect()).type, "failed");
+  await assert.rejects(readFile(marker), { code: "ENOENT" });
+  assert.equal((await f.calls()).length, 0);
+});
+
 test("installer uses existing pi and exact argv, preserves profiles, and creates approved files exclusively", async (t) => {
   const f = await fixture(t);
   const worker = path.join(f.agentDir, "agents", "worker.md");

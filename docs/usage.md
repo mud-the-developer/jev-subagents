@@ -16,7 +16,7 @@ The native command is `/jev-subagents`; `/jev` is not an alias. Ask the parent n
 
 The session picker chooses a JEV decision-backend preference, not a worker model or execution grant. Initial interactive discovery is limited to known/explicit literal-loopback metadata endpoints; remote inference and local-model installation are not implied. `profiles` separately reviews creation of missing fixed-profile files. Existing files are not overwritten.
 
-`runtime` inspects the active tool catalog. `doctor` performs bounded environment/SDK checks without a model call; `doctor last` shows recorded failure metadata in the same session. They do not certify physical display, account access or task correctness.
+`runtime` inspects the active tool catalog. `doctor` performs bounded environment/SDK checks without a model call; `doctor last` shows recorded failure metadata in the same session, not a fresh check. Independent directory targets have separate owned readers, and an absent environment report does not imply a failed SDK import. Reviewed managed Node/Bun Pi launchers are recognized without running shell shims. These observations do not certify physical display, account access or task correctness.
 
 ## Direct read-only example
 

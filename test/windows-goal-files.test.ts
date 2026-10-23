@@ -8,7 +8,8 @@ import { prepareGoalFileScope, executeGoalFileEffect, checkGoalFileScope, snapsh
 import { GOAL_FILES_ERROR, MAX_GOAL_FILE_BYTES, MAX_GOAL_FILES_BYTES, validGoalFileInput, validGoalFileScope,
   type GoalFileScope, type GoalFileRequest } from "../src/goal-files.ts";
 import { canonicalWindowsGoalDirectory, snapshotWindowsGoalTexts, windowsGoalFileIO, withWindowsGoalReadBatch } from "../src/windows-goal-files.ts";
-import { DirectoryValidationError } from "../src/directory-diagnostics.ts";
+import { DirectoryValidationError, directoryPreparationIssues } from "../src/directory-diagnostics.ts";
+import { canonicalOrdinaryDirectories } from "../src/goal-run-effects.ts";
 import { executeGoalSession } from "../src/goal-worker.ts";
 
 const windows = { skip: process.platform !== "win32", timeout: 60000 };
@@ -79,6 +80,19 @@ test("NTFS snapshots inspect only named control files, handle missing leaves and
   assert.equal(stopped.type, "file_failed"); if (stopped.type === "file_failed") assert.equal(stopped.mayHaveWritten, false);
 });
 
+for (const target of ["workspace", "agent_directory"] as const) test(`NTFS independent directory checks preserve the healthy sibling after ${target} refusal`, windows, async t => {
+  const f = await fixture(t); let helpers = 0;
+  const name = target === "workspace" ? "work" : "agent";
+  sourceFault(t, source => {
+    helpers++;
+    return source.replace("if(!control)Security(root,privacy);", `if(!control){if(Path.GetFileName(name)=="${name}")Check(false,"unsafe_write_acl");Security(root,privacy);}`);
+  });
+  await assert.rejects(withWindowsGoalReadBatch(() => canonicalOrdinaryDirectories(f.cwd, f.protections.agentDirectory, t.signal), t.signal), error => {
+    assert.deepEqual(directoryPreparationIssues(error), [{ target, reason: "unsafe_write_acl", cleanupConfirmed: true }]);
+    return true;
+  });
+  assert.equal(helpers, 2, "Both targets need their own observed native result");
+});
 test("NTFS fresh-read batch reuses owned code but reopens handles and observes changed content", windows, async t => {
   const f = await fixture(t), control = path.join(f.cwd, "AGENTS.md"); await fs.writeFile(control, "before");
   const native = windowsGoalFileIO.spawn, spawn = t.mock.method(windowsGoalFileIO, "spawn", (...args: Parameters<typeof native>) => native(...args));

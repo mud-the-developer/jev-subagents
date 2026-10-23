@@ -162,6 +162,11 @@ type BrokerInput = { root: string; files: string[]; protected: string[]; writabl
 type BrokerScope = { first: NativeSnapshot; call(data: Record<string, unknown>, signal?: AbortSignal): Promise<unknown>; close(clean: boolean, keep?: boolean): Promise<boolean> };
 const readBatch = new AsyncLocalStorage<{ open(input: BrokerInput, signal?: AbortSignal): Promise<BrokerScope> }>();
 
+/** Independent preflight targets must not inherit a sibling's poisoned reader. */
+export function withIndependentWindowsGoalRead<T>(run: () => Promise<T>): Promise<T> {
+  return readBatch.exit(run);
+}
+
 /** Invocation-local code/Job reuse only; every read reopens handles and final cleanup precedes owner release. */
 export async function withWindowsGoalReadBatch<T>(run: () => Promise<T>, signal?: AbortSignal): Promise<T> {
   if (process.platform !== "win32" || readBatch.getStore()) return run();

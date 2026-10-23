@@ -14,7 +14,7 @@ import { DEFAULT_MAX_MODEL_CALLS, type BoundedRun as Run } from "./delegate-mach
 import { codexThinkingLevels } from "./planning.ts";
 import { DirectoryValidationError, DirectoryPreparationError, directoryError, directoryPreparationIssues, directorySystemReason, type DirectoryReason, type DirectoryTarget } from "./directory-diagnostics.ts";
 import { prepareGoalFileScope, checkGoalFileScope, snapshotGoalText } from "./goal-file-effects.ts";
-import { canonicalWindowsGoalDirectory, openWindowsGoalProjectOwner, snapshotWindowsGoalTexts, withWindowsGoalReadBatch } from "./windows-goal-files.ts";
+import { canonicalWindowsGoalDirectory, openWindowsGoalProjectOwner, snapshotWindowsGoalTexts, withWindowsGoalReadBatch, withIndependentWindowsGoalRead } from "./windows-goal-files.ts";
 import { runWindowsGoalProcess, markOwnedReplyIncomplete, type OwnedProcessReply } from "./windows-goal-process.ts";
 import { bunWorkerOptions } from "./worker-runtime.ts";
 import { goalFileDigest, validGoalFilePath, MAX_GOAL_FILE_BYTES, MAX_GOAL_FILES_BYTES } from "./goal-files.ts";
@@ -76,7 +76,8 @@ export async function checkFreshReadPair(first: () => Promise<void>, second: () 
 export async function canonicalGoalDirectories(cwd: string, journalDirectory: string, agentDirectory: string, signal?: AbortSignal) {
   signal?.throwIfAborted();
   const requests = [{ path: cwd, private: false }, { path: journalDirectory, private: true }, { path: agentDirectory, private: false }];
-  const results = await Promise.allSettled(requests.map(request => Promise.resolve().then(() => goalDirectoryIO.canonical(request.path, request.private, signal))));
+  const results = await Promise.allSettled(requests.map(request => Promise.resolve().then(() =>
+    withIndependentWindowsGoalRead(() => goalDirectoryIO.canonical(request.path, request.private, signal)))));
   signal?.throwIfAborted();
   const values = results.map(result => result.status === "fulfilled" ? result.value : fail());
   return { cwd: values[0]!, journalDirectory: values[1]!, agentDirectory: values[2]! };
@@ -87,7 +88,7 @@ export async function canonicalOrdinaryDirectories(cwd: string, agentDirectory: 
   const targets: readonly DirectoryTarget[] = ["workspace", "agent_directory"];
   if (signal?.aborted) throw new DirectoryPreparationError(GOAL_RUN_ERROR, targets.map(target => ({ target, reason: "cancelled", cleanupConfirmed: true })));
   const results = await Promise.allSettled([cwd, agentDirectory].map(value =>
-    Promise.resolve().then(() => goalDirectoryIO.canonical(value, false, signal))));
+    Promise.resolve().then(() => withIndependentWindowsGoalRead(() => goalDirectoryIO.canonical(value, false, signal)))));
   const issues = results.flatMap((result, index) => {
     if (result.status === "fulfilled" && !signal?.aborted) return [];
     const detail = result.status === "rejected" ? directoryError(result.reason) : undefined;

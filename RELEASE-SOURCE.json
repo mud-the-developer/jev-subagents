@@ -1,14 +1,14 @@
 {
   "version": "1.0.0-rc.1",
-  "developmentSnapshot": "2200bf0e16eda3e11d262c53c65f2af1f48a3daa",
+  "developmentSnapshot": "1b0d400f03fbd611a707373a485e587a83a72f40",
   "runtimeScriptsAndTestsByteIdentical": true,
   "dependencyLockByteIdentical": true,
   "packageMetadataChange": "Version only: 0.6.0-rc.2 to 1.0.0-rc.1; private:true and MIT remain set.",
   "groupDigestAlgorithm": "SHA256 of sorted relative-path + NUL + file-SHA256-hex + LF records, UTF-8.",
   "preservedGroups": {
-    "src": { "files": 107, "sha256": "2d46f3fe4720138777f37e4b05add20a077c0d08f70266f6a7bb022a30501908" },
-    "test": { "files": 122, "sha256": "342e5889e22913bdb00b421137cf9650a9a8cbc7052af8e09baac2959d59d4c6" },
-    "scripts": { "files": 8, "sha256": "873408a5970d3d94f8777b607fec463cc7c5d3b8c046752ba14bc14f47a164a3" },
+    "src": { "files": 107, "sha256": "6a1c050198aa4fca42a5888203aba2b2d58698002181915678c2224c52d35bd5" },
+    "test": { "files": 122, "sha256": "156bf872ba0a9b5c0438d358f78b8e6b9f3d87f36124d52cbbd05011057eb1bd" },
+    "scripts": { "files": 8, "sha256": "3a1c7c58046cdd8baa0c79cf1d47488ab8d27eb549dd58e2c5211fe29425599c" },
     "agents": { "files": 4, "sha256": "59499cc2f962066f2c1ab9b354780bffd6f1dd48e558e526e60226083e390fa6" },
     "eval": { "files": 4, "sha256": "8e52cc12a916ed2767f62f7e1e5665bb1cbcbdc2ffbc8b863de8eeeb100cda65" },
     ".github": { "files": 1, "sha256": "e01092cbf5b61cef15aa46b69225cc8dd967fcc46e4ff71f03f6ed3ba7b5eb97" }

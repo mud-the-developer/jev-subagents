@@ -52,7 +52,7 @@ export function doctorEnvironmentText(result: DoctorEnvironment): string {
     ...(result.agentDirectory ? [`Pi configuration permissions · ${result.agentDirectory === "passed" ? "existing execution guard passed" : "refused/unknown / no bypass"}`] : []),
     ...directoryIssueRows(result.directoryIssues),
     setup ? `Host Pi · ${setup.piVersion} · Bun ${setup.bun} · pinned worker SDK ${setup.testedVersion}` : "Environment/CLI check incomplete",
-    `Standalone Bun worker SDK import · ${setup?.workerVersion ? setup.workerVersion === setup.testedVersion ? "passed" : "pinned version mismatch" : "failed/unconfirmed"}`,
+    `Standalone Bun worker SDK import · ${!setup ? "not reported (environment/CLI check incomplete)" : setup.workerVersion ? setup.workerVersion === setup.testedVersion ? "passed" : "pinned version mismatch" : "failed/unconfirmed"}`,
     ...(setup?.profiles.map(profile => `Profile ${profile.name} · ${profile.status === "valid" ? "explicit configuration shape confirmed (model/authentication unverified)" : profile.status === "missing" ? "missing" : "format/permissions unknown"}`) ?? []),
     ...(result.blocked ? [result.blocked === "uncertain" ? "Execution ownership/accounting unknown / records retained / new execution blocked" : "Execution owner closed / no automatic recovery"] : []),
     ...(result.cancelled ? ["Diagnostic cancelled / no automatic rerun"] : []),

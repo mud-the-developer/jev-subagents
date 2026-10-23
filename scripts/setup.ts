@@ -178,7 +178,9 @@ function environment(agentDir: string): NodeJS.ProcessEnv {
 async function managedPiEntry(dir: string): Promise<string | undefined> {
   const shim = path.join(dir, "pi.cmd");
   const content = (await readFile(shim, "utf8")).replaceAll("\r\n", "\n").trim();
-  if (content !== '@ECHO off\nnode "%~dp0pi-launcher.js" %*') return undefined;
+  const nodeShim = '@ECHO off\nnode "%~dp0pi-launcher.js" %*';
+  const bunShim = '@ECHO off\nbun --smol --no-env-file --no-install --config=NUL "%~dp0pi-launcher.js" %*';
+  if (content !== nodeShim && content !== bunShim) return undefined;
   const install = path.join(path.dirname(dir), "install"), version = (await readFile(path.join(install, "current-version"), "utf8")).trim();
   if (!versionPattern.test(version)) return undefined;
   const pkg = await realpath(path.join(install, "releases", version, "node_modules", "@earendil-works", "pi-coding-agent"));
@@ -186,8 +188,8 @@ async function managedPiEntry(dir: string): Promise<string | undefined> {
   try { data = JSON.parse(await readFile(path.join(pkg, "package.json"), "utf8")); }
   catch { return undefined; }
   const bin = typeof data.bin === "string" ? data.bin : data.bin?.pi;
-  if (data.name !== "@earendil-works/pi-coding-agent" || data.version !== version || !bin) return undefined;
-  const entry = await realpath(path.resolve(pkg, bin)), relative = path.relative(pkg, entry);
+  if (data.name !== "@earendil-works/pi-coding-agent" || data.version !== version || typeof bin !== "string" || !bin) return undefined;
+  const entry = await realpath(path.resolve(pkg, content === bunShim ? "dist/bun/cli.js" : bin)), relative = path.relative(pkg, entry);
   if (!relative || path.isAbsolute(relative) || relative === ".." || relative.startsWith(".." + path.sep) || !(await lstat(entry)).isFile()) return undefined;
   return entry;
 }
