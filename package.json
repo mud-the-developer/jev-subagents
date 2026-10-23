@@ -1,0 +1,67 @@
+{
+  "name": "jev-subagents",
+  "version": "1.0.0-rc.1",
+  "private": true,
+  "license": "MIT",
+  "description": "JEV-assisted subagents, reviewed task trees and parent-child information sharing for Pi.",
+  "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "engines": {
+    "bun": "1.4.3"
+  },
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "scripts": {
+    "typecheck": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json node_modules/typescript/bin/tsc --noEmit",
+    "lint": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json node_modules/eslint/bin/eslint.js src test scripts eval eslint.config.mjs --max-warnings=0",
+    "test": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 ./test/*.test.ts",
+    "test:integration": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 ./test/integration.test.ts",
+    "demo:job": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/demo-job.mjs",
+    "release:source": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/release-source.ts",
+    "test:budget": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 test/worker-budget.test.ts test/decision.test.ts",
+    "test:budget:integration": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 --test-name-pattern=^JEV.budget.advice.eight test/integration.test.ts",
+    "check:budget": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test:budget && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test:budget:integration",
+    "test:tui": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 test/task-tree.test.ts test/task-tree-effects.test.ts test/task-tree-worker.test.ts test/task-tree-runtime.test.ts test/task-tree-tui.test.ts test/plan-widget.test.ts test/parallel-read-worker.test.ts test/parallel-read.test.ts test/parallel-read-policy.test.ts test/parallel-read-adapter.test.ts test/parallel-read-runtime.test.ts test/worker-runtime.test.ts test/bun-windows-transport.test.ts test/memory-quality.test.ts test/release-source.test.ts test/delegation-memory.test.ts test/delegation-memory-effects.test.ts test/delegation-memory-owner.test.ts test/project-memory.test.ts test/project-memory-store.test.ts test/project-memory-effects.test.ts test/project-memory-presentation.test.ts test/graph-presentation.test.ts test/plan-graph.test.ts test/graph-authorization.test.ts test/graph-runtime.test.ts test/ui-language.test.ts test/plan-presentation.test.ts test/plan-workflow.test.ts test/plan-progress.test.ts test/tui-view-diagnostics.test.ts test/ui-probe.test.ts test/tui-approval.test.ts test/context-approval.test.ts test/native-task-review.test.ts test/delegation-access.test.ts test/task-review.test.ts test/approval-ui-diagnostics.test.ts test/directory-diagnostics.test.ts test/runtime-health.test.ts test/ordinary-runtime.test.ts test/delegate-presentation.test.ts test/setup.test.ts",
+    "check:tui": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test:tui",
+    "test:doctor": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 test/worker-budget.test.ts test/decision.test.ts test/worker-rounds.test.ts test/ordinary-authorization.test.ts test/doctor.test.ts test/worker.test.ts test/delegate-presentation.test.ts test/delegate.test.ts test/setup.test.ts",
+    "check:doctor": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test:doctor",
+    "test:windows": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 test/task-tree.test.ts test/task-tree-effects.test.ts test/task-tree-worker.test.ts test/task-tree-runtime.test.ts test/task-tree-tui.test.ts test/plan-widget.test.ts test/parallel-read-worker.test.ts test/parallel-read.test.ts test/parallel-read-policy.test.ts test/parallel-read-adapter.test.ts test/parallel-read-runtime.test.ts test/worker-runtime.test.ts test/bun-windows-transport.test.ts test/memory-quality.test.ts test/release-source.test.ts test/delegation-memory.test.ts test/delegation-memory-effects.test.ts test/delegation-memory-owner.test.ts test/project-memory.test.ts test/project-memory-store.test.ts test/project-memory-effects.test.ts test/project-memory-presentation.test.ts test/graph-presentation.test.ts test/plan-graph.test.ts test/graph-authorization.test.ts test/graph-runtime.test.ts test/ui-language.test.ts test/plan-presentation.test.ts test/plan-workflow.test.ts test/plan-progress.test.ts test/worker-budget.test.ts test/worker-rounds.test.ts test/doctor.test.ts test/runtime-health.test.ts test/ui-probe.test.ts test/approval-ui-diagnostics.test.ts test/ordinary-authorization.test.ts test/ordinary-runtime.test.ts test/ordinary-preparation.test.ts test/directory-diagnostics.test.ts test/delegate-presentation.test.ts test/internal-language-skills.test.ts test/router.test.ts test/decision.test.ts test/planning-assessment.test.ts test/soft-routing.test.ts test/delegate.test.ts test/worker.test.ts test/verification.test.ts test/integration.test.ts test/jev-transport.test.ts test/openjev.test.ts test/jev-backend.test.ts test/session-setup.test.ts test/gpu-laya.test.ts test/evaluation.test.ts test/windows-process.test.ts test/setup.test.ts test/windows-onboarding.test.ts test/setup-studio.test.ts test/task-review.test.ts test/native-task-review.test.ts test/delegation-access.test.ts test/platform-support.test.ts test/context-approval.test.ts test/tui-approval.test.ts test/tui-view-diagnostics.test.ts test/windows-journal.test.ts test/windows-goal-files.test.ts test/windows-goal-owner.test.ts test/goal-control-batching.test.ts test/goal-context-batching.test.ts test/goal-directory-preparation.test.ts test/goal-platform-preflight.test.ts test/owned-fixture-teardown.test.ts test/documentation-figures.test.ts test/lint-rules.test.ts",
+    "check:windows": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test:windows",
+    "test:windows:goal-boundary": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=50000 --test-name-pattern=\"^B2\\spure|^B2\\sreal|^missing\\sUI|^session\\snavigation|^IPC\\sparent|^the\\sbounded\\sworker|^fresh\\sWindows\" test/goal-run.test.ts",
+    "check:windows:goal-boundary": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test:windows:goal-boundary",
+    "eval": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json eval/run.ts",
+    "eval:memory": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json eval/memory-run.ts",
+    "check:windows-native": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/check-windows-native.ts",
+    "check:bun-only": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/check-bun-only.ts",
+    "check": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "typebox": "1.3.7"
+  },
+  "overrides": {
+    "@earendil-works/pi-coding-agent": {
+      "undici": "8.10.2"
+    },
+    "minimatch": {
+      "brace-expansion": "5.0.12"
+    }
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.85.1",
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.19.19",
+    "eslint": "10.12.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1"
+  }
+}

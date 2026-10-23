@@ -1,0 +1,2 @@
+# Keep scripts and byte-pinned upstream fixtures identical on every checkout.
+* text=auto eol=lf

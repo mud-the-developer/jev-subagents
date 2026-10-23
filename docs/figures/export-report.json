@@ -1,0 +1,41 @@
+{
+  "upstreamRef": "e12ec8001148d09c750badf71d3da4c97fb3fbbb",
+  "upstreamVersion": "0.5.1",
+  "localOnly": true,
+  "externalBrowserRequestsAllowed": false,
+  "renderer": "Excalimate generatePlayerPackage + compileAnimatedSvg static poster / Chrome PNG",
+  "reports": [
+    {
+      "name": "workflow",
+      "profile": "css-keyframes",
+      "posterTimeMs": 0,
+      "sourceKeyframeCount": 4,
+      "emittedKeyframeCount": 2,
+      "sourceElements": 31,
+      "geometry": {
+        "width": 1120,
+        "height": 630,
+        "textCount": 17,
+        "clipped": []
+      },
+      "svgBytes": 20317,
+      "pngBytes": 143602
+    },
+    {
+      "name": "scope",
+      "profile": "css-keyframes",
+      "posterTimeMs": 0,
+      "sourceKeyframeCount": 4,
+      "emittedKeyframeCount": 2,
+      "sourceElements": 20,
+      "geometry": {
+        "width": 1120,
+        "height": 630,
+        "textCount": 17,
+        "clipped": []
+      },
+      "svgBytes": 10036,
+      "pngBytes": 151155
+    }
+  ]
+}

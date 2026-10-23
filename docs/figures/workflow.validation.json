@@ -1,0 +1,11 @@
+{
+  "name": "workflow",
+  "validation": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Project is valid V2: 31 elements, 4 tracks, 0 actions."
+      }
+    ]
+  }
+}

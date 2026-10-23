@@ -1,0 +1,32 @@
+SYNTHETIC UI EXAMPLE — no execution, transmission approval or reusable authority.
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ JEV / EXECUTION PLAN  [◇ AWAITING APPROVAL]                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ ├─ ○ 1 · WAITING                                                             │
+│ │  Inspect the approved source                                               │
+│ │  ID inspect                                                                │
+│ │  AFTER ← none                                                              │
+│ │  AGENT scout · MODEL offline/scout · EFFORT low                            │
+│ │                                                                            │
+│ ├─ ○ 2 · WAITING                                                             │
+│ │  Choose one reviewed approach                                              │
+│ │  ID implement                                                              │
+│ │  AFTER ← inspect                                                           │
+│ │  AGENT pending · MODEL pending · EFFORT pending                            │
+│ │  ├─ ◇ A · WAITING                                                          │
+│ │  │  Keep the public API                                                    │
+│ │  │  ID keep_api                                                            │
+│ │  └─ ◇ B · WAITING                                                          │
+│ │     Use the bounded parser                                                 │
+│ │     ID replace_parser                                                      │
+│ │                                                                            │
+│ └─ ○ 3 · WAITING                                                             │
+│    Review the approved edit                                                  │
+│    ID review                                                                 │
+│    AFTER ← implement                                                         │
+│    AGENT worker_strong · MODEL offline/reviewer · EFFORT high                │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ ELAPSED 0:00 · LIMIT 24:00:00 · OBSERVED SDK 0                               │
+│ Plan summary · not a substitute for exact-source approval                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

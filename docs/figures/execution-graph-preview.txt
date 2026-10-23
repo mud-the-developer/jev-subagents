@@ -1,0 +1,45 @@
+SYNTHETIC DAG v2 EXAMPLE — no execution, transmission approval or reusable authority.
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ JEV / EXECUTION PLAN  [◇ AWAITING APPROVAL]                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ DAG v2 · ENTRY route · 6 NODES / 6 LINKS                                     │
+│ ◇ CHOICE route · READY                                                       │
+│ Choose the reviewed implementation route.                                    │
+│ ├─ [a] → a1 · PENDING                                                        │
+│    Use the longer approach when the requested structure needs it.            │
+│ └─ [b] → b1 · PENDING                                                        │
+│    Use the local fix when it meets the requested change.                     │
+│                                                                              │
+│ ○ TASK a1 · WAITING                                                          │
+│ Inspect the approved file for the longer approach.                           │
+│ IN ← route [PENDING]                                                         │
+│ AGENT worker · MODEL offline/fixture · EFFORT low                            │
+│ └─ → a2 · PENDING                                                            │
+│                                                                              │
+│ ○ TASK a2 · WAITING                                                          │
+│ Apply the reviewed longer change to the approved file.                       │
+│ IN ← a1 [PENDING]                                                            │
+│ AGENT worker · MODEL offline/fixture · EFFORT low                            │
+│ └─ → merge · PENDING                                                         │
+│                                                                              │
+│ ○ TASK b1 · WAITING                                                          │
+│ Apply the reviewed local fix to the approved file.                           │
+│ IN ← route [PENDING]                                                         │
+│ AGENT worker · MODEL offline/fixture · EFFORT low                            │
+│ └─ → merge · PENDING                                                         │
+│                                                                              │
+│ ○ JOIN merge · WAITING                                                       │
+│ IN ← a2 [PENDING], b1 [PENDING]                                              │
+│ └─ → review · PENDING                                                        │
+│                                                                              │
+│ ○ TASK review · WAITING                                                      │
+│ Read the selected edit and report issues; do not claim tests ran.            │
+│ IN ← merge [PENDING]                                                         │
+│ AGENT worker · MODEL offline/fixture · EFFORT low                            │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ ELAPSED 0:00 · LIMIT 24:00:00 · OBSERVED SDK 0                               │
+│ ACTIVE = selected dependency · not execution or verification proof           │
+│ Plan summary · not a substitute for exact-source approval                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

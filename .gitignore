@@ -1,0 +1,28 @@
+node_modules/
+coverage/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Personal pi state and credentials are not portable installation inputs.
+.pi/
+auth.json
+models.json
+
+# Active orchestration ownership is local-only, never a portable checkpoint.
+.jev-goal.lock
+
+# Local memory, private journals, diagnostic logs and ACL backups are not source.
+*.sqlite
+*.sqlite-*
+.jev-memory.lock
+owner.lock
+goal.jsonl
+.jev-memory.jsonl
+.jev-context-application.jsonl
+*.log
+*acl*backup*
+
+# PowerShell may generate this cache when launched with an isolated environment.
+/Microsoft/Windows/PowerShell/

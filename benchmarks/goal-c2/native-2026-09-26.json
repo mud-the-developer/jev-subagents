@@ -1,0 +1,110 @@
+{
+  "date": "2026-09-26",
+  "status": "native_verifier_boundary_passed_real_model_goal_not_run",
+  "baseCommit": "40ef6fbe9b434ca65b6f170f5ae1e1e7bf4ab475",
+  "unpublishedWorktree": true,
+  "artifacts": "/private/tmp/jev-c2.oVcnMN",
+  "environment": {
+    "host": "macOS 27.2 arm64",
+    "hostNode": "22.22.3",
+    "piSdk": "0.85.1",
+    "colima": "0.10.3",
+    "lima": "2.2.0",
+    "dockerClient": "29.8.0",
+    "dockerEngine": "29.5.2",
+    "engineApiUsed": "1.47",
+    "guestKernel": "6.8.0-117-generic aarch64",
+    "vm": { "driver": "vz", "cpus": 2, "memoryGiB": 4, "rootDiskGiB": 5, "dataDiskGiB": 5 },
+    "sharedHostPath": "/private/tmp/jev-c2.oVcnMN/share",
+    "image": "sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c",
+    "imageSource": "docker.io/library/node:22-bookworm-slim",
+    "imageNode": "22.23.3",
+    "yamaPtraceScope": 1,
+    "yamaChanged": false,
+    "cgroupVersion": "2",
+    "builtinSeccomp": true
+  },
+  "sourceSha256": {
+    "src/goal-verification.ts": "7fbebae90f09c873454613bfb48048681e5a612ba1c7bf33d17d483a6f70b2bf",
+    "src/goal-verification-effects.ts": "2834df41f6a17b64f3b4798f18494c73e9210406845f51fc76be106e93c9a6b0",
+    "src/goal-verification-worker.mjs": "067f57d148a3b480478d4de7a8a1a19e4fa558b75de9487d730ca4bbfcaaf071",
+    "src/goal-sequence.ts": "0b94353e14eab5ef2d8ded67c6857979227ddc1cd56f23c7f18d9ecbf36453f1",
+    "src/goal-sequence-effects.ts": "f6cbdc5df512e0472699e14aad4f0db9cb6d56948415d7b3d1fbe1f9254efb12",
+    "src/goal-machine.ts": "cd13ee34374a7b495c56d25365280745468781ab7d596394ec4d7fb79e3a4278"
+  },
+  "harnessSha256": {
+    "native.mts": "849594e8ee485bae08f23e4cc2e35252d8d321960b799b9b3aef907cd2f7f77f",
+    "hostloss.mts": "7d5d9b093242dff2a2f7caae23fd3cf9193136b9e925a2d42462f69304f8423c"
+  },
+  "cases": [
+    { "name": "probe", "status": "exited", "exitCode": 0, "elapsedMs": 139.478292, "cleanupConfirmed": true },
+    { "name": "isolation_assertions", "status": "exited", "exitCode": 0, "elapsedMs": 395.10225, "cleanupConfirmed": true },
+    { "name": "detached_child_normal_exit", "status": "exited", "exitCode": 0, "elapsedMs": 108.718125, "cleanupConfirmed": true },
+    { "name": "explicit_exit_42_transport", "status": "exited", "exitCode": 42, "elapsedMs": 156.74275, "cleanupConfirmed": true },
+    { "name": "generic_exit_1_transport", "status": "exited", "exitCode": 1, "elapsedMs": 132.022083, "cleanupConfirmed": true },
+    { "name": "deadline_with_detached_child", "status": "timed_out", "exitCode": 124, "elapsedMs": 5046.014459, "cleanupConfirmed": true },
+    { "name": "cancel_with_detached_child", "status": "cancelled", "exitCode": null, "elapsedMs": 607.799125, "cleanupConfirmed": true },
+    { "name": "caller_sigkill", "callerSignal": "SIGKILL", "detachedChildSeenBeforeKill": true, "guardExitCode": 124, "elapsedAfterHostKillMs": 4506.2415, "pidAfterExit": 0, "containerRemovedByTestObserver": true, "snapshotRetained": true }
+  ],
+  "isolationAssertions": [
+    "checker UID 501 and parent PID 1",
+    "approved input readable and unchanged",
+    "input write and read-only rootfs write denied",
+    "unmounted disposable outside canary unreadable",
+    "private tmp write/read succeeds",
+    "only loopback interface and outbound test connect returns a routing/permission denial",
+    "host canary environment variable absent",
+    "effective capabilities zero, no-new-privileges set, seccomp filter active",
+    "cgroup memory.max=268435456, memory.swap.max=0, pids.max=128 and CPU quota=one CPU",
+    "same-UID /proc/1/mem write-open denied",
+    "SIGUSR1 does not expose guard inspector on loopback port 9229"
+  ],
+  "observations": {
+    "allSevenEffectCasesReportedIsolation": true,
+    "allSuccessfulExitCasesReportedCurrentFiles": true,
+    "allSevenSourceFilesUnchanged": true,
+    "allRecordedContainerInspectMatches": true,
+    "engineNormalizedEmptyLinksToNull": true,
+    "remainingContainersBeforeVmStop": 0,
+    "remainingDetachedMarkersInGuest": 0
+  },
+  "realModelGoal": {
+    "plannedModel": "openai-codex/gpt-5.6-luna",
+    "plannedThinking": "low",
+    "plannedSdkCallLimit": 20,
+    "plannedDurationSeconds": 600,
+    "approvalAttempts": [
+      { "outcome": "expired_without_approval", "packetSha256": "d8e4eeba4de7aacc4f4719543897b6a2b397686e4bfe954deed8ed3000ada036" },
+      { "outcome": "expired_without_approval", "packetSha256": "f0def9b2d1627e222f954bf3df533f08ee212b19b1becee0fb1a2bbe36d0d846" }
+    ],
+    "sameScopeExceptNoncesAndTimes": true,
+    "approvalUi": "ask_user bridge to the real extension confirmation callback; no synthesized Yes",
+    "goalStatus": "cancelled_before_activation",
+    "modelCalls": 0,
+    "parentModelCalls": 0,
+    "jevCalls": 0,
+    "workerRuns": 0,
+    "goalJournalCreated": false,
+    "taskVerification": "not_run"
+  },
+  "cleanup": {
+    "vmStopped": true,
+    "temporaryProfilesRemoved": 2,
+    "existingProfilesOverwritten": false,
+    "modelCredentialsCopied": false,
+    "hostCallerProcessesRemaining": 0,
+    "homeSharedWithVm": false,
+    "sshAgentForwarded": false,
+    "defaultDockerContextChanged": false,
+    "packagesAndStoppedVmRetained": true,
+    "uncertainHostLossSnapshotRetained": true
+  },
+  "limitations": [
+    "Standalone verifier effects, not a completed real-model C2 Goal.",
+    "Exit 42 and exit 1 cases test transport/classification inputs; they do not prove arbitrary checker honesty or repair quality.",
+    "One macOS/Colima/Linux/Node/image combination only; no Podman, other platform or kernel-exploit coverage.",
+    "Resource settings were read inside the container, not exhaustively stress-tested.",
+    "Native pi TUI visual usability and real-model quality/cost were not validated.",
+    "Temporary harnesses and raw non-secret observations are local artifacts, not a shipped automatic installer or live-test runner."
+  ]
+}

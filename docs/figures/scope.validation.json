@@ -1,0 +1,11 @@
+{
+  "name": "scope",
+  "validation": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Project is valid V2: 20 elements, 4 tracks, 0 actions."
+      }
+    ]
+  }
+}
