@@ -1,8 +1,37 @@
+<div align="center">
+
 # jev-subagents
 
-JEV-assisted subagents for [Pi](https://pi.dev): explicit fixed-profile workers, reviewed execution, bounded reference sharing and owned process cleanup.
+**Route when needed. Review the exact scope. Follow every worker.**
+
+JEV-assisted subagents for [Pi](https://pi.dev), with native terminal plans, explicit worker permissions and bounded reference sharing.
+
+[**Download RC1**](https://github.com/mud-the-developer/jev-subagents/releases/tag/v1.0.0-rc.1) · [Installation](docs/installation.md) · [Usage](docs/usage.md) · [Security](docs/security.md)
+
+</div>
+
+[![Source checks](https://github.com/mud-the-developer/jev-subagents/actions/workflows/check.yml/badge.svg?branch=main)](https://github.com/mud-the-developer/jev-subagents/actions/workflows/check.yml)
 
 **First public prerelease: `v1.0.0-rc.1`.** This is a release candidate, not a claim of general task correctness, physical TUI certification or real-provider quality/billing. Runtime source, scripts and all regression tests are preserved in this public snapshot; private development history, personal-path reports and internal screenshots are not distributed.
+
+## See the plan, not a black box
+
+<p align="center">
+  <a href="docs/media/workflow.gif"><img src="docs/media/workflow.gif" alt="Synthetic native task-tree preview: exact-scope review, two concurrent read lanes, fresh checks, an exclusive file-ID edit, and an explicitly unverified ending." width="1120"></a>
+</p>
+
+**Real component output, synthetic scenario.** This GIF is an offline-rendered UI preview, **not a screen recording, live task, approval receipt or performance benchmark**. Model names, SDK counters and timing are illustrative. [Static preview](docs/media/task-tree.png) · [Capture method and provenance](docs/media/README.md).
+
+| Review before execution | Know what an ending means |
+| --- | --- |
+| [![Native exact-source review viewport with synthetic model, tools and runtime, never submitted](docs/media/source-review.png)](docs/media/source-review.png) | [![Native task tree ending with all workers explicitly completed but unverified and human review still required](docs/media/ended-unverified.png)](docs/media/ended-unverified.png) |
+| One complete native source review; scroll through the full packet. This example is an ordinary-profile review, not the file-ID tree's own packet. | Completion stays **unverified**. The UI does not turn a finished process into passed verification or task acceptance. |
+
+*Click a still image to view it at full resolution. Prefer less motion? Use the [static task-tree image](docs/media/task-tree.png).*
+
+| Explicit roles | Visible dependencies | Clear boundaries |
+| --- | --- | --- |
+| Fixed profiles and optional JEV candidate advice | Read lanes can overlap; dependent mutations wait | Reviewed scope, owned cleanup and no automatic retry |
 
 ## Install from GitHub Releases
 

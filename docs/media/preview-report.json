@@ -1,0 +1,47 @@
+{
+  "kind": "offline_native_ui_previews",
+  "sdk": "0.85.1",
+  "columns": 112,
+  "sourceSha256": {
+    "src/plan-presentation.ts": "6ca95b5206659d8cbb96bb46c90247090cf75750339b76cdb1ec14b37553e678",
+    "src/context-approval.ts": "8370c98f2f43f6586a266d97be66b7de9ff2b9b47835057dd9f300082adab38a",
+    "src/native-task-review.ts": "d31847234a89555d6a378e58d2fc912d7bc3113c4dd464e9edef75d386b5d896",
+    "src/task-review-machine.ts": "67891a1547623f3038c5bf54a3020dbde83dc81efbb4f1e4c031fe7eba999b19"
+  },
+  "renderer": "Actual renderPlan + native exact-source editor, rasterized with Windows System.Drawing/Consolas",
+  "syntheticData": true,
+  "screenRecording": false,
+  "liveModels": false,
+  "approvalGranted": false,
+  "networkAttempts": 0,
+  "animationFrames": 25,
+  "systemToolsOnly": true,
+  "ownershipCleanupConfirmed": true,
+  "assets": [
+    {
+      "name": "task-tree.png",
+      "bytes": 37700,
+      "sha256": "e83dfe28f5ab8589745169a0b0b400e22124a18e7a4ae3230729136c25c29b41"
+    },
+    {
+      "name": "source-review.png",
+      "bytes": 31972,
+      "sha256": "2aba414d188e3b9261e1c4bea6200dad61c0a598cf03954cee5072990b99b7a9"
+    },
+    {
+      "name": "ended-unverified.png",
+      "bytes": 42208,
+      "sha256": "b787b667dde535e653b767220531e0b3085036a16844e3572ed1308b7ff52d8d"
+    },
+    {
+      "name": "workflow.gif",
+      "bytes": 724043,
+      "sha256": "1f0252cc58d6302673f6f835cb822aece35c2fcdb51c000cf65ab2ed9492ba1d"
+    }
+  ],
+  "limitations": [
+    "Illustrative counters/timing, not a benchmark or real task result.",
+    "Documentation frame is not the full Pi terminal or physical user acceptance.",
+    "Existing release tag and ZIP are not altered."
+  ]
+}
