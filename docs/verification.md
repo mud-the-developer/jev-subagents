@@ -25,6 +25,16 @@ The gate checks actor/source/home safety, builds a keyless child environment wit
 
 Hosted Windows CI runners are elevated, so their lint/typecheck job is not a substitute for this native non-admin process/filesystem acceptance.
 
+## Installed Pi1.3 UI surface — current main only
+
+The updated opt-in probe is newer than the immutable RC1 ZIP. It requires an **existing Pi1.3.0 SDK directory** and the source checkout's frozen full dependencies; it does not install or adopt another host SDK:
+
+```text
+bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test/host-tui-surface.mjs "/absolute/path/to/existing-pi-1.3.0-package" "receipt.json"
+```
+
+This uses the installed host loader, native editor/renderer and a private test-only review bridge. Synthetic input checks complete literal source, untimed review waiting, positive submission, cancellation and edited-source denial; cards cover English three-level model/task lines at48/80/120columns. It also checks the separate standalone fixture, unchanged configuration and tool metadata limits. The receipt records the probe engine, host/worker SDK versions, zero network/worker calls and synthetic limitations. A positive synthetic review is never a live job grant or physical operator acceptance.
+
 ## Artifact smoke
 
 For the actual source ZIP: verify SHA256SUMS and safe paths, extract into a new folder, install production-only frozen dependencies with lifecycle scripts disabled, verify pinned versions and four-tool/`/jev-subagents` discovery, then run the existing `demo:job` in an isolated keyless environment. Expected demo receipts include3Bun workers,6loopback SDK calls, declared edit only, all children closed and no retained project lock.
@@ -32,5 +42,7 @@ For the actual source ZIP: verify SHA256SUMS and safe paths, extract into a new 
 A development node_modules tree or earlier ZIP cannot certify a different archive. A passing smoke is not real-provider quality, physical TUI interaction, arbitrary task correctness or human task acceptance. Actual observed release gates are recorded in the GitHub release notes.
 
 ## Historical regression data
+
+All eleven historical native-failure scenarios remain under the unchanged30-second parent/15-second child limits. Fixed scenario/phase timings expose elapsed time and loopback/launch counters, not task source or provider output. Cancelled test owners cannot start a new fixture or continue a later assertion; started work still settles through the existing owned teardown. One prior aggregate CI timeout was not reproduced in subsequent gates, and its initial cause is not retroactively established. Treat future retained timings as investigation evidence, not performance guarantees or permission to retry paid work or increase deadlines.
 
 All source/test/script files are preserved from the reviewed development snapshot. The minimal `benchmarks/goal-c2` recorded metadata/hash-chain fixture and the two `docs/figures` diagrams are retained solely for unchanged regression coverage; they do not activate retired Goal, container, managed-context or SoL-Pi integration APIs. Other internal reports/screenshots and personal-path documentation are excluded. See [RELEASE-SOURCE.json](../RELEASE-SOURCE.json) and [third-party notices](../THIRD_PARTY_NOTICES.md).

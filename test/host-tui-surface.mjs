@@ -1,4 +1,4 @@
-// Explicit installed-host probe: node test/host-tui-surface.mjs /absolute/path/to/host-sdk [receipt.json]
+// Explicit installed-host probe: bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test/host-tui-surface.mjs /absolute/path/to/host-sdk [receipt.json]
 // Real loader, renderer and native dialog methods; synthetic terminal input is NOT physical user acceptance.
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -40,12 +40,14 @@ try {
   const theme = await import(pathToFileURL(path.join(hostRoot, 'dist/modes/interactive/theme/theme.js')).href);
   const { CustomEditor } = await import(pathToFileURL(path.join(hostRoot, 'dist/modes/interactive/components/custom-editor.js')).href);
   const pinned = await import(pathToFileURL(path.join(repo, 'node_modules/@earendil-works/pi-coding-agent/dist/index.js')).href);
-  assert.equal(sdk.VERSION, '1.2.0'); assert.equal(pinned.VERSION, '0.85.1');
-  pinned.initTheme('dark', false);
+  assert.equal(sdk.VERSION, '1.3.0'); assert.equal(pinned.VERSION, '0.85.1');
+  sdk.initTheme('dark', false); pinned.initTheme('dark', false);
+  const bridge = path.join(root, 'native-review-bridge.ts');
+  await fs.writeFile(bridge, `import { confirmNativeTaskReview } from ${JSON.stringify(path.join(repo, 'src/native-task-review.ts'))};\nexport default pi => pi.registerCommand('fixture-native-review', { handler: (args, ctx) => confirmNativeTaskReview(JSON.parse(args), ctx, ctx.signal, value => ctx.observeApproval?.(value)) });\n`);
   const loader = new sdk.DefaultResourceLoader({ cwd: root, agentDir, settingsManager: sdk.SettingsManager.inMemory({ packages: [] }),
     noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true, noContextFiles: true,
-    additionalExtensionPaths: [path.join(repo, 'src/index.ts'), path.join(standalone, 'src/sol-pi/index.ts')] });
-  await loader.reload(); loaded = loader.getExtensions(); assert.deepEqual(loaded.errors, []); assert.equal(loaded.extensions.length, 2);
+    additionalExtensionPaths: [path.join(repo, 'src/index.ts'), path.join(standalone, 'src/sol-pi/index.ts'), bridge] });
+  await loader.reload(); loaded = loader.getExtensions(); assert.deepEqual(loaded.errors, []); assert.equal(loaded.extensions.length, 3);
   const jev = loaded.extensions.find(entry => entry.path === path.join(repo, 'src/index.ts')) ?? loaded.extensions[0];
   const sol = loaded.extensions.find(entry => entry !== jev);
   const ctx = { cwd: root, mode: 'tui', hasUI: false, isProjectTrusted: () => false,
@@ -71,7 +73,8 @@ try {
   Object.assign(mode, { ui: screen, editor, editorContainer: new tui.Container(), keybindings: keys,
     programStatus: new ProgramStatusReporter(() => terminal, () => 'Synthetic only') });
   mode.editorContainer.addChild(editor); screen.addChild(mode.editorContainer); screen.start();
-  const { confirmNativeTaskReview } = await import(new URL('../src/native-task-review.ts', import.meta.url));
+  const nativeReview = loaded.extensions.find(entry => entry.commands.has('fixture-native-review')).commands.get('fixture-native-review');
+  const confirmNativeTaskReview = (content, context, signal, observe) => nativeReview.handler(JSON.stringify(content), { ...context, signal, observeApproval: observe });
   const controller = new AbortController(), diagnostics = [];
   const reviewCtx = { ...ctx, hasUI: true, ui: {
     select: mode.showExtensionSelector.bind(mode), confirm: mode.showExtensionConfirm.bind(mode), custom: mode.showExtensionCustom.bind(mode),
@@ -82,17 +85,19 @@ try {
   let settled = false;
   const work = confirmNativeTaskReview(content, reviewCtx, controller.signal, value => { diagnostics.push(value); }).then(value => { settled = true; return value; });
   const ready = async predicate => { for (let n = 0; n < 100; n++) { if (predicate()) return; await nextTurn(); } assert.fail('Native view did not become ready'); };
-  await ready(() => !!mode.extensionSelector); assert.equal(mode.extensionSelector.countdown, undefined);
-  assert.ok(mode.extensionSelector.render(80).join('\n').includes('24h (86400s)'));
+  const findSource = component => typeof component.getExpandedText === 'function' ? component : (component.children ?? []).map(findSource).find(Boolean);
+  const sourceVisible = () => mode.editorContainer.children[0] !== editor && !!findSource(mode.editorContainer);
+  await ready(sourceVisible); assert.equal(mode.extensionSelector, undefined);
+  const text = findSource(mode.editorContainer).getExpandedText();
+  assert.ok(text.includes('24h (86400s)')); for (const section of content.sections) assert.ok(text.includes(section.text));
   const later = originalNow() + 86400000; Date.now = () => later;
-  await nextTurn(); assert.equal(settled, false); input('\r');
-  await ready(() => !mode.extensionSelector && mode.editorContainer.children[0] !== editor);
+  await nextTurn(); assert.equal(settled, false);
   for (const width of [48, 80, 120]) { columns = width; assert.ok(mode.editorContainer.render(width).length); screen.requestRender(true); await nextTurn(); }
-  input('\r'); await ready(() => !!mode.extensionSelector); assert.equal(mode.extensionSelector.countdown, undefined);
-  input('\r'); await ready(() => mode.extensionSelector?.options?.[0] === 'Yes'); assert.equal(mode.extensionSelector.countdown, undefined);
-  input('\r'); assert.equal(await work, true);
+  input('\r'); assert.equal(await work, true); assert.equal(mode.editorContainer.children[0], editor);
   const cancel = new AbortController(), denied = confirmNativeTaskReview(content, reviewCtx, cancel.signal);
-  await ready(() => !!mode.extensionSelector); cancel.abort(); assert.equal(await denied, false);
+  await ready(sourceVisible); cancel.abort(); assert.equal(await denied, false);
+  const edited = confirmNativeTaskReview(content, reviewCtx, controller.signal);
+  await ready(sourceVisible); input('X'); input('\r'); assert.equal(await edited, false);
   const { executeProjectMemory, projectMemoryIO } = await import(new URL('../src/project-memory-effects.ts', import.meta.url));
   const { memoryProjectKey, memoryDigest } = await import(new URL('../src/project-memory.ts', import.meta.url));
   const memoryState = { version: 1, projectKey: memoryProjectKey(root), revision: 1, facts: [{ id: 'fact_a', kind: 'decision', title: 'Synthetic public title', content: 'SYNTHETIC_READONLY_MEMORY', provenance: 'Fixture parent review only.', createdRevision: 1 }], edges: [] };
@@ -101,7 +106,6 @@ try {
     read: async () => ({ state: structuredClone(memoryState), directory: memoryDirectory, token: memoryDigest(memoryState) }) };
   const memoryWork = executeProjectMemory({ operation: 'snapshot', directory: memoryDirectory, expectedRevision: 1, ids: ['fact_a'] }, reviewCtx, controller.signal, memoryIO);
   await ready(() => mode.editorContainer.children[0] !== editor);
-  const findSource = component => typeof component.getExpandedText === 'function' ? component : (component.children ?? []).map(findSource).find(Boolean);
   assert.ok(findSource(mode.editorContainer)?.getExpandedText().includes('SYNTHETIC_READONLY_MEMORY'));
   input('\r'); const memoryResult = await memoryWork;
   assert.equal(memoryResult.status, 'snapshot'); assert.equal(memoryResult.snapshot.records[0].content, 'SYNTHETIC_READONLY_MEMORY');
@@ -128,14 +132,26 @@ try {
   screen.addChild(graphCard);
   for (const width of [48, 80, 120]) { columns = width; assert.ok(graphCard.render(width).length); screen.requestRender(true); await nextTurn(); }
   assert.ok(frames.includes('DAG v2')); assert.ok(frames.includes('SKIPPED')); assert.ok(frames.includes('JOIN'));
+  const treeLabels = { inspect: 'Inspect approved source', edit: 'Apply the approved edit', review: 'Review declared changes' };
+  const treeCard = { version: 3, phase: 'running', display: { maxDepth: 3, animations: false }, elapsedMs: 1, seconds: 120, modelCalls: 3,
+    nodes: ['inspect', 'edit', 'review'].map((id, index, ids) => ({ id, title: id, kind: 'task', after: index ? [ids[index - 1]] : [],
+      state: index === 0 ? 'completed_unverified' : index === 1 ? 'running' : 'pending', model: `offline/${id}`, thinking: 'low', modelCalls: index === 0 ? 2 : index === 1 ? 1 : 0 })),
+    edges: [{ from: 'inspect', to: 'edit', kind: 'dependency', status: 'active' }, { from: 'edit', to: 'review', kind: 'dependency', status: 'pending' }] };
+  const treeComponent = { render: width => renderPlan(treeCard, width, theme.theme, true, undefined, treeLabels), invalidate() {} };
+  screen.addChild(treeComponent);
+  for (const width of [48, 80, 120]) { columns = width; assert.ok(treeComponent.render(width).length); screen.requestRender(true); await nextTurn(); }
+  const treeText = renderPlan(treeCard, 120, undefined, true, undefined, treeLabels).join('\n');
+  assert.ok(treeText.includes('MODEL offline/inspect — Inspect approved source')); assert.match(treeText, /│ {6,}└─ ○ review/);
   assert.ok(frames.length > 0); assert.equal(fetches, 0);
   const receipt = { kind: 'fresh_installed_host_ordinary_surface_and_standalone_sol_pi', hostSdk: sdk.VERSION, workerSdk: pinned.VERSION,
+    probeEngine: process.versions.bun ? `Bun ${process.versions.bun}` : `Node ${process.versions.node}`, nativeReviewThroughHostLoader: true,
     jevTools: [...jev.tools.keys()], standaloneTools: [...sol.tools.keys()], duplicateTools: false, standaloneConfigUnchanged: true,
     retiredSolPiInputRejected: true, metadataBytes, nativeUi: { methods: 'InteractiveMode', renderer: 'TuiMainScreen', syntheticTerminal: true,
       delayedReviewApproved: true, readableApprovedSeconds: 86_400, literalMultilineSources: true,
       planCard: { language: 'English', stages: 3, selectedBranch: 'replace_parser', observedSdkCalls: 8, syntheticOnly: true },
       graphCard: { version: 2, nodes: 6, links: 6, selectedChoice: 'b', skippedNodes: 2, conditionalLinksAndJoinVisible: true, syntheticOnly: true },
-      memorySnapshot: { exactNativeSourceApproved: true, originalDataPreserved: true, sqliteFilesOpened: 0, jevRequests: 0, syntheticOnly: true }, countdownTimersAbsent: true, resizeWidths: [48, 80, 120], abortDenied: true, frameBytes: Buffer.byteLength(frames),
+      treeCard: { version: 3, depth: 3, tasks: 3, modelAndEnglishTaskOneLine: true, labelsSeparateFromPlan: true, syntheticOnly: true },
+      memorySnapshot: { exactNativeSourceApproved: true, originalDataPreserved: true, sqliteFilesOpened: 0, jevRequests: 0, syntheticOnly: true }, countdownTimersAbsent: true, resizeWidths: [48, 80, 120], abortDenied: true, editedSourceDenied: true, frameBytes: Buffer.byteLength(frames),
       remainingMs: diagnostics.at(-1)?.remainingMs }, networkRequests: fetches, workerInvocations: 0,
     limitations: ['Not the running cached extension or physical terminal', 'Standalone fixture only; no live provider or compaction inference'] };
   if (receiptPath) await fs.writeFile(receiptPath, JSON.stringify(receipt, null, 2) + '\n');
