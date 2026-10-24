@@ -9,7 +9,7 @@ Use an existing Pi installation and standalone Bun1.4.3. Do not install or upgra
 Download from the official repository. Compare the archive SHA-256 with the exact filename in `SHA256SUMS` before extraction. Checksums detect changed bytes; their publisher identity still depends on obtaining them from the trusted release.
 
 ```powershell
-Get-FileHash .\jev-subagents-1.0.0-rc.1-source.zip -Algorithm SHA256
+Get-FileHash .\jev-subagents-1.0.0-source.zip -Algorithm SHA256
 ```
 
 On Linux, `sha256sum --check SHA256SUMS` checks the published filename. Extract only after the match, into a new folder outside `node_modules`, and inspect its README/LICENSE. Never overwrite a running or locally edited installation.

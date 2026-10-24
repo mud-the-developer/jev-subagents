@@ -25,9 +25,9 @@ The gate checks actor/source/home safety, builds a keyless child environment wit
 
 Hosted Windows CI runners are elevated, so their lint/typecheck job is not a substitute for this native non-admin process/filesystem acceptance.
 
-## Installed Pi1.3 UI surface — current main only
+## Installed Pi1.3 UI surface — v1.0.0
 
-The updated opt-in probe is newer than the immutable RC1 ZIP. It requires an **existing Pi1.3.0 SDK directory** and the source checkout's frozen full dependencies; it does not install or adopt another host SDK:
+The updated opt-in probe is included in v1.0.0 and is newer than the immutable RC1 ZIP. It requires an **existing Pi1.3.0 SDK directory** and the source checkout's frozen full dependencies; it does not install or adopt another host SDK:
 
 ```text
 bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test/host-tui-surface.mjs "/absolute/path/to/existing-pi-1.3.0-package" "receipt.json"
@@ -41,7 +41,7 @@ For the actual source ZIP: verify SHA256SUMS and safe paths, extract into a new 
 
 A development node_modules tree or earlier ZIP cannot certify a different archive. A passing smoke is not real-provider quality, physical TUI interaction, arbitrary task correctness or human task acceptance. Actual observed release gates are recorded in the GitHub release notes.
 
-## Native regression fixture preparation — current main only
+## Native regression fixture preparation — v1.0.0
 
 `check` now prepares the historical C1/Sol test children with the existing standalone Bun1.4.3 compiler before the normal native test run. This is test preparation, not a new production executor: ordinary `jev_*` workers and the source-only distribution remain source-based. No standalone executable, extra runtime or SDK upgrade is installed.
 
@@ -51,6 +51,6 @@ Native-owned protocol checks run before the full gate. They test SDK/config bind
 
 ## Historical regression data
 
-All eleven historical native-failure scenarios remain under the unchanged30-second parent/15-second child limits. Fixed scenario/phase timings expose elapsed time and loopback/launch counters, not task source or provider output. Current fixtures additionally own25-second parent/10-second child work deadlines, reserving five seconds for the existing stop/drain/release sequence inside the unchanged framework limits. Their independent abort signal does not rely on the framework signal; late agent-directory reset also leaves a successor fixture's value intact. In one failed Linux run this stopped and settled at25.011seconds without a dangling-process kill or subsequent-parent cascade. Before these changes, a Linux PR run started its last scenario around29.8seconds and both framework signals stayed false after30seconds. Containment alone did not solve throughput. The current native-fixture candidate has separately passed all eleven scenarios and the three Sol native scenarios on Linux/macOS, including repeat and normal preparation-branch PR runs; exact public-source and production-archive qualification still must match the final commit. Earlier/later successful gates do not erase the retained failed receipts or establish a universal performance guarantee. Investigate retained timings and fixture ownership without dropping scenarios, increasing deadlines, weakening cleanup or retrying paid work.
+All eleven historical native-failure scenarios remain under the unchanged30-second parent/15-second child limits. Fixed scenario/phase timings expose elapsed time and loopback/launch counters, not task source or provider output. Current fixtures additionally own25-second parent/10-second child work deadlines, reserving five seconds for the existing stop/drain/release sequence inside the unchanged framework limits. Their independent abort signal does not rely on the framework signal; late agent-directory reset also leaves a successor fixture's value intact. In one failed Linux run this stopped and settled at25.011seconds without a dangling-process kill or subsequent-parent cascade. Before these changes, a Linux PR run started its last scenario around29.8seconds and both framework signals stayed false after30seconds. Containment alone did not solve throughput. The native fixtures have separately passed all eleven scenarios and the three Sol native scenarios on Linux/macOS, including repeat and normal preparation-branch PR runs. The v1.0.0 release still requires exact final-commit public CI, native Windows and production-archive qualification, recorded in its release notes. Earlier/later successful gates do not erase the retained failed receipts or establish a universal performance guarantee. Investigate retained timings and fixture ownership without dropping scenarios, increasing deadlines, weakening cleanup or retrying paid work.
 
 All source/test/script files are preserved from the reviewed development snapshot. The minimal `benchmarks/goal-c2` recorded metadata/hash-chain fixture and the two `docs/figures` diagrams are retained solely for unchanged regression coverage; they do not activate retired Goal, container, managed-context or SoL-Pi integration APIs. Other internal reports/screenshots and personal-path documentation are excluded. See [RELEASE-SOURCE.json](../RELEASE-SOURCE.json) and [third-party notices](../THIRD_PARTY_NOTICES.md).

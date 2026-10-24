@@ -41,9 +41,9 @@ Review the exact model, thinking, effective tools, workspace, file IDs, source a
 
 One permitted plan skips JEV selection, not authorization. Multiple candidates are selected only within the approved packet. No duplicate routing, paid width planner, automatic retry/escalation or arbitrary model changes. Generated downstream references need their existing disclosure authority and remain untrusted reference data.
 
-## English task labels and visible depth — current main only
+## English task labels and visible depth — v1.0.0
 
-This development UI is newer than the immutable RC1 ZIP. For a declared tree, optional reviewed labels are keyed by its existing task IDs:
+This UI is included in v1.0.0 and is newer than the immutable RC1 ZIP. For a declared tree, optional reviewed labels are keyed by its existing task IDs:
 
 ```json
 {

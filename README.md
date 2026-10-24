@@ -6,19 +6,19 @@
 
 JEV-assisted subagents for [Pi](https://pi.dev), with native terminal plans, explicit worker permissions and bounded reference sharing.
 
-[**Download RC1**](https://github.com/mud-the-developer/jev-subagents/releases/tag/v1.0.0-rc.1) · [Installation](docs/installation.md) · [Usage](docs/usage.md) · [Security](docs/security.md)
+[**Download v1.0.0**](https://github.com/mud-the-developer/jev-subagents/releases/tag/v1.0.0) · [Installation](docs/installation.md) · [Usage](docs/usage.md) · [Security](docs/security.md)
 
 </div>
 
 [![Source checks](https://github.com/mud-the-developer/jev-subagents/actions/workflows/check.yml/badge.svg?branch=main)](https://github.com/mud-the-developer/jev-subagents/actions/workflows/check.yml)
 
-**First public prerelease: `v1.0.0-rc.1`.** This is a release candidate, not a claim of general task correctness, physical TUI certification or real-provider quality/billing. Runtime source, scripts and all regression tests are preserved in this public snapshot; private development history, personal-path reports and internal screenshots are not distributed.
+**Stable source release: `v1.0.0`.** This release covers the documented bounded execution and verification contracts, not a claim of general task correctness, physical TUI certification or real-provider quality/billing. Runtime source, scripts and all regression tests are preserved in this public snapshot; private development history, personal-path reports and internal screenshots are not distributed.
 
-**Security notice:** the immutable RC1 ZIP still contains `undici8.10.2`, affected by newly published advisories. Current `main` pins the SDK-scoped dependency to `8.12.2`; this is not a retroactive patch to RC1 or a new release. See [security status](docs/security.md#dependency-security-status).
+**Security notice:** the immutable RC1 ZIP still contains `undici8.10.2`, affected by newly published advisories. `v1.0.0` pins the SDK-scoped dependency to `8.12.2`; the original RC1 tag and assets are not retroactively patched. See [security status](docs/security.md#dependency-security-status).
 
 ## See each model's job in a three-level tree
 
-**Current `main` UI preview:** human-only task labels below are newer than the immutable RC1 ZIP. They are available in updated source, not retroactively added to the published release.
+**Included in v1.0.0:** human-only English task labels and the three-level dependency view below. The immutable RC1 ZIP does not include these later UI updates.
 
 <p align="center">
   <a href="docs/media/workflow.gif"><img src="docs/media/workflow.gif" alt="Synthetic three-level native task tree: scout inspects the approved module, worker performs a file-ID edit, reviewer checks the changes, and every model has an English one-line task description before an unverified ending." width="1120"></a>
@@ -39,11 +39,11 @@ JEV-assisted subagents for [Pi](https://pi.dev), with native terminal plans, exp
 
 ## Install from GitHub Releases
 
-Download **`jev-subagents-1.0.0-rc.1-source.zip`** and **`SHA256SUMS`** from the [release page](https://github.com/mud-the-developer/jev-subagents/releases/tag/v1.0.0-rc.1). Use the named source asset, not an unpinned branch or a GitHub-generated archive of a different commit.
+Download **`jev-subagents-1.0.0-source.zip`** and **`SHA256SUMS`** from the [release page](https://github.com/mud-the-developer/jev-subagents/releases/tag/v1.0.0). Use the named source asset, not an unpinned branch or a GitHub-generated archive of a different commit.
 
 1. Verify the archive SHA-256 against `SHA256SUMS` from the official release.
 2. Extract into a new stable local folder outside `node_modules`. On Windows use a normal non-admin account and local fixed NTFS with safe ownership/ACLs. Do not repair permissions or overwrite an existing installation.
-3. In the extracted `jev-subagents-1.0.0-rc.1` folder, prepare the frozen production dependencies and register the local source:
+3. In the extracted `jev-subagents-1.0.0` folder, prepare the frozen production dependencies and register the local source:
 
    ```text
    bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json install --production --frozen-lockfile --ignore-scripts

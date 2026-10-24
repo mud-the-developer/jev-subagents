@@ -10,7 +10,7 @@ These are **offline-rendered previews of the actual native UI components**, not 
 | [ended-unverified.png](ended-unverified.png) |The native plan's explicit unverified completion and human-review warning |
 | [preview-report.json](preview-report.json) |Renderer source hashes, image hashes/sizes, synthetic/no-network/no-approval and owned-process cleanup observations |
 
-The current `main` previews include human-only task labels newer than RC1; the released ZIP and tag remain unchanged. Indented levels are dependencies among three declared tasks, not recursive agents or a larger worker budget. Labels are supplied separately from transcript-safe plan data and are not inferred from private task summaries.
+The v1.0.0 previews include human-only task labels newer than RC1; the original RC1 ZIP and tag remain unchanged. Indented levels are dependencies among three declared tasks, not recursive agents or a larger worker budget. Labels are supplied separately from transcript-safe plan data and are not inferred from private task summaries.
 
 The preview calls the existing `renderPlan` and `confirmNativeTaskReview`/native editor code with synthetic data, denies the review and never starts a model or task worker. The real pinned SDK dark theme is rasterized in a documentation window with system fonts; dim intensity/font rasterization can differ from a physical terminal. The full review packet remains scrollable in the actual UI; a still viewport is not evidence that its source was reviewed or approved.
 

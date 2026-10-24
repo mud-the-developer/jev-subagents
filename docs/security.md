@@ -2,9 +2,9 @@
 
 ## Dependency security status
 
-Current `main` changes only the existing SDK-scoped `undici` override from8.10.2 to8.12.2. Bun1.4.3, SDK0.85.1, TypeBox1.3.7 and the adjacent brace-expansion override remain fixed. New registry advisories affect the previous8.x version: [EventSource memory DoS](https://github.com/advisories/GHSA-4qv8-2p9j-2685), [SRI token bypass](https://github.com/advisories/GHSA-f72v-6w45-q472), and [content-encoding error DoS](https://github.com/advisories/GHSA-xjj6-f33q-929c). All list8.12.2 as the patched8.x version.
+v1.0.0 changes only the existing SDK-scoped `undici` override from8.10.2 to8.12.2. Bun1.4.3, SDK0.85.1, TypeBox1.3.7 and the adjacent brace-expansion override remain fixed. New registry advisories affect the previous8.x version: [EventSource memory DoS](https://github.com/advisories/GHSA-4qv8-2p9j-2685), [SRI token bypass](https://github.com/advisories/GHSA-f72v-6w45-q472), and [content-encoding error DoS](https://github.com/advisories/GHSA-xjj6-f33q-929c). All list8.12.2 as the patched8.x version.
 
-The original RC1 tag/ZIP are immutable and retain8.10.2; earlier successful audits describe the advisory database at that time, not current security acceptance. No replacement asset or new release is implied. Current source audit and regression checks must pass without lowering thresholds; a clean audit is not proof that unknown vulnerabilities do not exist.
+The original RC1 tag/ZIP are immutable and retain8.10.2; earlier successful audits describe the advisory database at that time, not current security acceptance. Use the separately versioned v1.0.0 assets for the patched source; RC1 assets are not replaced. Source audit and regression checks must pass without lowering thresholds; a clean audit is not proof that unknown vulnerabilities do not exist.
 
 ## Trust and execution
 

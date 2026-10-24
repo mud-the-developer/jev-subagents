@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "developmentSnapshot": "bdac87e092955d28df7ce640c1f8f06f7e9cbaf3",
-  "sourceStatus": "Current main includes unreleased human-only task labels, owned fixture deadlines, test-only native Bun regression prebuilds and the undici8.12.2 security patch. Published RC1 remains immutable at commit 3fd43886827a56e36f9430e3419472492ff078b3 and retains its original dependencies.",
+  "sourceStatus": "v1.0.0 source includes human-only task labels, owned fixture deadlines, test-only native Bun regression prebuilds and the undici8.12.2 security patch. Published RC1 remains immutable at commit 3fd43886827a56e36f9430e3419472492ff078b3 and retains its original dependencies.",
   "runtimeScriptsAndTestsByteIdentical": true,
   "dependencyLockByteIdentical": true,
-  "packageMetadataChange": "Version only: 0.6.0-rc.2 to 1.0.0-rc.1; private:true and MIT remain set.",
+  "packageMetadataChange": "Version only: 0.6.0-rc.2 to 1.0.0; private:true and MIT remain set.",
   "groupDigestAlgorithm": "SHA256 of sorted relative-path + NUL + file-SHA256-hex + LF records, UTF-8.",
   "preservedGroups": {
     "src": { "files": 107, "sha256": "fe477bdce6391531d545fbc3c0bd3af99def403d5fd73d6e978d220a2da29028" },

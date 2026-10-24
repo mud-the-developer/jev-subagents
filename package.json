@@ -1,6 +1,6 @@
 {
   "name": "jev-subagents",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "description": "JEV-assisted subagents, reviewed task trees and parent-child information sharing for Pi.",
