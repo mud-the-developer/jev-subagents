@@ -26,3 +26,7 @@ goal.jsonl
 
 # PowerShell may generate this cache when launched with an isolated environment.
 /Microsoft/Windows/PowerShell/
+
+# Same-checkout native bundle experiments are not distributable source.
+/src/goal-sequence-worker.probe-*
+/src/sol-pi-worker.probe-*

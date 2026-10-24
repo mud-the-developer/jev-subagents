@@ -98,7 +98,7 @@ export const WorkerReportSchema = Type.Object({
       Type.Literal("transport"), Type.Literal("cancelled"), Type.Literal("unknown"),
     ]),
     httpStatus: Type.Union([Type.Integer({ minimum: 100, maximum: 599 }), Type.Null()]),
-    stage: Type.Optional(Type.Union([Type.Literal("input"), Type.Literal("model_loading"), Type.Literal("session_setup"),
+    stage: Type.Optional(Type.Union([Type.Literal("input"), Type.Literal("model_loading"), Type.Literal("session_setup"), Type.Literal("extension_loading"),
       Type.Literal("model_request"), Type.Literal("model_response"), Type.Literal("internal_report"), Type.Literal("accounting"), Type.Literal("cleanup")])),
   }, closed)),
   accounting: Type.Union([

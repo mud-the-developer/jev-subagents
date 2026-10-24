@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import childProcess from "node:child_process";
 import { test, type TestContext } from "node:test";
 import { mkdir, mkdtemp, realpath, writeFile, rm, readFile, lstat, readdir } from "node:fs/promises";
 import path from "node:path";
@@ -15,8 +16,10 @@ import { createServer } from "node:http";
 import { once } from "node:events";
 import { zstdDecompressSync } from "node:zlib";
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
-import { initialState, reduce, type Run } from "../src/delegate-machine.ts";
-import { bunWorkerOptions } from "../src/worker-runtime.ts";
+import { initialState, reduce, WorkerReplySchema, type Run } from "../src/delegate-machine.ts";
+import { Value } from "typebox/value";
+import { bunWorkerOptions, workerEnvironment } from "../src/worker-runtime.ts";
+import { fixtureWorkDeadline, teardownOwnedFixture } from "./helpers/owned-fixture-teardown.ts";
 const { execPath, execArgv } = bunWorkerOptions();
 const shellRuntime = [execPath, ...execArgv].map(value => `'${value.replaceAll("'", "'\\''")}'`).join(" ");
 
@@ -56,13 +59,36 @@ test("Sol cancellation drains late usage without another admission or a zero-cos
   assert.equal(state.status === "done" && state.result, "cancelled");
 });
 
-async function fixture(t: TestContext, features: Partial<SolPiInput> = {}, limits = { maxCalls: 6, contextWindow: 272000 }) {
+async function fixture(t: TestContext, features: Partial<SolPiInput> = {}, limits = { maxCalls: 6, contextWindow: 272000 }, signal = t.signal) {
+  signal.throwIfAborted();
   const root = await realpath(await mkdtemp(path.join(os.tmpdir(), "jev-sol-"))), cwd = path.join(root, "work"), agentDir = path.join(root, "agent"), storageDirectory = path.join(root, "storage");
   const prior = { ...process.env }, umask = process.umask(0o077);
   for (const key of Object.keys(process.env)) delete process.env[key];
-  Object.assign(process.env, { PATH: prior.PATH ?? "", HOME: root, TMPDIR: path.join(storageDirectory, "tmp"), PI_CODING_AGENT_DIR: agentDir, PI_OFFLINE: "1", PI_SKIP_VERSION_CHECK: "1", NODE_DISABLE_COMPILE_CACHE: "1" });
-  t.after(async () => { process.umask(umask); for (const key of Object.keys(process.env)) delete process.env[key]; Object.assign(process.env, prior); await rm(root, { recursive: true, force: true }); });
+  Object.assign(process.env, workerEnvironment({ PATH: prior.PATH ?? "", HOME: root, TMPDIR: path.join(storageDirectory, "tmp"), PI_CODING_AGENT_DIR: agentDir, PI_OFFLINE: "1", PI_SKIP_VERSION_CHECK: "1", NODE_DISABLE_COMPILE_CACHE: "1" }));
+  const owner = new AbortController(), invocations: Promise<unknown>[] = []; let uncertain = false, constructed = false;
+  const cleanup = { stop() {}, async release() {}, done: false };
+  t.after(() => teardownOwnedFixture({ async stop() { owner.abort(); cleanup.stop(); }, invocations: () => invocations, release: () => cleanup.release(),
+    async hasMarker() {
+      if (uncertain || !constructed) return true;
+      for (const marker of [path.join(cwd, ".jev-goal.lock"), path.join(storageDirectory, ".jev-goal.lock")]) {
+        try { await lstat(marker); return true; } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") return true; }
+      }
+      return false;
+    }, remove: () => rm(root, { recursive: true, force: true }), reset() {
+      if (process.env.PI_CODING_AGENT_DIR !== agentDir) return;
+      process.umask(umask); for (const key of Object.keys(process.env)) delete process.env[key]; Object.assign(process.env, prior);
+    } }).finally(() => { cleanup.done = true; }));
   t.mock.method(globalThis, "fetch", async () => { throw new Error("External HTTP forbidden"); });
+  const fork = childProcess.fork, wire: { event: string; valid?: boolean; modelCalls?: number | null; cleanupConfirmed?: boolean; code?: number | null; signal?: string | null }[] = [];
+  t.mock.method(childProcess, "fork", (modulePath: string | URL, args: readonly string[], options: childProcess.ForkOptions) => {
+    const child = fork(typeof modulePath === "string" && path.basename(modulePath) === "sol-pi-worker.ts" ? path.join(path.dirname(modulePath), "sol-pi-worker.probe-bytecode.js") : modulePath, args, options);
+    child.on("message", message => {
+      const valid = Value.Check(WorkerReplySchema, message);
+      wire.push({ event: "reply", valid, ...(valid ? { modelCalls: message.report.modelCalls, cleanupConfirmed: message.report.solPi?.cleanupConfirmed ?? false } : {}) });
+    });
+    child.once("close", (code, signal) => wire.push({ event: "close", code, signal }));
+    return child;
+  });
   for (const dir of [cwd, agentDir, storageDirectory, path.join(agentDir, "agents")]) await mkdir(dir, { mode: 0o700 });
   await writeFile(path.join(cwd, "AGENTS.md"), "Fixture instructions: never claim human acceptance.\n", { mode: 0o600 });
   const file = path.join(agentDir, "agents/sol.md"), systemPrompt = "Follow the explicit task. Do not delegate further.";
@@ -72,7 +98,8 @@ async function fixture(t: TestContext, features: Partial<SolPiInput> = {}, limit
   const model = { provider: "openai-codex", id: "gpt-5.6-sol" };
   const base: Run = { task: "Perform only the explicit synthetic fixture task.", cwd, model, maxModelCalls: limits.maxCalls,
     agent: { name: "sol", description: "Fixture Sol", model, thinking: "low", file, systemPrompt, tools: ["read", "bash", "edit", "write"] } };
-  const run: Run = { ...base, solPi: await prepareSolPi(base, options) };
+  const preparation = prepareSolPi(base, options, AbortSignal.any([signal, owner.signal])); invocations.push(preparation);
+  const run: Run = { ...base, solPi: await preparation };
   const faux = ai.fauxProvider({ provider: model.provider, api: "openai-codex-responses", models: [model.id].map(id =>
     ({ id, reasoning: true, input: ["text"], contextWindow: limits.contextWindow, maxTokens: 4096, cost: { input: 1, output: 2, cacheRead: 0.1, cacheWrite: 1 } })) });
   const packets: Packet[] = [], sessions: AgentSession[] = [], runtimes: ModelRuntime[] = [];
@@ -91,9 +118,35 @@ async function fixture(t: TestContext, features: Partial<SolPiInput> = {}, limit
       const created = await createAgentSession(config); sessions.push(created.session); return created;
     },
   };
-  const invoke = (signal?: AbortSignal) => runSolPi(run, (input, cancel) => executeSolPiWorker(input, cancel, io), signal);
-  return { root, cwd, agentDir, storageDirectory, run, options, faux, packets, sessions, runtimes, answer, io, invoke };
+  const invoke = (cancel?: AbortSignal, execute: Parameters<typeof runSolPi>[1] = (input, stopped) => executeSolPiWorker(input, stopped, io), selected = run) => {
+    const work = runSolPi(selected, execute, AbortSignal.any([signal, owner.signal, ...(cancel ? [cancel] : [])])).then(result => {
+      uncertain ||= result.report?.solPi?.cleanupConfirmed !== true || result.report?.solPi?.lockRetained !== false; return result;
+    });
+    invocations.push(work); return work;
+  };
+  constructed = true;
+  return { root, cwd, agentDir, storageDirectory, run, options, faux, packets, sessions, runtimes, answer, io, invoke, cleanup, wire };
 }
+
+test("a cancelled Sol fixture cannot replace environment, umask or register cleanup", async t => {
+  const before = process.env, mask = process.umask(), reason = new Error("Synthetic Sol fixture cancellation"); let hooks = 0;
+  const cancelled = { signal: AbortSignal.abort(reason), mock: t.mock, after(hook: () => Promise<void>) { hooks++; t.after(hook); } } as unknown as TestContext;
+  await assert.rejects(fixture(cancelled), { message: reason.message });
+  assert.equal(hooks, 0); assert.equal(process.env, before); assert.equal(process.umask(), mask);
+});
+
+test("late Sol teardown preserves a successor environment and umask", { skip: process.platform === "win32" }, async t => {
+  const prior = { ...process.env }, mask = process.umask(); let successor: string | undefined, done = () => false;
+  t.after(() => {
+    if (process.env.PI_CODING_AGENT_DIR !== successor) return;
+    process.umask(mask); for (const key of Object.keys(process.env)) delete process.env[key]; Object.assign(process.env, prior);
+  });
+  await t.test("close the earlier owner", async child => {
+    const f = await fixture(child); done = () => f.cleanup.done; successor = `${f.agentDir}-successor`;
+    process.env.PI_CODING_AGENT_DIR = successor; process.umask(0o027);
+  });
+  assert.equal(done(), true); assert.equal(process.env.PI_CODING_AGENT_DIR, successor); assert.equal(process.umask(), 0o027);
+});
 
 test("Sol pinned standalone runtime uses real SDK, no inherited extensions and aggregate accounting", async t => {
   const f = await fixture(t); f.faux.setResponses([f.answer("Synthetic task complete; human review required.")]);
@@ -350,7 +403,7 @@ test("Sol lifecycle expiry/cancellation never dispatches execution and terminal 
   assert.deepEqual(reduceSolJob(state, { type: "opened", now: grant.preparedAt + 2 }), { state, effects: [] });
   const controller = new AbortController(); controller.abort();
   const execute = t.mock.fn(async () => ({ type: "cancel" as const }));
-  const result = await runSolPi(f.run, execute, controller.signal);
+  const result = await f.invoke(controller.signal, execute);
   assert.equal(result.type, "cancel"); assert.equal(result.report?.accounting.status, "not_started");
   assert.equal(result.report?.solPi?.lockRetained, false); assert.equal(execute.mock.callCount(), 0);
   assert.deepEqual(await readdir(f.storageDirectory), []);
@@ -365,14 +418,14 @@ test("Sol shared cap stops before another SDK call; missing replies and storage 
     assert.equal(await readFile(path.join(f.cwd, "changed.txt"), "utf8"), "APPLIED");
   });
   await t.test("missing worker receipt is not zero", async t => {
-    const f = await fixture(t), result = await runSolPi(f.run, async () => ({ type: "failed", error: "worker lost" }));
+    const f = await fixture(t), result = await f.invoke(undefined, async () => ({ type: "failed", error: "worker lost" }));
     assert.equal(result.type, "failed"); assert.equal(result.report?.modelCalls, null); assert.equal(result.report?.solPi?.calls, null);
     assert.equal(result.report?.accounting.status, "unknown"); assert.equal(result.report?.solPi?.lockRetained, true);
     assert.ok((await lstat(path.join(f.cwd, ".jev-goal.lock"))).isFile());
   });
   await t.test("lost journal integrity cannot be overwritten", async t => {
     const f = await fixture(t); f.faux.setResponses([f.answer("Complete")]);
-    const result = await runSolPi(f.run, async (run, signal) => {
+    const result = await f.invoke(undefined, async (run, signal) => {
       const reply = await executeSolPiWorker(run, signal, f.io);
       await writeFile(path.join(f.storageDirectory, SOL_RECORD), "PRIVATE_TAMPERED_RECORD\n"); return reply;
     });
@@ -417,8 +470,13 @@ test("Sol approval fails closed without native UI; strict options and exact prep
 });
 
 test("independent Sol child uses isolated loopback Codex: success, HTTP failure and cancellation", { timeout: 20000 }, async t => {
-  for (const mode of ["success", "error", "cancel"] as const) await t.test(mode, async t => {
-  const f = await fixture(t), requests: Record<string, unknown>[] = [], controller = new AbortController();
+  const began = performance.now(), work = fixtureWorkDeadline(t.signal, 15_000); t.after(work.close);
+  try {
+  for (const mode of ["success", "error", "cancel"] as const) {
+    work.signal.throwIfAborted();
+    await t.test(mode, async t => {
+  const signal = AbortSignal.any([work.signal, t.signal]); signal.throwIfAborted();
+  const f = await fixture(t, {}, undefined, signal), requests: Record<string, unknown>[] = [], controller = new AbortController();
   const server = createServer(async (req, res) => {
     assert.equal(req.method, "POST"); assert.match(req.url!, /\/responses$/);
     const chunks: Buffer[] = []; for await (const chunk of req) chunks.push(Buffer.from(chunk));
@@ -438,8 +496,11 @@ test("independent Sol child uses isolated loopback Codex: success, HTTP failure 
     ];
     res.writeHead(200, { "Content-Type": "text/event-stream" }); res.end(events.map(event => `data: ${JSON.stringify(event)}\n\n`).join(""));
   });
+  f.cleanup.stop = () => server.closeAllConnections();
+  f.cleanup.release = () => new Promise<void>((resolve, reject) => server.close(error => {
+    if (error && (error as NodeJS.ErrnoException).code !== "ERR_SERVER_NOT_RUNNING") reject(error); else resolve();
+  }));
   server.listen(0, "127.0.0.1"); await once(server, "listening");
-  t.after(async () => { server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())); });
   const address = server.address(); assert.ok(address && typeof address !== "string");
   const fakeToken = `e30.${Buffer.from(JSON.stringify({ "https://api.openai.com/auth": { chatgpt_account_id: "offline-fixture" } })).toString("base64url")}.fixture`;
   await writeFile(path.join(f.agentDir, "models.json"), JSON.stringify({ providers: { "openai-codex": {
@@ -449,7 +510,11 @@ test("independent Sol child uses isolated loopback Codex: success, HTTP failure 
   } } }));
   const { solPi: _old, ...base } = f.run;
   const run = { ...base, solPi: await prepareSolPi(base, f.options) };
-  const result = await runSolPi(run, runSubagent, controller.signal);
+  signal.throwIfAborted();
+  const result = await f.invoke(controller.signal, runSubagent, run);
+  console.log(JSON.stringify({ kind: "sol_native_case_timing", workerArtifact: "probe-bytecode", mode, parentElapsedMs: Math.round(performance.now() - began),
+    workAborted: work.signal.aborted, requests: requests.length, modelCalls: result.report?.modelCalls ?? null, failureStage: result.report?.diagnostic?.stage ?? null, cleanupConfirmed: result.report?.solPi?.cleanupConfirmed ?? false, wire: f.wire, synthetic: true }));
+  signal.throwIfAborted();
   assert.equal(result.type, mode === "success" ? "completed" : mode === "cancel" ? "cancel" : "failed", JSON.stringify(result));
   assert.equal(requests.length, 1); assert.ok(!JSON.stringify(result).includes("PRIVATE_HTTP_BODY"));
   assert.equal(requests[0]!.model, "gpt-5.6-sol"); assert.deepEqual(requests[0]!.reasoning, { effort: "low", summary: "auto" });
@@ -458,7 +523,9 @@ test("independent Sol child uses isolated loopback Codex: success, HTTP failure 
   const files = (await readdir(path.join(f.storageDirectory, "sessions"))).filter(file => file.endsWith(".jsonl"));
   assert.equal(files.length, 1);
   assert.ok(!(await readFile(path.join(f.storageDirectory, "sessions", files[0]!), "utf8")).includes("PRIVATE_HTTP_BODY"));
-  });
+    });
+  }
+  } finally { work.close(); }
 });
 
 test("native summary and automatic continuation cannot bypass the unified call ceiling", async t => {
@@ -489,7 +556,7 @@ test("native summary and automatic continuation cannot bypass the unified call c
 test("copied source changes are rejected before auth/models; a completed grant cannot replay", async t => {
   await t.test("copied source", async t => {
     const f = await fixture(t); f.faux.setResponses([f.answer("must not run")]);
-    const result = await runSolPi(f.run, async (run, signal) => {
+    const result = await f.invoke(undefined, async (run, signal) => {
       await writeFile(path.join(f.storageDirectory, "source/src/sol-pi/index.ts"), "PRIVATE_CHANGED_SOURCE");
       return executeSolPiWorker(run, signal, f.io);
     });

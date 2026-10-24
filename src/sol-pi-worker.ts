@@ -38,6 +38,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
   const settlements = new Set<Promise<unknown>>();
   let state: SolState | undefined, session: Session | undefined, promptStarted: number | undefined;
   let timer: ReturnType<typeof setTimeout> | undefined, cleanupConfirmed = false, completed = false, output = "";
+  let failureStage: NonNullable<NonNullable<WorkerReport["diagnostic"]>["stage"]> = "input";
   let unsubscribe = () => {};
   const send = (event: SolEvent) => {
     if (!state) return [];
@@ -70,7 +71,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
           session.model?.provider !== run!.model.provider || session.model.id !== run!.model.id ||
           session.thinkingLevel !== run!.agent.thinking || session.autoCompactionEnabled || session.autoRetryEnabled)) fail();
     };
-    await current();
+    await current(); failureStage = "model_loading";
     const runtime = await io.createModelRuntime({ authPath: path.join(agentDir, "auth.json"), modelsPath: path.join(agentDir, "models.json"),
       allowModelNetwork: false, signal: abortSignal });
     const model = runtime.getModel(run.model.provider, run.model.id);
@@ -122,6 +123,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
     runtime.completeSimple = async (selected, packet, options) => { await current(); return startCall("summary", selected, packet, options).result(); };
     runtime.streamDeferred = () => fail(); runtime.fetchDeferred = async () => fail(); runtime.cancelDeferred = async () => fail();
 
+    failureStage = "session_setup";
     const guard: ExtensionFactory = pi => {
       pi.on("tool_call", async event => {
         try {
@@ -154,8 +156,10 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
     const loader = new DefaultResourceLoader({ cwd: run.cwd, agentDir, settingsManager, noExtensions: true, noSkills: true, noPromptTemplates: true,
       noThemes: true, noContextFiles: true, additionalExtensionPaths: [path.join(grant.options.storageDirectory, "extension.ts")],
       extensionFactories: [guard], systemPromptOverride: () => grant.systemPrompt, appendSystemPromptOverride: () => [] });
+    failureStage = "extension_loading";
     await loader.reload();
     if (loader.getExtensions().errors.length || loader.getExtensions().extensions.length !== 2) fail();
+    failureStage = "session_setup";
     const sm = SessionManager.create(run.cwd, path.join(grant.options.storageDirectory, "sessions"));
     const created = await io.createAgentSession({ cwd: run.cwd, agentDir, modelRuntime: runtime, model, thinkingLevel: run.agent.thinking!,
       settingsManager, resourceLoader: loader, tools, sessionManager: sm });
@@ -183,7 +187,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
     await session.bindExtensions({ onError: () => { send({ type: "failed" }); } });
     await current();
     if (session.systemPrompt !== `${grant.systemPrompt}\nCurrent working directory: ${run.cwd.replace(/\\/g, "/")}\n`) fail();
-    promptStarted = performance.now();
+    promptStarted = performance.now(); failureStage = "model_request";
     await session.prompt(grant.prompt, { expandPromptTemplates: false });
     await current();
     const last = session.messages.findLast(message => message.role === "assistant");
@@ -213,6 +217,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
   const stats = { turns: final?.settled.length ?? 0, usage: { input: usage?.input ?? 0, output: usage?.output ?? 0,
     cacheRead: usage?.cacheRead ?? 0, cacheWrite: usage?.cacheWrite ?? 0 }, cost: usage?.cost ?? 0 };
   const report: WorkerReport = { startupMs: (promptStarted ?? now) - started, executionMs: promptStarted === undefined ? null : now - promptStarted,
+    ...(!success ? { diagnostic: { category: "unknown" as const, httpStatus: null, stage: failureStage } } : {}),
     modelCalls: total, accounting: !total ? { status: "not_started" } : { status: "reported", stats, complete: success && final?.known === true },
     ...(run?.agent.thinking ? { thinking: { requested: run.agent.thinking, applied: session?.thinkingLevel ?? null } } : {}),
     ...(run?.solPi ? { solPi: { sourceDigest: run.solPi.sourceDigest, storageDirectory: run.solPi.options.storageDirectory,
@@ -226,7 +231,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
 if (process.send && process.argv[1] === fileURLToPath(import.meta.url)) {
   process.umask(0o077);
   const controller = new AbortController();
-  process.once("SIGTERM", () => controller.abort()); process.once("disconnect", () => controller.abort());
+  process.on("SIGTERM", () => controller.abort()); process.once("disconnect", () => controller.abort());
   process.once("message", async input => {
     const reply = await executeSolPiWorker(input, controller.signal);
     process.send!(reply, () => process.exit(0));

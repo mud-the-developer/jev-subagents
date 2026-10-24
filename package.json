@@ -38,7 +38,7 @@
     "eval:memory": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json eval/memory-run.ts",
     "check:windows-native": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/check-windows-native.ts",
     "check:bun-only": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/check-bun-only.ts",
-    "check": "bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test"
+    "check": "bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/build-worker-probe.mjs && bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json scripts/build-worker-probe.mjs && bun --no-env-file --no-install --config=src/worker-bunfig.toml --tsconfig-override=tsconfig.json test --parallel=4 --timeout=30000 test/worker-bundle-probe.test.ts && bun --no-env-file --no-install --config=src/worker-bunfig.toml run lint && bun --no-env-file --no-install --config=src/worker-bunfig.toml run typecheck && bun --no-env-file --no-install --config=src/worker-bunfig.toml run test"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*",

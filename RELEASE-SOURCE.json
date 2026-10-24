@@ -1,15 +1,15 @@
 {
   "version": "1.0.0-rc.1",
-  "developmentSnapshot": "3c168d84e3cc00817c51aa6f973aa3a16b99f9f8",
-  "sourceStatus": "Current main includes unreleased human-only task labels, owned fixture deadlines and the undici8.12.2 security patch. Published RC1 remains immutable at commit 3fd43886827a56e36f9430e3419472492ff078b3 and retains its original dependencies.",
+  "developmentSnapshot": "bdac87e092955d28df7ce640c1f8f06f7e9cbaf3",
+  "sourceStatus": "Current main includes unreleased human-only task labels, owned fixture deadlines, test-only native Bun regression prebuilds and the undici8.12.2 security patch. Published RC1 remains immutable at commit 3fd43886827a56e36f9430e3419472492ff078b3 and retains its original dependencies.",
   "runtimeScriptsAndTestsByteIdentical": true,
   "dependencyLockByteIdentical": true,
   "packageMetadataChange": "Version only: 0.6.0-rc.2 to 1.0.0-rc.1; private:true and MIT remain set.",
   "groupDigestAlgorithm": "SHA256 of sorted relative-path + NUL + file-SHA256-hex + LF records, UTF-8.",
   "preservedGroups": {
-    "src": { "files": 107, "sha256": "eca2611b530c45cd6bf6da3c4a2237a6af8cef9b43b99b17e7f8e637a80b13af" },
-    "test": { "files": 122, "sha256": "52f0761bc2829e2c24a5806be546e50631dab6ba209f5a4b2d48ac3bd48321e8" },
-    "scripts": { "files": 8, "sha256": "3a1c7c58046cdd8baa0c79cf1d47488ab8d27eb549dd58e2c5211fe29425599c" },
+    "src": { "files": 107, "sha256": "fe477bdce6391531d545fbc3c0bd3af99def403d5fd73d6e978d220a2da29028" },
+    "test": { "files": 124, "sha256": "7529c9e96a201292dd1c302492eb92c8d8740a983c4f98ef92feb3322bf03ff0" },
+    "scripts": { "files": 9, "sha256": "1a0601685fdb8f44f04ff852b7b0001d63d2e2054ab4422f34e444630ebf610f" },
     "agents": { "files": 4, "sha256": "59499cc2f962066f2c1ab9b354780bffd6f1dd48e558e526e60226083e390fa6" },
     "eval": { "files": 4, "sha256": "8e52cc12a916ed2767f62f7e1e5665bb1cbcbdc2ffbc8b863de8eeeb100cda65" },
     ".github": { "files": 1, "sha256": "e01092cbf5b61cef15aa46b69225cc8dd967fcc46e4ff71f03f6ed3ba7b5eb97" }

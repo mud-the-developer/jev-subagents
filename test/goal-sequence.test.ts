@@ -89,7 +89,8 @@ async function fixture(t: TestContext, mode = "edit", observe?: (value: FixtureT
   await writeFile(path.join(agentDir, "models.json"), JSON.stringify({ providers: { offline: { api: "openai-completions", baseUrl: `http://127.0.0.1:${address.port}/v1`, apiKey: "offline-sequence-key",
     models: ["planner", "worker"].map((name) => ({ id: `offline-${name}`, reasoning: false, contextWindow: 65536, maxTokens: 1024, cost: { input: 1, output: 3, cacheRead: 0.1, cacheWrite: 1 } })) } } }));
   const fork = childProcess.fork;
-  const launches = t.mock.method(childProcess, "fork", (modulePath: string | URL, args: readonly string[], options: childProcess.ForkOptions) => fork(modulePath, args,
+  const launches = t.mock.method(childProcess, "fork", (modulePath: string | URL, args: readonly string[], options: childProcess.ForkOptions) => fork(
+    typeof modulePath === "string" && path.basename(modulePath) === "goal-sequence-worker.ts" ? path.join(path.dirname(modulePath), "goal-sequence-worker.probe-bytecode.js") : modulePath, args,
     { ...options, env: workerEnvironment({ PATH: process.env.PATH, HOME: root, PI_CODING_AGENT_DIR: agentDir, PI_OFFLINE: "1", PI_SKIP_VERSION_CHECK: "1",
       ...(process.platform === "win32" ? { SystemRoot: process.env.SystemRoot ?? process.env.SYSTEMROOT, TEMP: process.env.TEMP, TMP: process.env.TMP } : {}) }) }));
   const fetch = t.mock.method(globalThis, "fetch", async () => { throw new Error("External HTTP forbidden"); });
@@ -523,7 +524,7 @@ test("native planner/worker failures never retry, repair, repeat a criterion or 
           const started = performance.now(); let f: Awaited<ReturnType<typeof fixture>> | undefined;
           const trace = (value: { stage: string; phase?: string; rootRemoved?: boolean; status?: string; cleanupConfirmed?: boolean }) => {
             activeStage = value.phase ?? value.stage;
-            console.log(JSON.stringify({ kind: "c1_native_case_timing", mode, ...value, elapsedMs: Math.round(performance.now() - started), parentElapsedMs: Math.round(performance.now() - began),
+            console.log(JSON.stringify({ kind: "c1_native_case_timing", workerArtifact: "probe-bytecode", mode, ...value, elapsedMs: Math.round(performance.now() - started), parentElapsedMs: Math.round(performance.now() - began),
               parentAborted: parentSignal.aborted, parentFrameworkAborted: frameworkSignal.aborted, caseAborted: t.signal.aborted, caseWorkAborted: work.signal.aborted,
               loopbackRequests: f?.requests.length ?? 0, launches: f?.launches.mock.callCount() ?? 0, synthetic: true }));
           };
