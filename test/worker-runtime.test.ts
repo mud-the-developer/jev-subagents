@@ -3,6 +3,7 @@ import cp from "node:child_process";
 import { mkdtemp, realpath, readFile, writeFile, appendFile, link, symlink, rm, chmod } from "node:fs/promises";
 import { createServer } from "node:http";
 import { once } from "node:events";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { snapshotGoalText } from "../src/goal-file-effects.ts";
 import { snapshotVerificationSocket } from "../src/goal-verification-effects.ts";
@@ -34,6 +35,14 @@ test("public tooling and CI use sealed Bun commands without changing test deadli
   assert.match(workflow, /bun-version: '1\.4\.3'/);
   assert.match(workflow, /--frozen-lockfile --ignore-scripts/);
   assert.match(workflow, /persist-credentials: false/);
+});
+
+test("the scoped undici security patch resolves without changing SDK, TypeBox or adjacent override pins", async () => {
+  const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(pkg.dependencies["@earendil-works/pi-coding-agent"], "0.85.1"); assert.equal(pkg.dependencies.typebox, "1.3.7");
+  assert.deepEqual(pkg.overrides, { "@earendil-works/pi-coding-agent": { undici: "8.12.2" }, minimatch: { "brace-expansion": "5.0.12" } });
+  const fromSdk = createRequire(new URL("../node_modules/@earendil-works/pi-coding-agent/package.json", import.meta.url));
+  assert.equal(fromSdk("undici/package.json").version, "8.12.2");
 });
 
 test("worker SQLite compatibility keeps extension loading, quoted strings, foreign keys and changed-row semantics guarded", async () => {

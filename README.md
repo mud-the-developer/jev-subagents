@@ -14,6 +14,8 @@ JEV-assisted subagents for [Pi](https://pi.dev), with native terminal plans, exp
 
 **First public prerelease: `v1.0.0-rc.1`.** This is a release candidate, not a claim of general task correctness, physical TUI certification or real-provider quality/billing. Runtime source, scripts and all regression tests are preserved in this public snapshot; private development history, personal-path reports and internal screenshots are not distributed.
 
+**Security notice:** the immutable RC1 ZIP still contains `undici8.10.2`, affected by newly published advisories. Current `main` pins the SDK-scoped dependency to `8.12.2`; this is not a retroactive patch to RC1 or a new release. See [security status](docs/security.md#dependency-security-status).
+
 ## See each model's job in a three-level tree
 
 **Current `main` UI preview:** human-only task labels below are newer than the immutable RC1 ZIP. They are available in updated source, not retroactively added to the published release.

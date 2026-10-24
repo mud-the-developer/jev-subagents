@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { dockerFixture, IMAGE, type Container } from "./helpers/goal-docker-fixture.ts";
 import childProcess from "node:child_process";
 import { once } from "node:events";
-import { teardownOwnedFixture } from "./helpers/owned-fixture-teardown.ts";
+import { fixtureWorkDeadline, teardownOwnedFixture } from "./helpers/owned-fixture-teardown.ts";
+import { workerEnvironment } from "../src/worker-runtime.ts";
 import { createServer } from "node:http";
 import { mkdir, mkdtemp, realpath, readFile, writeFile, rm, lstat, open, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -23,8 +24,8 @@ import { decodeGoalJournal } from "../src/goal-journal.ts";
 import { executeSequenceWorker } from "../src/goal-sequence-worker.ts";
 
 type FixtureTiming = { stage: "phase" | "teardown"; phase?: string; rootRemoved?: boolean };
-async function fixture(t: TestContext, mode = "edit", observe?: (value: FixtureTiming) => void) {
-  t.signal.throwIfAborted();
+async function fixture(t: TestContext, mode = "edit", observe?: (value: FixtureTiming) => void, signal = t.signal) {
+  signal.throwIfAborted();
   const root = await realpath(await mkdtemp(path.join(tmpdir(), "jev-sequence-"))), cwd = path.join(root, "work"), agentDir = path.join(root, "config"), journal = path.join(root, "journal");
   const old = process.env.PI_CODING_AGENT_DIR;
   process.env.PI_CODING_AGENT_DIR = agentDir;
@@ -37,7 +38,10 @@ async function fixture(t: TestContext, mode = "edit", observe?: (value: FixtureT
       }
       return false;
     }, remove: () => rm(root, { recursive: true, force: true }),
-    reset() { if (old === undefined) delete process.env.PI_CODING_AGENT_DIR; else process.env.PI_CODING_AGENT_DIR = old; },
+    reset() {
+      if (process.env.PI_CODING_AGENT_DIR !== agentDir) return;
+      if (old === undefined) delete process.env.PI_CODING_AGENT_DIR; else process.env.PI_CODING_AGENT_DIR = old;
+    },
   }).then(({ removed }) => { observe?.({ stage: "teardown", rootRemoved: removed }); }));
   for (const dir of [cwd, agentDir, journal, path.join(agentDir, "agents")]) await mkdir(dir, { mode: 0o700 });
   const file = path.join(cwd, "fixture.txt"), initial = "A=BEFORE\nB=BEFORE\nSOURCE_ONLY_DO_NOT_FORWARD\n";
@@ -86,8 +90,8 @@ async function fixture(t: TestContext, mode = "edit", observe?: (value: FixtureT
     models: ["planner", "worker"].map((name) => ({ id: `offline-${name}`, reasoning: false, contextWindow: 65536, maxTokens: 1024, cost: { input: 1, output: 3, cacheRead: 0.1, cacheWrite: 1 } })) } } }));
   const fork = childProcess.fork;
   const launches = t.mock.method(childProcess, "fork", (modulePath: string | URL, args: readonly string[], options: childProcess.ForkOptions) => fork(modulePath, args,
-    { ...options, env: { PATH: process.env.PATH, HOME: root, PI_CODING_AGENT_DIR: agentDir, PI_OFFLINE: "1", PI_SKIP_VERSION_CHECK: "1",
-      ...(process.platform === "win32" ? { SystemRoot: process.env.SystemRoot ?? process.env.SYSTEMROOT, TEMP: process.env.TEMP, TMP: process.env.TMP } : {}) } }));
+    { ...options, env: workerEnvironment({ PATH: process.env.PATH, HOME: root, PI_CODING_AGENT_DIR: agentDir, PI_OFFLINE: "1", PI_SKIP_VERSION_CHECK: "1",
+      ...(process.platform === "win32" ? { SystemRoot: process.env.SystemRoot ?? process.env.SYSTEMROOT, TEMP: process.env.TEMP, TMP: process.env.TMP } : {}) }) }));
   const fetch = t.mock.method(globalThis, "fetch", async () => { throw new Error("External HTTP forbidden"); });
   const confirm = t.mock.fn<ExtensionContext["ui"]["confirm"]>(async () => true);
   const ctx = { cwd, hasUI: true, sessionManager: { getSessionId: () => "legacy-sequence-fixture" }, ui: { confirm } } as unknown as ExtensionContext;
@@ -482,6 +486,18 @@ test("C1 no UI, decline, or approval-time profile/config/file changes create no 
   });
 });
 
+test("late sequence fixture reset cannot overwrite a successor agent directory", async t => {
+  const before = process.env.PI_CODING_AGENT_DIR; let successor: string | undefined, teardownObserved = false;
+  t.after(() => {
+    if (process.env.PI_CODING_AGENT_DIR !== successor) return;
+    if (before === undefined) delete process.env.PI_CODING_AGENT_DIR; else process.env.PI_CODING_AGENT_DIR = before;
+  });
+  await t.test("release the earlier owner", async child => {
+    const f = await fixture(child, "edit", value => { if (value.stage === "teardown") teardownObserved = true; }); successor = `${f.agentDir}-successor`;
+    process.env.PI_CODING_AGENT_DIR = successor;
+  });
+  assert.equal(teardownObserved, true); assert.equal(process.env.PI_CODING_AGENT_DIR, successor);
+});
 test("a cancelled sequence fixture starts no resources or environment replacement", async t => {
   const before = process.env, reason = new Error("Synthetic fixture owner cancellation"); let registered = 0;
   const cancelled = { signal: AbortSignal.abort(reason), mock: t.mock,
@@ -490,37 +506,45 @@ test("a cancelled sequence fixture starts no resources or environment replacemen
   assert.equal(registered, 0); assert.equal(process.env, before);
 });
 test("native planner/worker failures never retry, repair, repeat a criterion or admit the next worker", async (t) => {
-  const began = performance.now(), parentSignal = t.signal;
+  // Leave five seconds to drain before the unchanged framework deadlines.
+  const began = performance.now(), frameworkSignal = t.signal, parentWork = fixtureWorkDeadline(t.signal, 25_000), parentSignal = parentWork.signal;
+  t.after(parentWork.close);
   let activeCase = "none", activeStage = "starting";
-  const aborted = () => console.log(JSON.stringify({ kind: "c1_native_parent_timing", mode: activeCase, stage: activeStage, elapsedMs: Math.round(performance.now() - began), parentAborted: true, synthetic: true }));
-  parentSignal.addEventListener("abort", aborted, { once: true }); t.after(() => parentSignal.removeEventListener("abort", aborted));
-  for (const mode of ["malformed", "foreign", "stop", "planner_tool", "error", "missing_usage", "repeat", "repeat_task", "blocked", "last_change", "loop"]) {
-    parentSignal.throwIfAborted();
-    await t.test(mode, { timeout: 15_000 }, async (t) => {
-      parentSignal.throwIfAborted(); t.signal.throwIfAborted();
-      activeCase = mode;
-      const started = performance.now(); let f: Awaited<ReturnType<typeof fixture>> | undefined;
-      const trace = (value: { stage: string; phase?: string; rootRemoved?: boolean; status?: string; cleanupConfirmed?: boolean }) => {
-        activeStage = value.phase ?? value.stage;
-        console.log(JSON.stringify({ kind: "c1_native_case_timing", mode, ...value, elapsedMs: Math.round(performance.now() - started), parentElapsedMs: Math.round(performance.now() - began),
-          parentAborted: parentSignal.aborted, caseAborted: t.signal.aborted, loopbackRequests: f?.requests.length ?? 0, launches: f?.launches.mock.callCount() ?? 0, synthetic: true }));
-      };
-      trace({ stage: "case_start" });
-      f = await fixture(t, mode, trace); trace({ stage: "fixture_ready" });
-      parentSignal.throwIfAborted(); t.signal.throwIfAborted();
-      if (mode === "loop") { f.input.maxModelCalls = 1; f.input.budget.workerCalls = 2; }
-      const done = await f.invoke(t.signal);
-      trace({ stage: "invocation_settled", status: done.status, cleanupConfirmed: done.cleanupConfirmed });
-      parentSignal.throwIfAborted(); t.signal.throwIfAborted();
-      assert.equal(done.status, "needs_review"); assert.equal(done.lockRetained, true); assert.equal(done.ledger?.blocked, true);
-      const planners = f.requests.filter((request) => request.model === "offline-planner").length, workers = f.requests.length - planners;
-      assert.equal(planners, mode.startsWith("repeat") ? 2 : 1); assert.ok(workers <= 2); assert.equal(f.confirm.mock.callCount(), 1);
-      assert.ok(!JSON.stringify(done).includes("PRIVATE_PROVIDER_ERROR"));
-      if (["planner_tool", "error", "missing_usage", "last_change", "loop"].includes(mode)) assert.equal(done.ledger?.totalUsd, null);
-      else assert.ok(done.ledger!.totalUsd! > 0);
-      assert.ok(done.history.length <= 1); assert.ok(!JSON.stringify(f.requests).includes('"name":"bash"'));
-    });
-  }
+  const aborted = () => console.log(JSON.stringify({ kind: "c1_native_parent_timing", mode: activeCase, stage: activeStage, elapsedMs: Math.round(performance.now() - began), parentAborted: true, parentFrameworkAborted: frameworkSignal.aborted, synthetic: true }));
+  parentSignal.addEventListener("abort", aborted, { once: true });
+  try {
+    for (const mode of ["malformed", "foreign", "stop", "planner_tool", "error", "missing_usage", "repeat", "repeat_task", "blocked", "last_change", "loop"]) {
+      parentSignal.throwIfAborted();
+      await t.test(mode, { timeout: 15_000 }, async (t) => {
+        const work = fixtureWorkDeadline(AbortSignal.any([parentSignal, t.signal]), 10_000);
+        t.after(work.close);
+        try {
+          work.signal.throwIfAborted(); activeCase = mode;
+          const started = performance.now(); let f: Awaited<ReturnType<typeof fixture>> | undefined;
+          const trace = (value: { stage: string; phase?: string; rootRemoved?: boolean; status?: string; cleanupConfirmed?: boolean }) => {
+            activeStage = value.phase ?? value.stage;
+            console.log(JSON.stringify({ kind: "c1_native_case_timing", mode, ...value, elapsedMs: Math.round(performance.now() - started), parentElapsedMs: Math.round(performance.now() - began),
+              parentAborted: parentSignal.aborted, parentFrameworkAborted: frameworkSignal.aborted, caseAborted: t.signal.aborted, caseWorkAborted: work.signal.aborted,
+              loopbackRequests: f?.requests.length ?? 0, launches: f?.launches.mock.callCount() ?? 0, synthetic: true }));
+          };
+          trace({ stage: "case_start" });
+          f = await fixture(t, mode, trace, work.signal); trace({ stage: "fixture_ready" });
+          work.signal.throwIfAborted();
+          if (mode === "loop") { f.input.maxModelCalls = 1; f.input.budget.workerCalls = 2; }
+          const done = await f.invoke(work.signal);
+          trace({ stage: "invocation_settled", status: done.status, cleanupConfirmed: done.cleanupConfirmed });
+          work.signal.throwIfAborted();
+          assert.equal(done.status, "needs_review"); assert.equal(done.lockRetained, true); assert.equal(done.ledger?.blocked, true);
+          const planners = f.requests.filter((request) => request.model === "offline-planner").length, workers = f.requests.length - planners;
+          assert.equal(planners, mode.startsWith("repeat") ? 2 : 1); assert.ok(workers <= 2); assert.equal(f.confirm.mock.callCount(), 1);
+          assert.ok(!JSON.stringify(done).includes("PRIVATE_PROVIDER_ERROR"));
+          if (["planner_tool", "error", "missing_usage", "last_change", "loop"].includes(mode)) assert.equal(done.ledger?.totalUsd, null);
+          else assert.ok(done.ledger!.totalUsd! > 0);
+          assert.ok(done.history.length <= 1); assert.ok(!JSON.stringify(f.requests).includes('"name":"bash"'));
+        } finally { work.close(); }
+      });
+    }
+  } finally { parentSignal.removeEventListener("abort", aborted); parentWork.close(); }
 });
 
 test("C1 accumulates actual counts and stops before an unaffordable next planner, without treating claims as verification", async (t) => {

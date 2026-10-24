@@ -1,3 +1,15 @@
+/** Test runners can expire a test without aborting its context signal. */
+export function fixtureWorkDeadline(parent: AbortSignal, milliseconds: number) {
+  const owner = new AbortController(), signal = AbortSignal.any([parent, owner.signal]);
+  const timer = setTimeout(() => owner.abort(new Error("Fixture work deadline exceeded.")), milliseconds);
+  const clear = () => clearTimeout(timer);
+  if (signal.aborted) clear(); else signal.addEventListener("abort", clear, { once: true });
+  return { signal, close() {
+    signal.removeEventListener("abort", clear); clear();
+    owner.abort(new Error("Fixture work owner closed."));
+  } };
+}
+
 /** Fixture effects only, not production execution/permission or rollback.
  * Withdraw work and observe settlement before filesystem removal. Unknown work,
  * failed release or retained ownership must never be hidden by deleting the root. */

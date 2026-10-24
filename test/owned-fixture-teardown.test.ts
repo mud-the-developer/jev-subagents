@@ -1,6 +1,30 @@
 import assert from "node:assert/strict";
+import { once } from "node:events";
 import { test } from "node:test";
-import { teardownOwnedFixture } from "./helpers/owned-fixture-teardown.ts";
+import { fixtureWorkDeadline, teardownOwnedFixture } from "./helpers/owned-fixture-teardown.ts";
+
+test("owned fixture expiry cancels and drains work even if the framework signal stays live", async t => {
+  const framework = new AbortController(), owner = fixtureWorkDeadline(framework.signal, 20), events: string[] = [];
+  t.after(owner.close);
+  const work = new Promise<void>(resolve => owner.signal.addEventListener("abort", () => queueMicrotask(() => { events.push("settled"); resolve(); }), { once: true }));
+  await once(owner.signal, "abort");
+  assert.equal(framework.signal.aborted, false); assert.match(owner.signal.reason.message, /deadline exceeded/);
+  await teardownOwnedFixture({ async stop() { owner.close(); events.push("stop"); }, invocations: () => [work],
+    async release() { events.push("release"); }, async hasMarker() { return false; }, async remove() { events.push("remove"); }, reset() { events.push("reset"); } });
+  assert.ok(events.indexOf("settled") < events.indexOf("release"));
+  assert.ok(events.indexOf("release") < events.indexOf("remove")); assert.equal(events.at(-1), "reset");
+});
+
+test("closing or upstream cancellation clears the owned deadline without aborting the framework", t => {
+  const clear = t.mock.method(globalThis, "clearTimeout");
+  for (const upstream of [false, true]) {
+    const framework = new AbortController(), owner = fixtureWorkDeadline(framework.signal, 60_000);
+    t.after(owner.close); const before = clear.mock.callCount();
+    if (upstream) framework.abort(); else owner.close();
+    assert.equal(owner.signal.aborted, true); assert.equal(framework.signal.aborted, upstream);
+    assert.ok(clear.mock.callCount() > before); owner.close();
+  }
+});
 
 test("owned fixture teardown stops, drains and releases before touching markers or removing a root", async () => {
   const events: string[] = [];
