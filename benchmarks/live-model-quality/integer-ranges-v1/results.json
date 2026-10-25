@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-live-profile-quality-pilot",
+  "reportedOn": "2026-10-25",
+  "task": "Repair mergeClosedIntegerRanges under SPEC.md without modifying caller arrays or adding I/O",
+  "syntheticOnly": true,
+  "samplesPerLiveProfile": 1,
+  "inputs": {
+    "sameInitialCode": true,
+    "sameSpecification": true,
+    "sameWorkerTaskSummary": true,
+    "heldOutTestFileGrantedToWorkers": false,
+    "workerRunsPerJob": 1,
+    "maxSdkCallsPerJob": 8,
+    "secondsPerJob": 180,
+    "effectiveFileTools": ["scope_read", "scope_edit", "scope_write"],
+    "filesPerJob": { "ranges.mjs": "read_write", "SPEC.md": "read" },
+    "currentProfileSystemTextEqualAtReportTime": true,
+    "currentProfileDeclaredToolsEqualAtReportTime": true,
+    "historicalCrossRunSystemHashesCaptured": false
+  },
+  "runtime": {
+    "platform": "native Windows, non-admin",
+    "bun": "1.4.3",
+    "workerSdk": "0.85.1",
+    "typebox": "1.3.7",
+    "sdkScopedUndici": "8.12.2",
+    "upstreamModelIdentityIndependentlyVerified": false
+  },
+  "fileSha256": {
+    "buggy.mjs": "824e1972e83826cecd81d0e390e828f5eb40be009cab1b4bd5e8e4b300b290e5",
+    "SPEC.md": "085584bf35daf1c44cd7c0501c8cebce0a280c5b49a13eaf8db87c3b12a38814",
+    "held-out.test.mjs": "9fcc7e9aadf6e08304e0934164c1864375f6c77ef593c1327c0287f47cc26e88",
+    "luna-low.mjs": "ef52c56bd710efdbad18b30b05b7b5eedff564e7e0b3b33d94d22ac1cadac2bf",
+    "astra-max.mjs": "f03056d4871622d9e0aae0b28eea017f1bd71d886cc9d3ab6a183f0f5ea80536"
+  },
+  "controls": {
+    "negativeBaseline": { "source": "buggy.mjs", "modelCalls": 0, "contractGroupsPassed": 4, "contractGroupsTotal": 12, "offlineOraclePassedAtReportTime": 150, "offlineOracleTotal": 1000 },
+    "oracle": { "method": "enumerated integer coverage on bounded [-20,20] inputs", "seed": "0x51a7c0de", "cases": 1000, "frozenInputAndFreshOutputChecks": true }
+  },
+  "liveRuns": [
+    {
+      "id": "luna-low-01",
+      "profile": "worker",
+      "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "source": "luna-low.mjs",
+      "workersStarted": 1,
+      "sdkCalls": 3,
+      "elapsedMsReported": 10898,
+      "observedUsdEstimate": 0.00184248,
+      "jevRequests": 0,
+      "nativeStatus": "completed_unverified",
+      "nativeTaskAcceptance": "needs_human_review",
+      "parentContractGroupsPassed": 12,
+      "parentContractGroupsTotal": 12,
+      "parentOraclePassed": 1000,
+      "parentOracleTotal": 1000,
+      "onlyDeclaredSourceChangedWithinFixture": true,
+      "specAndHeldOutTestsUnchanged": true,
+      "workerClaimedTestsRun": false,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "responseTraceCoverage": "complete",
+      "responseTrace": [
+        { "call": 1, "stopReason": "toolUse", "toolRequests": 2, "allowedToolNames": ["scope_read"] },
+        { "call": 2, "stopReason": "toolUse", "toolRequests": 1, "allowedToolNames": ["scope_write"] },
+        { "call": 3, "stopReason": "stop", "toolRequests": 0, "allowedToolNames": [] }
+      ]
+    },
+    {
+      "id": "astra-max-01",
+      "profile": "worker_strong",
+      "configuredProviderModel": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "source": "astra-max.mjs",
+      "workersStarted": 1,
+      "sdkCalls": 5,
+      "elapsedMsReported": 92712,
+      "observedUsdEstimate": 0.229134,
+      "jevRequests": 0,
+      "nativeStatus": "completed_unverified",
+      "nativeTaskAcceptance": "needs_human_review",
+      "parentContractGroupsPassed": 12,
+      "parentContractGroupsTotal": 12,
+      "parentOraclePassed": 1000,
+      "parentOracleTotal": 1000,
+      "onlyDeclaredSourceChangedWithinFixture": true,
+      "specAndHeldOutTestsUnchanged": true,
+      "workerClaimedTestsRun": false,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "responseTraceCoverage": "complete",
+      "responseTrace": [
+        { "call": 1, "stopReason": "toolUse", "toolRequests": 1, "allowedToolNames": ["scope_read"] },
+        { "call": 2, "stopReason": "toolUse", "toolRequests": 1, "allowedToolNames": ["scope_read"] },
+        { "call": 3, "stopReason": "toolUse", "toolRequests": 1, "allowedToolNames": ["scope_edit"] },
+        { "call": 4, "stopReason": "toolUse", "toolRequests": 1, "allowedToolNames": ["scope_read"] },
+        { "call": 5, "stopReason": "stop", "toolRequests": 0, "allowedToolNames": [] }
+      ]
+    }
+  ],
+  "limits": {
+    "modelOnlyCausalComparison": false,
+    "randomizedRunOrder": false,
+    "multipleTasksOrStatisticalRanking": false,
+    "actualAccountBillingVerified": false,
+    "tokenUsageCapturedInPublishedProjection": false,
+    "responseTraceProvesEachToolExecution": false,
+    "generalModelQualityCertified": false,
+    "githubActionsUsedForThisBenchmark": false,
+    "storedRecordsGrantExecutionAuthority": false
+  }
+}
