@@ -1,0 +1,63 @@
+{
+  "goldAndEmptyNegativeControls": {
+    "datasetControls": [
+      {
+        "questionId": 1380,
+        "referencePass": true,
+        "emptyNegativeRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 1317,
+        "referencePass": true,
+        "emptyNegativeRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 791,
+        "referencePass": true,
+        "emptyNegativeRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 773,
+        "referencePass": true,
+        "emptyNegativeRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 228,
+        "referencePass": true,
+        "emptyNegativeRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 263,
+        "referencePass": true,
+        "emptyNegativeRejected": true,
+        "databaseUnchanged": true
+      }
+    ],
+    "providerCalls": 0,
+    "rawSqlPublished": false
+  },
+  "selectorMock": {
+    "fixedArmsMakeNoSelectorCalls": true,
+    "nativeRouteRequestAndChoiceValidation": true,
+    "candidateDescriptionsBounded": true,
+    "mockFetches": 1,
+    "realSelectorRequests": 0,
+    "realWorkerRequests": 0,
+    "mockAccountingIsBenchmarkEvidence": false
+  },
+  "sqlSafety": {
+    "unsafeQueriesRejected": 8,
+    "selectAndCteAccepted": true,
+    "progressDeadlineWorks": true,
+    "databaseUnchanged": true,
+    "generatedCodeExecuted": false
+  },
+  "realWorkerCalls": 0,
+  "realSelectorCalls": 0,
+  "mockAccountingIsLiveEvidence": false
+}

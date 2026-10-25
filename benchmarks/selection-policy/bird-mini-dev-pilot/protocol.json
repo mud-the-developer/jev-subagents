@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "status": "preregistered_before_any_policy_model_or_selector_request",
+  "dataset": {
+    "name": "BIRD Mini-Dev SQLite",
+    "hfRevision": "f65faf4ae3b638c1fa6df1d3370c8d92c8366301",
+    "license": "CC-BY-SA-4.0",
+    "attribution": "BIRD-SQL team / bird-bench/mini_dev / birdsql/bird_mini_dev",
+    "questionsSha256": "88ceb0710163cae46a256ecea8f0a8c98286599530b60587fda5c3cfe57d45d2",
+    "archiveETag": "\"7BEB6DAB11E65F0FDE563E644A1EA319\"",
+    "archiveBytes": 800943648,
+    "rangeBytesDownloaded": 1387964,
+    "databases": [
+      {
+        "db_id": "superhero",
+        "member": "minidev/MINIDEV/dev_databases/superhero/superhero.sqlite",
+        "bytes": 237568,
+        "compressedBytes": 104094,
+        "crc32": 2175838638,
+        "sha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1"
+      },
+      {
+        "db_id": "student_club",
+        "member": "minidev/MINIDEV/dev_databases/student_club/student_club.sqlite",
+        "bytes": 2641920,
+        "compressedBytes": 614801,
+        "crc32": 3943193338,
+        "sha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77"
+      },
+      {
+        "db_id": "toxicology",
+        "member": "minidev/MINIDEV/dev_databases/toxicology/toxicology.sqlite",
+        "bytes": 2678784,
+        "compressedBytes": 652028,
+        "crc32": 2133487963,
+        "sha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93"
+      }
+    ]
+  },
+  "privateSampleSha256": "a4d6cb0a9f9d17b6bc9a374b9acda43baaca6fad9959efbbdf094672129a0d9a",
+  "sample": [
+    {
+      "questionId": 1380,
+      "dbId": "student_club",
+      "difficulty": "simple",
+      "inputSha256": {
+        "TASK.md": "79fb186a1feb9fae5423db4ea4e70ceff95fa430d90e68c8cf1ef49ada9af189",
+        "SCHEMA.md": "392b8a2d6079a6e2b13364744568eea5184f2949d5920400e5ad5debfae1cce2",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "01b988f042a979e20b896ff7ba3194748d5bee733a4f23bb35ff6d0915b072fb"
+    },
+    {
+      "questionId": 1317,
+      "dbId": "student_club",
+      "difficulty": "moderate",
+      "inputSha256": {
+        "TASK.md": "9786a581d7f613abfaee1a1fc42544f7007cb1936461b0c96f23abe7c9af2943",
+        "SCHEMA.md": "392b8a2d6079a6e2b13364744568eea5184f2949d5920400e5ad5debfae1cce2",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "589ffd3acf522ae81192579f297589e93b0c41f748b224d1b4bb5c857a2f70cb"
+    },
+    {
+      "questionId": 791,
+      "dbId": "superhero",
+      "difficulty": "simple",
+      "inputSha256": {
+        "TASK.md": "bcb7bda75c78c0364de217b0bebb494e00f028990d9418271e022e4e2ea851ff",
+        "SCHEMA.md": "75527512da7bdbb7b36704d6e5c4c39a3e663b6e666f4278053e298c8c0ae05c",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "c7272fe8e520896806ae41ce6e27dc3995727f53dced9f1ef738d5d6a297c142"
+    },
+    {
+      "questionId": 773,
+      "dbId": "superhero",
+      "difficulty": "challenging",
+      "inputSha256": {
+        "TASK.md": "f2ea9ded1b60c097209fbf4c233d186c3a9891231cd24baed51476b5c6614e1c",
+        "SCHEMA.md": "75527512da7bdbb7b36704d6e5c4c39a3e663b6e666f4278053e298c8c0ae05c",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 157,
+      "goldSetSha256": "0825e942a1a391d69a5db46907d2c57fd3468ac84168fa43e160b7cc1d3d9e7b"
+    },
+    {
+      "questionId": 228,
+      "dbId": "toxicology",
+      "difficulty": "moderate",
+      "inputSha256": {
+        "TASK.md": "5c06747994c5fe66a90f2e1037f94205b8132da98343447f7fa74d6f8b3d937c",
+        "SCHEMA.md": "56747642ec5114c1a04eebe15bfdef3346f10bf44b510efad85003db7a0a6952",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "8f4cdf2c325af93ac149e398049d7f19b3a7fe732635af48e9ddd3a494a4ff50"
+    },
+    {
+      "questionId": 263,
+      "dbId": "toxicology",
+      "difficulty": "challenging",
+      "inputSha256": {
+        "TASK.md": "5098818412d884c35afad56b538d9ed72fd1ce79c2babae5380abfd8d5abd9d1",
+        "SCHEMA.md": "56747642ec5114c1a04eebe15bfdef3346f10bf44b510efad85003db7a0a6952",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "275260c7488ecf660bf2ba202062f23b010e65393e7186a89052f3dd2767b18f"
+    }
+  ],
+  "samplingSeed": "bird-selector-pilot-510e527f",
+  "orderSeed": "0x1f83d9ab",
+  "order": [
+    {
+      "id": "q791-jev_select",
+      "questionId": 791,
+      "arm": "jev_select"
+    },
+    {
+      "id": "q791-fixed_luna",
+      "questionId": 791,
+      "arm": "fixed_luna"
+    },
+    {
+      "id": "q791-fixed_astra",
+      "questionId": 791,
+      "arm": "fixed_astra"
+    },
+    {
+      "id": "q773-fixed_luna",
+      "questionId": 773,
+      "arm": "fixed_luna"
+    },
+    {
+      "id": "q773-fixed_astra",
+      "questionId": 773,
+      "arm": "fixed_astra"
+    },
+    {
+      "id": "q773-jev_select",
+      "questionId": 773,
+      "arm": "jev_select"
+    },
+    {
+      "id": "q1317-fixed_astra",
+      "questionId": 1317,
+      "arm": "fixed_astra"
+    },
+    {
+      "id": "q1317-jev_select",
+      "questionId": 1317,
+      "arm": "jev_select"
+    },
+    {
+      "id": "q1317-fixed_luna",
+      "questionId": 1317,
+      "arm": "fixed_luna"
+    },
+    {
+      "id": "q228-jev_select",
+      "questionId": 228,
+      "arm": "jev_select"
+    },
+    {
+      "id": "q228-fixed_astra",
+      "questionId": 228,
+      "arm": "fixed_astra"
+    },
+    {
+      "id": "q228-fixed_luna",
+      "questionId": 228,
+      "arm": "fixed_luna"
+    },
+    {
+      "id": "q263-fixed_astra",
+      "questionId": 263,
+      "arm": "fixed_astra"
+    },
+    {
+      "id": "q263-fixed_luna",
+      "questionId": 263,
+      "arm": "fixed_luna"
+    },
+    {
+      "id": "q263-jev_select",
+      "questionId": 263,
+      "arm": "jev_select"
+    },
+    {
+      "id": "q1380-fixed_luna",
+      "questionId": 1380,
+      "arm": "fixed_luna"
+    },
+    {
+      "id": "q1380-jev_select",
+      "questionId": 1380,
+      "arm": "jev_select"
+    },
+    {
+      "id": "q1380-fixed_astra",
+      "questionId": 1380,
+      "arm": "fixed_astra"
+    }
+  ],
+  "profiles": {
+    "worker": {
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "systemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df"
+    },
+    "worker_strong": {
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "systemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df"
+    }
+  },
+  "plannedWorkerRuns": 18,
+  "plannedSelectorRequests": 6,
+  "selector": {
+    "backend": "typesafe",
+    "model": "jev-1.13.0",
+    "sessionSelectionRestored": false,
+    "input": "English public question/evidence only, no gold SQL, difficulty label, prior outcome or private source",
+    "timeoutSeconds": 10,
+    "requestsPerSelection": 1,
+    "softRouting": false
+  },
+  "limits": {
+    "sdkCallCap": null,
+    "workerSeconds": 300,
+    "scopePrepareSeconds": 45,
+    "sqlSeconds": 5,
+    "sqlChildSeconds": 10,
+    "automaticRetry": false,
+    "fallback": false,
+    "hardUsdCap": false
+  },
+  "clock": {
+    "timer": "single parent performance.now T0/T1",
+    "start": "request-ready before fixed/JEV policy choice",
+    "end": "worker session/fileIO/Job/child cleanup complete AND SQL authorizer/evaluator exited with independent match",
+    "included": [
+      "selector request",
+      "selected-profile preparation and input copy",
+      "fresh file/instruction scope",
+      "direct pinned SDK owned worker",
+      "file/session/Job closure",
+      "read-only SQL validation and database integrity checks"
+    ],
+    "excluded": [
+      "one-time dataset download/schema snapshot/reference qualification",
+      "common corpus/protocol integrity eligibility load before T0",
+      "operator approval wait",
+      "final report serialization"
+    ],
+    "humanReviewWaitMs": 0,
+    "generatedExecutableCodeRun": false
+  },
+  "evaluation": {
+    "metric": "single-database result-set EX matching official row-set comparison; SELECT-only six-question pilot, not full500 leaderboard",
+    "readOnlyImmutableSqlite": true,
+    "authorizerDenyWritesAttachPragmaExtensionsFiles": true,
+    "sqlRowBound": 5000,
+    "sqlResultByteBound": 1048576,
+    "goldNonempty": true,
+    "initialEmptyNegativeControl": true,
+    "difficultyGivenToSelectorOrWorker": false,
+    "testFeedback": false
+  },
+  "runtime": {
+    "bun": "1.4.3",
+    "workerSdk": "0.85.1",
+    "python": "3.14.8",
+    "sqlite": "3.50.4",
+    "sharedSafetyGuards": true,
+    "productExecutionOrchestratorUsed": false
+  },
+  "publication": {
+    "rawDatasetDbGoldOrQueryRedistributedInMitRepo": false,
+    "rawProfilesCredentialsPersonalPaths": false,
+    "metadataOnly": true,
+    "newActions": false,
+    "executionAuthority": false
+  },
+  "selectorSourceSha256": {
+    "effects.ts": "1a89c378b8489246d095fbc4248ece21ff657a9e709e800bb23718c58adc9237",
+    "machine.ts": "947fd19f8e45e9a167da093d9b29983ba977af57abd3c39aced472a0d5497bff",
+    "choice.ts": "cfa1cbf5f96564cca8259ef619fb227aec8438f59dc0535e86a858100182e466",
+    "jev-config.ts": "f8dc4f51e34a194896a6e2f1d8e1440b100e953906c138d060ed831c38136c5f"
+  }
+}
