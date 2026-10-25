@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "status": "prepared_not_executed",
+  "status": "registered_before_execution_sdk_cap_removed",
   "liveRunsExecuted": 0,
   "executionAuthority": false,
   "question": "Compare existing operational fixed-profile configurations on multi-module synthetic maintenance tasks; not model-only causal ranking.",
@@ -71,9 +71,9 @@
   "limits": {
     "trials": 12,
     "repeatsPerTaskCondition": 2,
-    "sdkCallsPerTrial": 12,
+    "sdkCallsPerTrial": null,
     "secondsPerTrial": 300,
-    "plannedSdkCallCeiling": 144,
+    "plannedSdkCallCeiling": null,
     "plannedExecutionSecondsCeiling": 3600,
     "hardUsdCapSupported": false,
     "costMetadataIsInvoice": false,

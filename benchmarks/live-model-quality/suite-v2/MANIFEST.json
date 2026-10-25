@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "status": "prepared_before_live_execution",
+  "status": "amended_before_first_live_trial_no_sdk_cap",
   "liveExecutionAuthority": false,
   "algorithm": "SHA256 of exact UTF-8/source bytes",
   "files": {
-    "TASK.md": "9972937ae65e63d6870e8c2988f35e6aa0d00e5a602b74f4de6f62833478606b",
-    "protocol.json": "d3edfda4e41ae7acb53ec0bfb27c7e74144d076a80df11796c9816e92a5d111a",
+    "TASK.md": "3cecc5f9fa125cb94e9cceb5942edf0b5e6de7c4c287716a09ebda02ae1dc99d",
+    "protocol.json": "901e9f4ae2fc557cb3c15623e44e5d5ae537f571d50f407a698e31d1d4fe6222",
     "tasks/async-cache/SPEC.md": "8fa6fb578c2add5db3d26de59344c011f96b55bc5a16ce4b99f58e7fdca382c6",
     "tasks/async-cache/checks.mjs": "d18ce17f4138c51972da0c0eaf7d2d5ab5776a263ac0f8f0ae1631b30ed9005f",
     "tasks/async-cache/initial/cache.mjs": "5d4f15f9e0738427879d4d2e1b1a2c1d8d5284d84714193e71676f4c655b1eb8",

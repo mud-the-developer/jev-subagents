@@ -1,6 +1,6 @@
 # Multi-module quality suite v2 — prepared, not executed
 
-**Status:0live trials.** This is a pre-execution task/checker package, not another claimed result. The earlier [one-task pilot](../integer-ranges-v1/README.md) remains a pilot and is not reused as a v2 observation.
+**Preregistration captured0live trials.** Subsequent execution records belong in a separate results file; this frozen task/checker package is not itself a claimed result. The earlier [one-task pilot](../integer-ranges-v1/README.md) remains a pilot and is not reused as a v2 observation.
 
 ## What is improved
 
@@ -21,10 +21,10 @@ Current offline controls: async-cache initial5/14/reference14/14; record-gateway
 - Same common [TASK.md](TASK.md), task-specific spec, initial bytes, file-ID mode and caps for each condition/repeat. Each job gets only its two existing mutable modules and read-only SPEC; no shell, discovery, new file, verifier, reference, prior output or test-feedback tool is granted.
 - Fresh protected fixture/scope and a fresh worker per trial; unchanged current cwd and native SID/DACL/file-identity/freshness/lease/cancellation checks. Capture each trial's public model/thinking/tool metadata and system-text hash without publishing raw profiles; incompatible system/tool changes invalidate comparability. No reuse of a prior result as an input solution or execution grant.
 - A fixed seed shuffles task order; paired AB/BA reversal counterbalances condition order across repeats. Runs are sequential, so competing workers do not fabricate a parallel latency comparison.
-- Proposed hard limits per trial: **one worker,12SDK rounds,300seconds**, no automatic retry/escalation/model switch/cap increase. Planned batch ceiling is144SDK rounds/3600execution seconds, not a monetary guarantee. The runtime has no hard USD cap; stored model-cost estimates are not invoices.
+- Operator-amended limits before the first live trial: **one worker,SDK natural completion with no model-round count cap,300seconds**. The closed batch remains12trials/3600execution seconds, with no automatic retry/escalation/model switch/time extension. There is no SDK-count or hard USD ceiling; stored model-cost estimates are not invoices. See [AMENDMENTS.md](AMENDMENTS.md).
 - Native execution failure/cancellation/unknown cleanup or accounting stops further scheduling and retains failures/unstarted denominators. A completed code attempt failing independent checks is a task failure, never parent-repaired or silently rerun. No additional model-based judge is planned.
 
-**These12paid trials have not been run.** This prepared protocol cannot authorize them. The operator must approve the closed run count/limits/conditions and any separate profile setup before a current genuine native job approval or live applicable Full Access can admit execution.
+The operator separately requested execution with no SDK call-count cap before any v2 trial. Existing low/max profiles are retained, not silently changed or claimed as a model-only comparison. These files still grant no authority: every trial must use current genuine native job approval or applicable live Full Access, with current scope/freshness/ownership checks. The protocol's0live counter is a preregistration snapshot, not an execution-progress counter.
 
 ## Scoring decided before results
 
