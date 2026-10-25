@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "status": "registered_before_direct_sdk_live_requests",
+  "arm": "direct_sdk_shared_safety",
+  "operatorRequested": true,
+  "executionAuthority": false,
+  "planned": 12,
+  "completedAtRegistration": 0,
+  "referenceJevOnCommit": "d12aae0f7b9172d08a7d202961b0bc431bfe5a6f",
+  "referenceDatasetManifestSha256": "5a30fca447fffb98cc5bdc425b353ed6879c49af980274c3c3e3d35d0281c0cb",
+  "conditions": {
+    "A": {
+      "profile": "worker",
+      "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+      "thinking": "low"
+    },
+    "B": {
+      "profile": "worker_strong",
+      "configuredProviderModel": "openai-codex/gpt-6-astra",
+      "thinking": "max"
+    }
+  },
+  "order": [
+    {
+      "id": "dependency-plan-r1-a",
+      "task": "dependency-plan",
+      "repeat": 1,
+      "condition": "A"
+    },
+    {
+      "id": "dependency-plan-r1-b",
+      "task": "dependency-plan",
+      "repeat": 1,
+      "condition": "B"
+    },
+    {
+      "id": "async-cache-r1-a",
+      "task": "async-cache",
+      "repeat": 1,
+      "condition": "A"
+    },
+    {
+      "id": "async-cache-r1-b",
+      "task": "async-cache",
+      "repeat": 1,
+      "condition": "B"
+    },
+    {
+      "id": "record-gateway-r1-b",
+      "task": "record-gateway",
+      "repeat": 1,
+      "condition": "B"
+    },
+    {
+      "id": "record-gateway-r1-a",
+      "task": "record-gateway",
+      "repeat": 1,
+      "condition": "A"
+    },
+    {
+      "id": "dependency-plan-r2-b",
+      "task": "dependency-plan",
+      "repeat": 2,
+      "condition": "B"
+    },
+    {
+      "id": "dependency-plan-r2-a",
+      "task": "dependency-plan",
+      "repeat": 2,
+      "condition": "A"
+    },
+    {
+      "id": "async-cache-r2-b",
+      "task": "async-cache",
+      "repeat": 2,
+      "condition": "B"
+    },
+    {
+      "id": "async-cache-r2-a",
+      "task": "async-cache",
+      "repeat": 2,
+      "condition": "A"
+    },
+    {
+      "id": "record-gateway-r2-a",
+      "task": "record-gateway",
+      "repeat": 2,
+      "condition": "A"
+    },
+    {
+      "id": "record-gateway-r2-b",
+      "task": "record-gateway",
+      "repeat": 2,
+      "condition": "B"
+    }
+  ],
+  "limits": {
+    "workersPerTrial": 1,
+    "sdkCallsPerTrial": null,
+    "secondsPerTrial": 300,
+    "automaticRetry": false,
+    "modelOrCwdFallback": false,
+    "hardUsdCap": false
+  },
+  "sharedSafetySourceSha256": {
+    "goal-files.ts": "4190226eab309a55b3e2f063850eccc1788466806bd25599c4ee048693709f32",
+    "goal-file-effects.ts": "c52b022679e8600a4b4687c07e7d60e86255a3c02683e786b008e96dce5fefc6",
+    "windows-goal-files.ts": "3ccfefc04a540fd5d4092fb8ab075c7e7eaff3f27be33f85156d01c0bbaf25f5",
+    "goal-run-effects.ts": "8e85961419507fdcbc8419336ffdc8ff6bf96bc2dd8c06af899822279abab231",
+    "windows-job.ts": "527587ba77aaeb1968cfa2f6177c5e2b34e5c93d1a2b350b1b2f4d9e0efece7e",
+    "worker-runtime.ts": "bfe3ecebde3b89579b23e5e84b277be85cd2777bb9b25e32964bc7c8cbe9e2ad",
+    "worker-bunfig.toml": "5a8c134bcb6738333df958877ce5962a2ccd4b8a394d9ee0166c43f9c64cf11f",
+    "internal-language.ts": "a129ba5a81a188d38cfa394f252260c45777b8093c8c0dbff53fc20573338fa8"
+  },
+  "directSdk": true,
+  "jevExtensionLoaded": false,
+  "jevOrchestrationCalled": false,
+  "allJevDerivedCodeAbsent": false,
+  "guardSharingExplicit": true,
+  "thinkingEqualized": false,
+  "armsInterleaved": false,
+  "fullHistoricalJevPromptHashAvailable": false,
+  "elapsedBoundaryEquivalenceEstablished": false,
+  "credentialsEffectLocal": true,
+  "testsAndReferencesGranted": false,
+  "noModelPreflight": {
+    "realWindowsGuardAndJobChecks": 10,
+    "realSdkSessionChecksBothProfiles": true,
+    "providerCalls": 0,
+    "mockAccountingUsedForLiveEvidence": false
+  },
+  "stopOn": [
+    "sdk_or_provider_failure",
+    "native_or_transport_failure",
+    "unknown_accounting",
+    "unconfirmed_disposal_or_file_io_or_job_cleanup"
+  ],
+  "noNewProductBackendOrTool": true,
+  "noActionsDispatch": true
+}
