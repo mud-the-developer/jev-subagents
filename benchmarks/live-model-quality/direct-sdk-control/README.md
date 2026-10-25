@@ -1,5 +1,7 @@
 # Direct SDK control — shared safety, no JEV execution layer
 
+**Completed:12/12direct SDK trials.** Both profiles passed6/6task trials and96/96contract groups, exactly matching JEV-on correctness and SDK-round totals. See [RESULTS.md](RESULTS.md) and [results.json](results.json). This suite shows no observed quality/round-count gain from the JEV execution layer; timing/billing/guard-sharing limits are explicit.
+
 This follow-up was requested after the registered [JEV-on12-trial study](../suite-v2/RESULTS.md). It is a **direct pinned-SDK execution-layer ablation**, not a claim that all JEV-derived source code or safety utilities have vanished.
 
 ## Treatment difference

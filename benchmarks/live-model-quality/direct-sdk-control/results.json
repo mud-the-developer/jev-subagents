@@ -1,0 +1,1781 @@
+{
+  "schemaVersion": 1,
+  "status": "completed_parent_checked",
+  "arm": "direct_sdk_shared_safety",
+  "reportedOn": "2026-10-25",
+  "registeredCommit": "e0b09f1bf3052138f2820711702eade781ebd942",
+  "referenceJevOnCommit": "d12aae0f7b9172d08a7d202961b0bc431bfe5a6f",
+  "planned": 12,
+  "completed": 12,
+  "notStarted": 0,
+  "retried": 0,
+  "sdkCallCap": null,
+  "secondsPerTrial": 300,
+  "conditions": {
+    "A": {
+      "planned": 6,
+      "completed": 6,
+      "allGroupsPass": 6,
+      "groupsPassed": 96,
+      "groupsTotal": 96,
+      "sdkCalls": 29,
+      "workerMedianMs": 17606.2949,
+      "workerRangeMs": [
+        14425.5335,
+        19862.2562
+      ],
+      "parentOwnedMedianMs": 18200.9172,
+      "observedUsdEstimate": 0.020734119999999998
+    },
+    "B": {
+      "planned": 6,
+      "completed": 6,
+      "allGroupsPass": 6,
+      "groupsPassed": 96,
+      "groupsTotal": 96,
+      "sdkCalls": 48,
+      "workerMedianMs": 114867.5027,
+      "workerRangeMs": [
+        95608.15759999999,
+        173995.44259999998
+      ],
+      "parentOwnedMedianMs": 115471.45384999999,
+      "observedUsdEstimate": 1.7818019999999999
+    }
+  },
+  "referenceJevOnConditions": {
+    "A": {
+      "planned": 6,
+      "completed": 6,
+      "allGroupsPass": 6,
+      "groupsPassed": 96,
+      "groupsTotal": 96,
+      "sdkCalls": 29,
+      "medianElapsedMs": 20081.5,
+      "elapsedRangeMs": [
+        17119,
+        26962
+      ],
+      "observedUsdEstimate": 0.02086636
+    },
+    "B": {
+      "planned": 6,
+      "completed": 6,
+      "allGroupsPass": 6,
+      "groupsPassed": 96,
+      "groupsTotal": 96,
+      "sdkCalls": 48,
+      "medianElapsedMs": 172353.5,
+      "elapsedRangeMs": [
+        109839,
+        201937
+      ],
+      "observedUsdEstimate": 1.781676
+    }
+  },
+  "totals": {
+    "sdkCalls": 77,
+    "observedUsdEstimate": 1.80253612
+  },
+  "jevOrchestrationInvoked": false,
+  "allJevDerivedCodeAbsent": false,
+  "sharedSafetyExplicit": true,
+  "elapsedBoundaryEquivalenceEstablished": false,
+  "fullHistoricalJevPromptHashAvailable": false,
+  "armsInterleaved": false,
+  "executionAuthority": false,
+  "rows": [
+    {
+      "type": "direct_sdk_result",
+      "id": "dependency-plan-r1-a",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.0034005999999999997,
+        "assistantMessages": 6,
+        "complete": true
+      },
+      "sdkCalls": 6,
+      "sdkCallCap": null,
+      "toolCalls": 8,
+      "elapsedMs": 19862.2562,
+      "startupMs": 785.3278,
+      "generationMs": 19076.9296,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 8,
+        "readBytes": 4298,
+        "writtenBytes": 4095
+      },
+      "systemPromptSha256": "82088c045da9efd7f69205648fd7891a07b373f71478aac97428032e21c54137",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 20391.081899999997,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "A",
+      "task": "dependency-plan",
+      "repeat": 1,
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 0,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "133552af0d3d92c945de501c7f8a0ec4cdbcbaf33d067e47528452a724c25335",
+        "summary.mjs": "be88e033a15a067aec8c40599b1ef28f668023856b8154c89b345a3134e9f064"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "dependency-plan-r1-b",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.24829599999999996,
+        "assistantMessages": 8,
+        "complete": true
+      },
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 103980.0286,
+      "startupMs": 767.2797,
+      "generationMs": 103212.7503,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 4382,
+        "writtenBytes": 2269
+      },
+      "systemPromptSha256": "725ed36f4e374c4b620147343361a5b819a2fe62f3782500b434667fb25aade8",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 104504.0527,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "B",
+      "task": "dependency-plan",
+      "repeat": 1,
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 1,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "6de50b05768fdef316f5ae4029292577e06eb8fdbf4bc2efdda7192cab9d7209",
+        "summary.mjs": "61e1ae7f454fbb2d7c9a52e71c0b0a547c0049c4f0a3a8f1f24203c77ed79e4f"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "async-cache-r1-a",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.0040018,
+        "assistantMessages": 5,
+        "complete": true
+      },
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 18914.1066,
+      "startupMs": 777.8117,
+      "generationMs": 18136.2969,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 5052,
+        "writtenBytes": 2165
+      },
+      "systemPromptSha256": "661046160f592651b8a1a43aa51f52078406afa11d50bc48c3774da4c167db07",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 19434.1629,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "A",
+      "task": "async-cache",
+      "repeat": 1,
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 2,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "7eeb9ae7be3db12755b07248aad589647c9c10d85568fd65dd210e6a26d408d8",
+        "client.mjs": "cd2f5beafd16269ccebb1e581985b2789cdbbbe9b73532cc8ba4ccf1930218e5"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "async-cache-r1-b",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.353406,
+        "assistantMessages": 8,
+        "complete": true
+      },
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 173995.44259999998,
+      "startupMs": 789.366,
+      "generationMs": 173206.07770000002,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 4844,
+        "writtenBytes": 1957
+      },
+      "systemPromptSha256": "8bcb3c720d3785d5eb1fb2a0f69914265e601c9d96dcd4a3dec237490bcf9869",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 174515.7224,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "B",
+      "task": "async-cache",
+      "repeat": 1,
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 3,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "35633b64237518dced4e52faff9dcb14f6d150ce046f60d9904b7b6c3c8401c1",
+        "client.mjs": "8852aeddccde23bffc7c790cec31c5c932481e81e7e9d55182f5a2483f7acd58"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "record-gateway-r1-b",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.34337,
+        "assistantMessages": 8,
+        "complete": true
+      },
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 107003.9016,
+      "startupMs": 1102.8002999999999,
+      "generationMs": 105901.1035,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 6584,
+        "writtenBytes": 2960
+      },
+      "systemPromptSha256": "b79780da41a663eb3ca0aa021f9b63ffa521074526d6f987acf6874bb71865ad",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 107684.2963,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "B",
+      "task": "record-gateway",
+      "repeat": 1,
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 4,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "1a0ace3bd104f759152eeef8d0e89dcc08327d63de4c7f94414a905784bc879c",
+        "gateway.mjs": "86c2267873e5cd4f6bde002731596eaba0e0bb7d59a0ce74af4077b3b069dab7"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "record-gateway-r1-a",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.0030378799999999997,
+        "assistantMessages": 4,
+        "complete": true
+      },
+      "sdkCalls": 4,
+      "sdkCallCap": null,
+      "toolCalls": 5,
+      "elapsedMs": 14425.5335,
+      "startupMs": 844.9482,
+      "generationMs": 13580.5867,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 5,
+        "readBytes": 3624,
+        "writtenBytes": 3167
+      },
+      "systemPromptSha256": "5ddc13287137d236cb765f161172d61318043b41c96e13917312d3fc7a855100",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 14956.28,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "A",
+      "task": "record-gateway",
+      "repeat": 1,
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 5,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "116a707dc274e9f1076625577f9ca45a61640009c191a2b60395d440df7b0132",
+        "gateway.mjs": "413bf42331b39868cdd58287b479a7618a70eeb207ebaeccc51f97f96e00d315"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "dependency-plan-r2-b",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.25691600000000003,
+        "assistantMessages": 8,
+        "complete": true
+      },
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 95608.15759999999,
+      "startupMs": 975.5805,
+      "generationMs": 94632.5783,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 4219,
+        "writtenBytes": 2106
+      },
+      "systemPromptSha256": "fc03abfbee9b1ea0f526f02b923135f8b1492f2b070ef42b99b70639d5ab917b",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 96133.3378,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "B",
+      "task": "dependency-plan",
+      "repeat": 2,
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 6,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "230c8813af5c5d8ea632508be8e309ce7e8a25899a0d0b18070b6ba5f5bd5151",
+        "summary.mjs": "36b9085aa830c457b000b88a94d78f17040b88a19103c7093c7be8dd173738aa"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "dependency-plan-r2-a",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.0027804400000000003,
+        "assistantMessages": 4,
+        "complete": true
+      },
+      "sdkCalls": 4,
+      "sdkCallCap": null,
+      "toolCalls": 5,
+      "elapsedMs": 15456.8335,
+      "startupMs": 808.0982,
+      "generationMs": 14648.7365,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 5,
+        "readBytes": 2113,
+        "writtenBytes": 2254
+      },
+      "systemPromptSha256": "a126b8aa4c95dadc1a6762dd473903d309084522089d89a48f36e81811dc7407",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 16298.423799999999,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "A",
+      "task": "dependency-plan",
+      "repeat": 2,
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 7,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "7a51e2709406a3505c559a03a319b1377e3ea36525bf02e34fa4c169455ba7de",
+        "summary.mjs": "36b9085aa830c457b000b88a94d78f17040b88a19103c7093c7be8dd173738aa"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "async-cache-r2-b",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.28900800000000004,
+        "assistantMessages": 8,
+        "complete": true
+      },
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 137068.2016,
+      "startupMs": 780.3446,
+      "generationMs": 136287.85890000002,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 4858,
+        "writtenBytes": 1971
+      },
+      "systemPromptSha256": "835f2ea726c0ed6f479ba277891b6df70799feac16c727310f4f01e83dc928f7",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 137749.8916,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "B",
+      "task": "async-cache",
+      "repeat": 2,
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 8,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "5e6652f1073071aaf4e039f51efdf89b78e248d009736c768218598e4284a78c",
+        "client.mjs": "b0275b9f137838877eac0774278f91191193d23c09949f12063f0c8c9400f24d"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "async-cache-r2-a",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.0031632800000000005,
+        "assistantMessages": 5,
+        "complete": true
+      },
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 16298.4832,
+      "startupMs": 787.3287,
+      "generationMs": 15511.1558,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 5031,
+        "writtenBytes": 2144
+      },
+      "systemPromptSha256": "4e920a408608c100ae005292fb68e6363c00f53584b5667452ce7a162e077801",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 16967.6715,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "A",
+      "task": "async-cache",
+      "repeat": 2,
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 9,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "70914b0c13ae777f52de0b63d88de15a739c07b105bf39ba43cab77c723b871d",
+        "client.mjs": "44ea9f95fb0928681cf8dc98845be595f9d7cccc63ef8a873b66b111b2c3ef20"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "record-gateway-r2-a",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.004350119999999999,
+        "assistantMessages": 5,
+        "complete": true
+      },
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "toolCalls": 6,
+      "elapsedMs": 19133.2099,
+      "startupMs": 935.144,
+      "generationMs": 18198.0671,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 6,
+        "readBytes": 3624,
+        "writtenBytes": 4866
+      },
+      "systemPromptSha256": "a70f3edf69075b7f41a3d042b4897f4f8678dfa20d414c8e25bdf0ce0fe76d25",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 19649.4981,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "A",
+      "task": "record-gateway",
+      "repeat": 2,
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 10,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "b8583b76099ea66e1095f6dfb3d9f9ab68ea6e0a3daef97958059982b1b87be8",
+        "gateway.mjs": "5078ae906793eabef5323a8d6362d812cca81eee4c92d1c46cc2995aa021499b"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "type": "direct_sdk_result",
+      "id": "record-gateway-r2-b",
+      "status": "completed_unverified",
+      "accounting": {
+        "status": "reported_complete",
+        "observedUsdEstimate": 0.290806,
+        "assistantMessages": 8,
+        "complete": true
+      },
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "toolCalls": 7,
+      "elapsedMs": 122731.1038,
+      "startupMs": 1259.9735,
+      "generationMs": 121471.1314,
+      "disposed": true,
+      "files": {
+        "ioFinished": true,
+        "changed": true,
+        "operations": 7,
+        "readBytes": 6476,
+        "writtenBytes": 2852
+      },
+      "systemPromptSha256": "90e9de96563c88607bc2ad0f6e1c3e25d7f6071b1f9ad9f4eac13ed8bec56e87",
+      "sdkDirect": true,
+      "jevExecutionCalls": 0,
+      "injectedOfflineSdk": false,
+      "parentOwnedElapsedMs": 123258.6114,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0,
+      "transportFailure": false,
+      "deadlineReached": false,
+      "arm": "direct_sdk_shared_safety",
+      "condition": "B",
+      "task": "record-gateway",
+      "repeat": 2,
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "effectiveProfileSha256": "414861ff3c829b7ed04920fc4af62dd2a79b7ef014d03783bb230e860596e4e5",
+      "seconds": 300,
+      "sharedGuards": [
+        "file_state_machine",
+        "native_file_io",
+        "instruction_versions",
+        "windows_job",
+        "sealed_bun_runtime"
+      ],
+      "historicalJevSystemPromptSha256Available": false,
+      "jevExtensionLoaded": false,
+      "jevOrchestrationInvoked": false,
+      "executionAuthority": false,
+      "sequenceIndex": 11,
+      "parentReviewedBeforeTests": true,
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "f986ab686377975d4e7804b37dec888ccff6fe67141099fdd9f86b893d992813",
+        "gateway.mjs": "af062db098ea2a1ed1833b6ca80f35d07dd2639187e95f1d44a04fd033ce9eb2"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "workerTestClaim": "not_run",
+      "workerClaimReviewedByParent": true,
+      "profileBodiesPublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    }
+  ]
+}

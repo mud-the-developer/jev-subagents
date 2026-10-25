@@ -1,0 +1,8 @@
+import { planTasks } from "./planner.mjs";
+
+export function renderTaskPlan(tasks) {
+  const { layers } = planTasks(tasks);
+  return layers.length === 0
+    ? "(empty)"
+    : layers.map((layer, index) => `layer${index}: ${layer.join(", ")}`).join("\n");
+}

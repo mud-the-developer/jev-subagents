@@ -100,6 +100,8 @@ Use the exact release commit and [existing validation commands](docs/verificatio
 
 **Completed registered comparison:** [multi-module suite v2](benchmarks/live-model-quality/suite-v2/RESULTS.md) used three task specs,48contract groups, positive/negative/mutant controls and a fixed counterbalanced12-trial order. Both operational profiles passed6/6task trials (96/96groups), so this suite showed no correctness separation. SDK round counts were uncapped by operator request; time bounds remained300seconds. Full per-trial code/hashes/checks and offline reproduction are included, with thinking/load/sample-size/billing limitations stated explicitly.
 
+**Direct SDK follow-up control:** the [matched execution-layer ablation](benchmarks/live-model-quality/direct-sdk-control/RESULTS.md) also passed6/6task trials per profile, with the same29/48SDK-round totals as JEV-on. No correctness/round-count benefit from JEV was observed on this suite. Safety utilities were deliberately shared, and full historical prompt/timing-boundary equivalence was not proven; this is not evidence that all JEV-derived code/guards can be removed or a general superiority claim.
+
 Retired Goal/sequence/managed-context/SoL-Pi integration code and small historical fixtures remain solely for regression coverage; they are not additional public tool APIs or current execution instructions. The two historical diagrams are [archived with their editable sources](docs/figures/README.md), not advertised as current features. Standalone SoL-Pi remains separate.
 
 ## License
