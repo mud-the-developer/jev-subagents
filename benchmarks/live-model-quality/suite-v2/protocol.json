@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 2,
+  "status": "prepared_not_executed",
+  "liveRunsExecuted": 0,
+  "executionAuthority": false,
+  "question": "Compare existing operational fixed-profile configurations on multi-module synthetic maintenance tasks; not model-only causal ranking.",
+  "conditions": {
+    "A": {
+      "profile": "worker",
+      "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+      "thinking": "low"
+    },
+    "B": {
+      "profile": "worker_strong",
+      "configuredProviderModel": "openai-codex/gpt-6-astra",
+      "thinking": "max"
+    }
+  },
+  "thinkingControlled": false,
+  "commonThinkingStudyRequiresSeparateProfileApproval": true,
+  "tasks": [
+    {
+      "id": "async-cache",
+      "mutableFiles": [
+        "cache.mjs",
+        "client.mjs"
+      ],
+      "readOnlyFiles": [
+        "SPEC.md"
+      ],
+      "parentHeldOut": [
+        "checks.mjs",
+        "reference implementations",
+        "mutants"
+      ],
+      "workersPerTrial": 1
+    },
+    {
+      "id": "record-gateway",
+      "mutableFiles": [
+        "policy.mjs",
+        "gateway.mjs"
+      ],
+      "readOnlyFiles": [
+        "SPEC.md"
+      ],
+      "parentHeldOut": [
+        "checks.mjs",
+        "reference implementations",
+        "mutants"
+      ],
+      "workersPerTrial": 1
+    },
+    {
+      "id": "dependency-plan",
+      "mutableFiles": [
+        "planner.mjs",
+        "summary.mjs"
+      ],
+      "readOnlyFiles": [
+        "SPEC.md"
+      ],
+      "parentHeldOut": [
+        "checks.mjs",
+        "reference implementations",
+        "mutants"
+      ],
+      "workersPerTrial": 1
+    }
+  ],
+  "limits": {
+    "trials": 12,
+    "repeatsPerTaskCondition": 2,
+    "sdkCallsPerTrial": 12,
+    "secondsPerTrial": 300,
+    "plannedSdkCallCeiling": 144,
+    "plannedExecutionSecondsCeiling": 3600,
+    "hardUsdCapSupported": false,
+    "costMetadataIsInvoice": false,
+    "automaticRetry": false,
+    "modelFallback": false,
+    "additionalJudgeCalls": false
+  },
+  "ordering": {
+    "seed": "0xbb67ae85",
+    "method": "Seeded task-order shuffle; paired AB/BA counterbalance across two repeats",
+    "order": [
+      {
+        "id": "dependency-plan-r1-a",
+        "task": "dependency-plan",
+        "repeat": 1,
+        "condition": "A"
+      },
+      {
+        "id": "dependency-plan-r1-b",
+        "task": "dependency-plan",
+        "repeat": 1,
+        "condition": "B"
+      },
+      {
+        "id": "async-cache-r1-a",
+        "task": "async-cache",
+        "repeat": 1,
+        "condition": "A"
+      },
+      {
+        "id": "async-cache-r1-b",
+        "task": "async-cache",
+        "repeat": 1,
+        "condition": "B"
+      },
+      {
+        "id": "record-gateway-r1-b",
+        "task": "record-gateway",
+        "repeat": 1,
+        "condition": "B"
+      },
+      {
+        "id": "record-gateway-r1-a",
+        "task": "record-gateway",
+        "repeat": 1,
+        "condition": "A"
+      },
+      {
+        "id": "dependency-plan-r2-b",
+        "task": "dependency-plan",
+        "repeat": 2,
+        "condition": "B"
+      },
+      {
+        "id": "dependency-plan-r2-a",
+        "task": "dependency-plan",
+        "repeat": 2,
+        "condition": "A"
+      },
+      {
+        "id": "async-cache-r2-b",
+        "task": "async-cache",
+        "repeat": 2,
+        "condition": "B"
+      },
+      {
+        "id": "async-cache-r2-a",
+        "task": "async-cache",
+        "repeat": 2,
+        "condition": "A"
+      },
+      {
+        "id": "record-gateway-r2-a",
+        "task": "record-gateway",
+        "repeat": 2,
+        "condition": "A"
+      },
+      {
+        "id": "record-gateway-r2-b",
+        "task": "record-gateway",
+        "repeat": 2,
+        "condition": "B"
+      }
+    ]
+  },
+  "evaluation": {
+    "primary": "Per-task all-contract-groups pass, equal task weight; report completed/planned denominator",
+    "secondary": [
+      "per-group failures",
+      "protected-scope/source-only changes",
+      "regression cases",
+      "observed round count",
+      "observed elapsed time",
+      "observed cost estimate",
+      "honest verification claim",
+      "confirmed cleanup/no retained lock"
+    ],
+    "testFeedbackToWorkers": false,
+    "testsMayChangeAfterFirstLiveRun": false,
+    "parentReviewsGeneratedCodeBeforeExecution": true,
+    "capturePerTrialPublicModelThinkingToolsAndSystemTextHash": true,
+    "publishRawProfileSystemText": false,
+    "incompatibleSystemOrToolChangeInvalidatesComparison": true,
+    "oracle": "Deterministic injected-clock concurrency cases, callback-spy policy cases, and independent seeded DAG depth oracle",
+    "safety": "Native file-ID scope and freshness/identity/cancellation/ownership checks remain; ordinary OS sandbox not claimed",
+    "harnessFailure": "Stop scheduling on native failure/cancellation/unknown cleanup/accounting; retain failure and unstarted denominator. No automatic retry or cap increase.",
+    "codeFailure": "A completed worker whose independent tests fail is a recorded task failure, never parent-repaired or replaced."
+  },
+  "publication": {
+    "credentialsProfileBodiesPersonalPaths": false,
+    "rawProviderErrors": false,
+    "storedRecordsGrantAuthority": false,
+    "githubActionsDispatch": false,
+    "stableReleaseChanged": false
+  }
+}

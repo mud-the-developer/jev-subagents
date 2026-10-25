@@ -1,0 +1,128 @@
+{
+  "kind": "prepared_quality_suite_control_checks",
+  "liveJobsExecuted": 0,
+  "providerCalls": 0,
+  "productionCodeChanged": false,
+  "frozenInputsVerified": 21,
+  "controls": [
+    {
+      "task": "async-cache",
+      "initial": {
+        "passed": 5,
+        "failed": 9,
+        "total": 14,
+        "failedCases": [
+          "constructor_validation",
+          "invalid_key_never_loads",
+          "pending_single_flight",
+          "ttl_begins_at_resolution",
+          "zero_ttl_only_shares_pending",
+          "sync_throw_becomes_rejection",
+          "rejections_are_not_cached",
+          "client_normalizes_both_operations",
+          "client_rejects_non_string_or_blank"
+        ]
+      },
+      "reference": {
+        "passed": 14,
+        "failed": 0,
+        "total": 14,
+        "failedCases": []
+      },
+      "mutant": {
+        "passed": 10,
+        "failed": 4,
+        "total": 14,
+        "failedCases": [
+          "invalidate_cached_key",
+          "stale_resolution_cannot_replace_new_entry",
+          "stale_rejection_cannot_erase_new_entry",
+          "client_normalizes_both_operations"
+        ],
+        "mutation": "invalidation_disabled"
+      }
+    },
+    {
+      "task": "record-gateway",
+      "initial": {
+        "passed": 5,
+        "failed": 12,
+        "total": 17,
+        "failedCases": [
+          "user_own_fields_required",
+          "members_only_own_read_update",
+          "admin_delete_requires_archived",
+          "policy_defaults_deny_malformed_records_actions",
+          "unknown_method_no_repo_access",
+          "null_request_bad_request",
+          "bad_id_no_lookup",
+          "wrong_resource_id_denied",
+          "get_returns_public_projection_only",
+          "patch_body_validation_precedes_lookup",
+          "patch_trims_and_does_not_leak_repo_result",
+          "unarchived_admin_delete_no_mutation"
+        ]
+      },
+      "reference": {
+        "passed": 17,
+        "failed": 0,
+        "total": 17,
+        "failedCases": []
+      },
+      "mutant": {
+        "passed": 15,
+        "failed": 2,
+        "total": 17,
+        "failedCases": [
+          "admin_delete_requires_archived",
+          "unarchived_admin_delete_no_mutation"
+        ],
+        "mutation": "unarchived_admin_delete"
+      }
+    },
+    {
+      "task": "dependency-plan",
+      "initial": {
+        "passed": 1,
+        "failed": 16,
+        "total": 17,
+        "failedCases": [
+          "parallel_layer_ascii_order",
+          "dependencies_override_input_order",
+          "layer_batch_not_priority_queue",
+          "diamond_layers",
+          "frozen_input_not_mutated",
+          "fresh_output_arrays",
+          "malformed_rows_and_ids",
+          "duplicate_task_ids",
+          "duplicate_dependency_ids",
+          "unknown_dependency",
+          "self_dependency",
+          "cycle_rejects_range_error",
+          "cycle_with_ready_nodes_never_partial",
+          "render_empty_and_nonempty_exactly",
+          "render_preserves_planner_errors",
+          "seeded_dag_depth_oracle"
+        ]
+      },
+      "reference": {
+        "passed": 17,
+        "failed": 0,
+        "total": 17,
+        "failedCases": []
+      },
+      "mutant": {
+        "passed": 14,
+        "failed": 3,
+        "total": 17,
+        "failedCases": [
+          "cycle_rejects_range_error",
+          "cycle_with_ready_nodes_never_partial",
+          "render_preserves_planner_errors"
+        ],
+        "mutation": "partial_cycle_plan"
+      }
+    }
+  ],
+  "executionAuthority": false
+}

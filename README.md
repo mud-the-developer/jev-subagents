@@ -98,6 +98,8 @@ Use the exact release commit and [existing validation commands](docs/verificatio
 
 **Additional live-profile evidence:** the [integer-ranges pilot](benchmarks/live-model-quality/integer-ranges-v1/README.md) compares an original buggy negative control with one real Luna/low and one real Astra/max repair, using the same held-out assertions and seeded oracle. Both recorded outputs passed12/12contract groups and1000/1000oracle cases; thinking differs and n=1per profile, so this is not a general model ranking or billing certificate. The checked-in evidence can be reproduced offline with0new provider calls; it is newer than the immutable v1.0.0 release ZIP.
 
+**Prepared next study — not results:** [multi-module suite v2](benchmarks/live-model-quality/suite-v2/README.md) fixes three task specs,48contract groups, positive/negative/mutant controls and a counterbalanced12-trial plan before execution. Its manifest/offline control verifier pass, but **v2 live trials are0** and the paid run/profile conditions still require explicit approval.
+
 Retired Goal/sequence/managed-context/SoL-Pi integration code and small historical fixtures remain solely for regression coverage; they are not additional public tool APIs or current execution instructions. The two historical diagrams are [archived with their editable sources](docs/figures/README.md), not advertised as current features. Standalone SoL-Pi remains separate.
 
 ## License
