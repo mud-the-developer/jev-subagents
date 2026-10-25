@@ -1,4 +1,6 @@
-# BIRD Mini-Dev selection-policy pilot — preregistered
+# BIRD Mini-Dev selection-policy pilot — completed
+
+**18/18worker trials and6/6real selector calls completed.** Fixed Luna3/6EX in65.96s; fixed Astra5/6in160.55s; JEV-selected3/6in66.40s, with all6choices selecting Luna. This sample showed no benefit over always-Luna and no accuracy-preserving speedup over always-Astra. See [RESULTS.md](RESULTS.md) and [results.json](results.json); limitations and unfavorable results are retained.
 
 Question: **does paying for a JEV choice reduce full automated turnaround while preserving SQL execution accuracy, compared with always using either candidate?** The prior fixed-profile JEV/direct study made0routing requests and could not answer this.
 

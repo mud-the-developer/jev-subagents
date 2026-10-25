@@ -102,6 +102,8 @@ Use the exact release commit and [existing validation commands](docs/verificatio
 
 **Direct SDK follow-up control:** the [matched execution-layer ablation](benchmarks/live-model-quality/direct-sdk-control/RESULTS.md) also passed6/6task trials per profile, with the same29/48SDK-round totals as JEV-on. No correctness/round-count benefit from JEV was observed on this suite. Safety utilities were deliberately shared, and full historical prompt/timing-boundary equivalence was not proven; this is not evidence that all JEV-derived code/guards can be removed or a general superiority claim.
 
+**Actual selector / end-to-end follow-up:** the [official BIRD Mini-Dev subset pilot](benchmarks/selection-policy/bird-mini-dev-pilot/RESULTS.md) measured one continuous parent clock from policy choice through validation/cleanup on6public SQL tasks ×3policies. Luna3/6EX/65.96s, Astra5/6/160.55s, JEV-selected3/6/66.40s (all6choices Luna): no observed benefit over always-Luna and no preserved-Astra-accuracy speedup. Data license, sampling, hashes, per-phase metadata and small-sample/metric/privacy limits are explicit; raw CC-BY-SA dataset/SQL is not relicensed under MIT.
+
 Retired Goal/sequence/managed-context/SoL-Pi integration code and small historical fixtures remain solely for regression coverage; they are not additional public tool APIs or current execution instructions. The two historical diagrams are [archived with their editable sources](docs/figures/README.md), not advertised as current features. Standalone SoL-Pi remains separate.
 
 ## License
