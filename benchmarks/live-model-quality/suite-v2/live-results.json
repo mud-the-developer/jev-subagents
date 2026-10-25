@@ -1,0 +1,1315 @@
+{
+  "schemaVersion": 2,
+  "status": "completed_parent_checked",
+  "reportedOn": "2026-10-25",
+  "registeredCommit": "54f7075f24738af948639a421582d427dda74ec7",
+  "preparedCommit": "092bbd51ef8ac21f23111bbd22b364d5827a13eb",
+  "sdkCapAmendedBeforeFirstLiveTrial": true,
+  "sdkCallCap": null,
+  "secondsPerTrial": 300,
+  "planned": 12,
+  "completed": 12,
+  "notStarted": 0,
+  "retried": 0,
+  "modelsOrProfilesChanged": false,
+  "thinkingEqualized": false,
+  "conditions": {
+    "A": {
+      "planned": 6,
+      "completed": 6,
+      "allGroupsPass": 6,
+      "groupsPassed": 96,
+      "groupsTotal": 96,
+      "sdkCalls": 29,
+      "medianElapsedMs": 20081.5,
+      "elapsedRangeMs": [
+        17119,
+        26962
+      ],
+      "observedUsdEstimate": 0.02086636
+    },
+    "B": {
+      "planned": 6,
+      "completed": 6,
+      "allGroupsPass": 6,
+      "groupsPassed": 96,
+      "groupsTotal": 96,
+      "sdkCalls": 48,
+      "medianElapsedMs": 172353.5,
+      "elapsedRangeMs": [
+        109839,
+        201937
+      ],
+      "observedUsdEstimate": 1.781676
+    }
+  },
+  "totals": {
+    "sdkCalls": 77,
+    "observedUsdEstimate": 1.8025423600000003,
+    "jevRequests": 0
+  },
+  "executionAuthority": false,
+  "scope": "Operational configuration comparison on three synthetic two-module tasks, two repeats each; not general model-only ranking",
+  "rows": [
+    {
+      "id": "dependency-plan-r1-a",
+      "condition": "A",
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 19480,
+      "observedUsdEstimate": 0.00304964,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "dependency-plan",
+      "repeat": 1,
+      "sequenceIndex": 0,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "8d24d555cfd01fdabf6cc4f7b0da8a57c2c1bc9e2fc348d477963bb793632ad7",
+        "summary.mjs": "36b9085aa830c457b000b88a94d78f17040b88a19103c7093c7be8dd173738aa"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "dependency-plan-r1-b",
+      "condition": "B",
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 124727,
+      "observedUsdEstimate": 0.24619600000000003,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "dependency-plan",
+      "repeat": 1,
+      "sequenceIndex": 1,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "948b9890b152c5bc451a4a1400b03070b9f252b5adb2f7fb0f4cecdaa4b1d572",
+        "summary.mjs": "8fa673ba79530ea09ea836a79741a2efcbee555a3e3d9c53bf6800f6f3a95b4b"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "async-cache-r1-a",
+      "condition": "A",
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 26962,
+      "observedUsdEstimate": 0.0035909999999999996,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "async-cache",
+      "repeat": 1,
+      "sequenceIndex": 2,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "5aef7e1094a70fe9b06e8bf44c12a7e1c6eafa86f6253c4d21c2dfa1dbea68df",
+        "client.mjs": "acee90f60c42f64a001dcfdef858351400a863538236f02c453bb5072763e0da"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "async-cache-r1-b",
+      "condition": "B",
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 201937,
+      "observedUsdEstimate": 0.334796,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "async-cache",
+      "repeat": 1,
+      "sequenceIndex": 3,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "9d0b401d0f501793c3ef27f2713978da8e7336446211ae5d08d42c3610a57fbf",
+        "client.mjs": "489cdc9964cb7e44cb080fcc96aec8ba5b4ca5e355368ef99e83e9f48c9dd6be"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "record-gateway-r1-b",
+      "condition": "B",
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 180834,
+      "observedUsdEstimate": 0.333698,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "record-gateway",
+      "repeat": 1,
+      "sequenceIndex": 4,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "6740f9e6a9a0829600a0eb56710393de600fd14f019b98cc849a8add1c98dbe5",
+        "gateway.mjs": "56ddfd66bb899cb506cdcdbcb68b0344a2cf1f5d17a269b0aa0174a963cd46c5"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "record-gateway-r1-a",
+      "condition": "A",
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 4,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 17119,
+      "observedUsdEstimate": 0.0030746799999999998,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "record-gateway",
+      "repeat": 1,
+      "sequenceIndex": 5,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "433709a53cf9a710c412b76fe3b1834ba0d37d16cec9c224554646eb3067f1ac",
+        "gateway.mjs": "1fbc1152a714ba60c24d967f37d7e46889defd01ec0ff96c778e311cc2c94d23"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "dependency-plan-r2-b",
+      "condition": "B",
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 109839,
+      "observedUsdEstimate": 0.22053799999999998,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "dependency-plan",
+      "repeat": 2,
+      "sequenceIndex": 6,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "eaff2b34a0e90859b846c5158098793dce5bd425d8bd98a442fb1dee3fd9c5e8",
+        "summary.mjs": "8fa673ba79530ea09ea836a79741a2efcbee555a3e3d9c53bf6800f6f3a95b4b"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "dependency-plan-r2-a",
+      "condition": "A",
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 20470,
+      "observedUsdEstimate": 0.00398504,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "dependency-plan",
+      "repeat": 2,
+      "sequenceIndex": 7,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "planner.mjs": "c3986267ed16d4157dd9444ae242da72a2cd971bd05e1c7a1ea261170235ae81",
+        "summary.mjs": "36b9085aa830c457b000b88a94d78f17040b88a19103c7093c7be8dd173738aa"
+      },
+      "checks": {
+        "task": "dependency-plan",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "empty_plan",
+            "passed": true
+          },
+          {
+            "name": "parallel_layer_ascii_order",
+            "passed": true
+          },
+          {
+            "name": "dependencies_override_input_order",
+            "passed": true
+          },
+          {
+            "name": "layer_batch_not_priority_queue",
+            "passed": true
+          },
+          {
+            "name": "diamond_layers",
+            "passed": true
+          },
+          {
+            "name": "frozen_input_not_mutated",
+            "passed": true
+          },
+          {
+            "name": "fresh_output_arrays",
+            "passed": true
+          },
+          {
+            "name": "malformed_rows_and_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_task_ids",
+            "passed": true
+          },
+          {
+            "name": "duplicate_dependency_ids",
+            "passed": true
+          },
+          {
+            "name": "unknown_dependency",
+            "passed": true
+          },
+          {
+            "name": "self_dependency",
+            "passed": true
+          },
+          {
+            "name": "cycle_rejects_range_error",
+            "passed": true
+          },
+          {
+            "name": "cycle_with_ready_nodes_never_partial",
+            "passed": true
+          },
+          {
+            "name": "render_empty_and_nonempty_exactly",
+            "passed": true
+          },
+          {
+            "name": "render_preserves_planner_errors",
+            "passed": true
+          },
+          {
+            "name": "seeded_dag_depth_oracle",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "async-cache-r2-b",
+      "condition": "B",
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 163873,
+      "observedUsdEstimate": 0.27814,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "async-cache",
+      "repeat": 2,
+      "sequenceIndex": 8,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "66f8f38b8bf77ec2aa2c6da6625e0f55c29d54e7a92653035f3974f10a33fd04",
+        "client.mjs": "24cfbf25131afe0834e18d36b941bab4a67213dffa8447482c44d293b9a10a16"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "async-cache-r2-a",
+      "condition": "A",
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 20389,
+      "observedUsdEstimate": 0.00361184,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "async-cache",
+      "repeat": 2,
+      "sequenceIndex": 9,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "cache.mjs": "fca847201fdc2dad0a7a43ecd5bfdd48bf4593a9b4fc218c8d2f30356e9ac00c",
+        "client.mjs": "d61c70879ae57292c583059ad059f3e6253f4b379a560f54751666e205512458"
+      },
+      "checks": {
+        "task": "async-cache",
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "results": [
+          {
+            "name": "constructor_validation",
+            "passed": true
+          },
+          {
+            "name": "invalid_key_never_loads",
+            "passed": true
+          },
+          {
+            "name": "pending_single_flight",
+            "passed": true
+          },
+          {
+            "name": "keys_are_independent",
+            "passed": true
+          },
+          {
+            "name": "ttl_begins_at_resolution",
+            "passed": true
+          },
+          {
+            "name": "zero_ttl_only_shares_pending",
+            "passed": true
+          },
+          {
+            "name": "undefined_is_cached",
+            "passed": true
+          },
+          {
+            "name": "sync_throw_becomes_rejection",
+            "passed": true
+          },
+          {
+            "name": "rejections_are_not_cached",
+            "passed": true
+          },
+          {
+            "name": "invalidate_cached_key",
+            "passed": true
+          },
+          {
+            "name": "stale_resolution_cannot_replace_new_entry",
+            "passed": true
+          },
+          {
+            "name": "stale_rejection_cannot_erase_new_entry",
+            "passed": true
+          },
+          {
+            "name": "client_normalizes_both_operations",
+            "passed": true
+          },
+          {
+            "name": "client_rejects_non_string_or_blank",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "record-gateway-r2-a",
+      "condition": "A",
+      "profile": "worker",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 5,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 19774,
+      "observedUsdEstimate": 0.00355416,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "record-gateway",
+      "repeat": 2,
+      "sequenceIndex": 10,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "17f0f114ae5189a5a9fea46606507ddca0f85174088d504b64a556cbc48f6c9b",
+        "gateway.mjs": "62c13918610e99862e3dad465f31ec3799f5d256adc1293327cb648b1fd9c2ba"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    },
+    {
+      "id": "record-gateway-r2-b",
+      "condition": "B",
+      "profile": "worker_strong",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 8,
+      "sdkCallCap": null,
+      "seconds": 300,
+      "elapsedMs": 197314,
+      "observedUsdEstimate": 0.368308,
+      "cleanupConfirmed": true,
+      "lockRetained": false,
+      "jevRequests": 0,
+      "workerTestClaim": "not_run",
+      "nativeStatus": "completed_unverified",
+      "parentReviewedBeforeTests": true,
+      "task": "record-gateway",
+      "repeat": 2,
+      "sequenceIndex": 11,
+      "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "profileDeclaredTools": "read, bash, edit, write, grep, find, ls",
+      "effectiveTools": "file-ID read/edit/write only",
+      "protectedInputsUnchanged": true,
+      "onlyDeclaredFilesWithinFixture": true,
+      "outputSha256": {
+        "policy.mjs": "463f8da6369121dc9d4ab1d343f91a94e7de8c1b5d2b01f5ecb6e6bbf70ff827",
+        "gateway.mjs": "381312402e3757237e6d30f68a4446d41ad6f0ebd25af0b0bd64c1ea659f377c"
+      },
+      "checks": {
+        "task": "record-gateway",
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "results": [
+          {
+            "name": "user_own_fields_required",
+            "passed": true
+          },
+          {
+            "name": "members_only_own_read_update",
+            "passed": true
+          },
+          {
+            "name": "admin_delete_requires_archived",
+            "passed": true
+          },
+          {
+            "name": "policy_defaults_deny_malformed_records_actions",
+            "passed": true
+          },
+          {
+            "name": "unknown_method_no_repo_access",
+            "passed": true
+          },
+          {
+            "name": "null_request_bad_request",
+            "passed": true
+          },
+          {
+            "name": "unauthenticated_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "bad_id_no_lookup",
+            "passed": true
+          },
+          {
+            "name": "not_found",
+            "passed": true
+          },
+          {
+            "name": "wrong_resource_id_denied",
+            "passed": true
+          },
+          {
+            "name": "get_returns_public_projection_only",
+            "passed": true
+          },
+          {
+            "name": "foreign_owner_denied_no_write",
+            "passed": true
+          },
+          {
+            "name": "patch_body_validation_precedes_lookup",
+            "passed": true
+          },
+          {
+            "name": "patch_trims_and_does_not_leak_repo_result",
+            "passed": true
+          },
+          {
+            "name": "unarchived_admin_delete_no_mutation",
+            "passed": true
+          },
+          {
+            "name": "archived_admin_delete_once",
+            "passed": true
+          },
+          {
+            "name": "repository_rejections_propagate",
+            "passed": true
+          }
+        ]
+      },
+      "tokenUsagePublished": false,
+      "actualAccountBillingVerified": false,
+      "upstreamIdentityIndependentlyVerified": false
+    }
+  ]
+}
