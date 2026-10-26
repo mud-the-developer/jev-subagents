@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "status": "registered_before_any_multistage_selector_or_worker_request",
+  "executionAuthority": false,
+  "question": "Does role routing per declared stage improve full-time/quality over the same fixed multi-stage structures?",
+  "profiles": {
+    "scout": {
+      "systemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+      "tools": "read, grep, find, ls",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low"
+    },
+    "worker": {
+      "systemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "tools": "read, bash, edit, write, grep, find, ls",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low"
+    },
+    "worker_strong": {
+      "systemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "tools": "read, bash, edit, write, grep, find, ls",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max"
+    }
+  },
+  "distinctConfiguredModels": 2,
+  "scoutAndWorkerSameModelThinkingDifferentRolePromptAndRights": true,
+  "cases": [
+    {
+      "questionId": 1368,
+      "dbId": "student_club",
+      "difficulty": "simple",
+      "inputSha256": {
+        "TASK.md": "6c5a1ec99a9c7ce624e325a99f127d272dd38f352904986691282c8e6cff3232",
+        "SCHEMA.md": "392b8a2d6079a6e2b13364744568eea5184f2949d5920400e5ad5debfae1cce2",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 825,
+      "dbId": "superhero",
+      "difficulty": "moderate",
+      "inputSha256": {
+        "TASK.md": "80a20b23cfa1017d64fc63c23a11a23ea833cbb5a17d7169d1bf8fd3e620d2cb",
+        "SCHEMA.md": "75527512da7bdbb7b36704d6e5c4c39a3e663b6e666f4278053e298c8c0ae05c",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 247,
+      "dbId": "toxicology",
+      "difficulty": "challenging",
+      "inputSha256": {
+        "TASK.md": "9e03638d5170b761879191ba137f45e09cba5145e249fb02156dae2bc1016630",
+        "SCHEMA.md": "56747642ec5114c1a04eebe15bfdef3346f10bf44b510efad85003db7a0a6952",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 3,
+      "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+      "referenceQualified": true
+    }
+  ],
+  "excludedPreviousQuestionIds": [
+    228,
+    263,
+    773,
+    791,
+    1317,
+    1380
+  ],
+  "holdoutSeed": "multistage-role-holdout-6a09e667",
+  "privateSampleSha256": "71275b67a7bd1202eef0912769f17306ec152d8524c50cd095a7a84e8111ece5",
+  "orderSeed": "multistage-order-bb67",
+  "order": [
+    {
+      "id": "q825-routed",
+      "questionId": 825,
+      "arm": "routed"
+    },
+    {
+      "id": "q825-fixed_cheap",
+      "questionId": 825,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q825-fixed_strong",
+      "questionId": 825,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q247-fixed_cheap",
+      "questionId": 247,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q247-fixed_strong",
+      "questionId": 247,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q247-routed",
+      "questionId": 247,
+      "arm": "routed"
+    },
+    {
+      "id": "q1368-fixed_strong",
+      "questionId": 1368,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q1368-routed",
+      "questionId": 1368,
+      "arm": "routed"
+    },
+    {
+      "id": "q1368-fixed_cheap",
+      "questionId": 1368,
+      "arm": "fixed_cheap"
+    }
+  ],
+  "arms": {
+    "fixed_cheap": [
+      "scout",
+      "worker",
+      "scout",
+      "worker if review requests one correction"
+    ],
+    "fixed_strong": [
+      "scout",
+      "worker_strong",
+      "scout",
+      "worker_strong if review requests one correction"
+    ],
+    "routed": {
+      "investigate": [
+        "scout",
+        "worker",
+        "worker_strong"
+      ],
+      "implement": [
+        "worker",
+        "worker_strong"
+      ],
+      "review": [
+        "scout",
+        "worker",
+        "worker_strong"
+      ],
+      "correct": [
+        "worker",
+        "worker_strong"
+      ]
+    }
+  },
+  "stageModes": {
+    "investigate": "read",
+    "implement": "mutation",
+    "review": "read",
+    "correct": "mutation"
+  },
+  "handoff": {
+    "analysisReportMaxUtf8Bytes": 8192,
+    "reviewExactJson": [
+      "needsFix:boolean",
+      "issues:string[]"
+    ],
+    "issueCountMax": 8,
+    "issueUtf8BytesMax": 512,
+    "needsFixRequiresConcreteIssue": true,
+    "malformedReviewTriggersCorrection": false,
+    "fullPriorWorkerHistoryShared": false,
+    "reportsAreUntrustedData": true,
+    "rawReportsOrDatasetPublished": false
+  },
+  "correction": {
+    "max": 1,
+    "condition": "valid reviewer JSON needsFix true with nonempty issues",
+    "newDeclaredStageNotNativeRetry": true,
+    "hiddenTestGradeShared": false,
+    "automaticModelOrProviderFailureRetry": false
+  },
+  "limits": {
+    "workflows": 9,
+    "baseWorkerStages": 27,
+    "maxWorkerStages": 36,
+    "baseJevRequests": 9,
+    "maxJevRequests": 12,
+    "workersPerStage": 1,
+    "secondsPerStage": 300,
+    "sdkCallCap": null,
+    "hardUsdCap": false,
+    "maxStagesPerWorkflow": 4
+  },
+  "clock": {
+    "singleParent": true,
+    "start": "before investigate selection",
+    "end": "all executed stage sessions/fileIO/Job children plus final readonly SQL verification complete",
+    "includes": [
+      "stage selections",
+      "artifact handoff creation",
+      "all stage preparations",
+      "SDK/tool/Job cleanup",
+      "hidden initial and final SQL grade"
+    ],
+    "humanReviewWaitMs": 0,
+    "oneTimeCorpusEligibilityDownloadExcluded": true
+  },
+  "grading": {
+    "primary": "final readonly SQL result-set EX",
+    "secondary": [
+      "workflow format and scope contract",
+      "initial EX vs final EX",
+      "review flags vs withheld initial EX",
+      "per-stage role/model/tools and routing latency",
+      "bounded correction use",
+      "full wall/cost/calls"
+    ],
+    "oldResultsNeverModified": true,
+    "difficultyOrGoldGivenToWorkerOrSelector": false,
+    "invalidReviewRetainedNoRetry": true,
+    "publicDataset": "BIRD Mini-Dev HFf65faf4ae3b638c1fa6df1d3370c8d92c8366301 CC-BY-SA4.0",
+    "full500OrStatisticalRanking": false
+  },
+  "sharedSourceSha256": {
+    "effects.ts": "1a89c378b8489246d095fbc4248ece21ff657a9e709e800bb23718c58adc9237",
+    "machine.ts": "947fd19f8e45e9a167da093d9b29983ba977af57abd3c39aced472a0d5497bff",
+    "choice.ts": "cfa1cbf5f96564cca8259ef619fb227aec8438f59dc0535e86a858100182e466",
+    "jev-config.ts": "f8dc4f51e34a194896a6e2f1d8e1440b100e953906c138d060ed831c38136c5f",
+    "goal-files.ts": "4190226eab309a55b3e2f063850eccc1788466806bd25599c4ee048693709f32",
+    "goal-file-effects.ts": "c52b022679e8600a4b4687c07e7d60e86255a3c02683e786b008e96dce5fefc6",
+    "goal-run-effects.ts": "8e85961419507fdcbc8419336ffdc8ff6bf96bc2dd8c06af899822279abab231",
+    "windows-goal-files.ts": "3ccfefc04a540fd5d4092fb8ab075c7e7eaff3f27be33f85156d01c0bbaf25f5",
+    "windows-job.ts": "527587ba77aaeb1968cfa2f6177c5e2b34e5c93d1a2b350b1b2f4d9e0efece7e",
+    "worker-runtime.ts": "bfe3ecebde3b89579b23e5e84b277be85cd2777bb9b25e32964bc7c8cbe9e2ad"
+  },
+  "sharedSqlEvaluatorSha256": "d904e9e21ae267f3458240f37186bf3780cedc48f44d1963fcd4441a94e33132",
+  "productChanged": false,
+  "selector": {
+    "backend": "typesafe",
+    "model": "jev-1.13.0",
+    "interactiveSessionSelectionRestored": false
+  },
+  "stopOn": [
+    "native/SDK/provider/selector failure",
+    "unknown accounting/cleanup",
+    "scope or profile freshness failure",
+    "oversized report; never silently truncate"
+  ]
+}
