@@ -104,6 +104,8 @@ Use the exact release commit and [existing validation commands](docs/verificatio
 
 **Actual selector / end-to-end follow-up:** the [official BIRD Mini-Dev subset pilot](benchmarks/selection-policy/bird-mini-dev-pilot/RESULTS.md) measured one continuous parent clock from policy choice through validation/cleanup on6public SQL tasks ×3policies. Luna3/6EX/65.96s, Astra5/6/160.55s, JEV-selected3/6/66.40s (all6choices Luna): no observed benefit over always-Luna and no preserved-Astra-accuracy speedup. Data license, sampling, hashes, per-phase metadata and small-sample/metric/privacy limits are explicit; raw CC-BY-SA dataset/SQL is not relicensed under MIT.
 
+**Per-stage role-routing follow-up:** the [multistage fresh-holdout pilot](benchmarks/selection-policy/multistage-bird-pilot/RESULTS.md) used investigation ->implementation ->read-only review, with one bounded correction only if requested. Across9matched workflows/27worker stages, all policies scored2/3EX. JEV's9actual choices always yielded scout ->worker ->scout; the reviewer missed the failing query and no correction activated. This changes the benchmark workflow, not per-SDK-turn product model switching, and provides no observed gain over the fixed cheap role path on these3holdouts.
+
 Retired Goal/sequence/managed-context/SoL-Pi integration code and small historical fixtures remain solely for regression coverage; they are not additional public tool APIs or current execution instructions. The two historical diagrams are [archived with their editable sources](docs/figures/README.md), not advertised as current features. Standalone SoL-Pi remains separate.
 
 ## License

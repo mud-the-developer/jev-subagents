@@ -1,4 +1,6 @@
-# Multistage BIRD role-routing pilot — registered before execution
+# Multistage BIRD role-routing pilot — completed
+
+**9/9workflows,27worker stages and9real selector choices completed.** All policies scored2/3EX. JEV chose scout ->worker ->scout for all3questions, matching the cheap fixed role path without improving observed accuracy/time/cost. All reviews missed the failing247query, so the conditional correction branch did not activate. See [RESULTS.md](RESULTS.md) and [results.json](results.json); unfavorable observations and coverage limits are retained.
 
 The earlier [single-stage selector pilot](../bird-mini-dev-pilot/RESULTS.md) selected worker/worker_strong once perquestion and never used scout. Its unfavorable results stay unchanged. This new benchmark tests **role choice at declared stage boundaries**, not per-SDK-round model swapping or a new production feature.
 

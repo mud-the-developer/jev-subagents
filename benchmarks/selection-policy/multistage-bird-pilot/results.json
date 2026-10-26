@@ -1,0 +1,2103 @@
+{
+  "schemaVersion": 1,
+  "status": "completed_multistage_role_routing_pilot",
+  "reportedOn": "2026-10-26",
+  "registeredCommit": "b48fc1048aabb037e2d780bf0735024646cd4e49",
+  "planned": 9,
+  "completed": 9,
+  "notStarted": 0,
+  "phaseWorkers": 27,
+  "maxApprovedPhaseWorkers": 36,
+  "selectorRequests": 9,
+  "sdkCalls": 66,
+  "totalObservedUsdEstimate": 0.26091857199999996,
+  "allCleanupAndAccountingKnown": true,
+  "stageBoundaryRoutingNotSdkTurnSwitching": true,
+  "productChanged": false,
+  "distinctConfiguredModels": 2,
+  "routedPathsAllScoutWorkerScout": true,
+  "correctionBranchActivated": false,
+  "rawDatasetReportsSqlOrProfilesPublished": false,
+  "actualBillingOrGeneralRankingVerified": false,
+  "executionAuthority": false,
+  "arms": {
+    "fixed_cheap": {
+      "planned": 3,
+      "completed": 3,
+      "initialCorrect": 2,
+      "finalCorrect": 2,
+      "workflowContractPass": 2,
+      "totalWallMs": 113414.31780000002,
+      "medianWallMs": 34818.4338,
+      "sdkCalls": 21,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.0125214,
+      "correctionStages": 0,
+      "reviewFalseNegatives": 1
+    },
+    "fixed_strong": {
+      "planned": 3,
+      "completed": 3,
+      "initialCorrect": 2,
+      "finalCorrect": 2,
+      "workflowContractPass": 2,
+      "totalWallMs": 156822.7598,
+      "medianWallMs": 51381.903600000005,
+      "sdkCalls": 24,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.23535335999999996,
+      "correctionStages": 0,
+      "reviewFalseNegatives": 1
+    },
+    "routed": {
+      "planned": 3,
+      "completed": 3,
+      "initialCorrect": 2,
+      "finalCorrect": 2,
+      "workflowContractPass": 2,
+      "totalWallMs": 117803.35470000003,
+      "medianWallMs": 38492.6306,
+      "sdkCalls": 21,
+      "selectorRequests": 9,
+      "observedUsdEstimate": 0.013043812,
+      "correctionStages": 0,
+      "reviewFalseNegatives": 1
+    }
+  },
+  "rows": [
+    {
+      "id": "q825-routed",
+      "index": 0,
+      "arm": "routed",
+      "questionId": 825,
+      "dbId": "superhero",
+      "difficulty": "moderate",
+      "requestReadyAt": "2026-10-26T03:48:31.156Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 1,
+            "observedUsdEstimate": 0.000023688,
+            "model": "jev-1.13.0",
+            "confidence": 0.74,
+            "usage": {
+              "inputTokens": 564,
+              "outputTokens": 42
+            }
+          },
+          "selectionMs": 308.4887,
+          "phaseWallMs": 14229.807,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-routed-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0011604,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 9661.5871,
+            "startupMs": 2276.3265,
+            "generationMs": 7385.2618,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 2992,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "4dd24199c3de9d467bc54dd7ed3dea3561506641725ac7f6d771fa282e4ce56a",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 10197.796699999999,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker",
+            "requests": 1,
+            "observedUsdEstimate": 0.000021546000000000003,
+            "model": "jev-1.13.0",
+            "confidence": 0.74,
+            "usage": {
+              "inputTokens": 513,
+              "outputTokens": 33
+            }
+          },
+          "selectionMs": 185.18279999999868,
+          "phaseWallMs": 13835.4403,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-routed-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00203232,
+              "assistantMessages": 3,
+              "complete": true
+            },
+            "sdkCalls": 3,
+            "sdkCallCap": null,
+            "toolCalls": 5,
+            "elapsedMs": 11032.7501,
+            "startupMs": 1750.2474000000002,
+            "generationMs": 9282.503999999999,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 5,
+              "readBytes": 3956,
+              "writtenBytes": 211
+            },
+            "systemPromptSha256": "36cac369b74a6c76dc2a7dc5c7f9ebe2fe536c59dba07f186ff906803cbff496",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 11567.299000000003,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 1,
+            "observedUsdEstimate": 0.000023688,
+            "model": "jev-1.13.0",
+            "confidence": 0.58,
+            "usage": {
+              "inputTokens": 564,
+              "outputTokens": 42
+            }
+          },
+          "selectionMs": 177.2088999999978,
+          "phaseWallMs": 9996.1665,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-routed-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0011697600000000002,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 7700.9544,
+            "startupMs": 1098.3881000000001,
+            "generationMs": 6602.567599999999,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 4145,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "9507be9376bdb7c36f67e75648a1772ef371072ddebad2416566be3229134a98",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 8409.150199999996,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": true,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 825,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "goldRows": 1,
+        "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "databaseSha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.0278000263497233,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 825,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "goldRows": 1,
+        "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "databaseSha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.029500039294362,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 218.1810000000005,
+      "finalVerificationMs": 210.66760000000068,
+      "totalWallMs": 38492.6306,
+      "workflowContractPass": true,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 7,
+      "selectorRequests": 3,
+      "observedUsdEstimate": 0.004431402,
+      "querySha256": "b6ed4e48961fdb50659a9af265d5d0a539290a9d0b3ced6a52a4a0ea8f8a8a75",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q825-fixed_cheap",
+      "index": 1,
+      "arm": "fixed_cheap",
+      "questionId": 825,
+      "dbId": "superhero",
+      "difficulty": "moderate",
+      "requestReadyAt": "2026-10-26T03:49:09.654Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.02089999999589054,
+          "phaseWallMs": 10715.157399999996,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-fixed_cheap-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0012171999999999999,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 9084.205800000002,
+            "startupMs": 1949.0033999999998,
+            "generationMs": 7135.2036,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 2992,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "72bc02a70057188fb3adb4f5a87af60b5eef43fbd44eae2be5c28b309a025403",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9630.270100000002,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.03510000000096625,
+          "phaseWallMs": 10855.049700000003,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-fixed_cheap-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0020481200000000005,
+              "assistantMessages": 3,
+              "complete": true
+            },
+            "sdkCalls": 3,
+            "sdkCallCap": null,
+            "toolCalls": 5,
+            "elapsedMs": 9167.6016,
+            "startupMs": 1015.7918,
+            "generationMs": 8151.811,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 5,
+              "readBytes": 4002,
+              "writtenBytes": 207
+            },
+            "systemPromptSha256": "f4fae93f6dac1dc803c493ccd2ba8d8aa8e73de262102521d128fd204b02f869",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 9706.8828,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.016499999997904524,
+          "phaseWallMs": 10726.196699999993,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-fixed_cheap-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0016098000000000002,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 8761.983,
+            "startupMs": 2306.4186999999997,
+            "generationMs": 6455.5656,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 4187,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "fa25ac1eb3e9ab2deb4064e21a3442fc8d8e5a0bffbd7bb89ed93d05e3dabb92",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9467.776899999997,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": true,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 825,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "goldRows": 1,
+        "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "databaseSha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.003399956971407,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 825,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "goldRows": 1,
+        "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "databaseSha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 0.9660000214353204,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 88.51950000000215,
+      "finalVerificationMs": 82.43219999999565,
+      "totalWallMs": 32469.0639,
+      "workflowContractPass": true,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 7,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.00487512,
+      "querySha256": "b053a9bb210a83e5277b9dd99880648f5923a86a4918db6dd02f6a2722dfba1a",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q825-fixed_strong",
+      "index": 2,
+      "arm": "fixed_strong",
+      "questionId": 825,
+      "dbId": "superhero",
+      "difficulty": "moderate",
+      "requestReadyAt": "2026-10-26T03:49:42.129Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.022600000011152588,
+          "phaseWallMs": 11178.760299999994,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-fixed_strong-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0014096,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 9549.6605,
+            "startupMs": 1009.9092,
+            "generationMs": 8539.7524,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 2992,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "27179e7beeec4067185557c2b0a4661ffbb60b832e0e0306ababb0202f32b6a4",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 10080.7987,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker_strong",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.02049999999871943,
+          "phaseWallMs": 29474.2273,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-fixed_strong-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.075712,
+              "assistantMessages": 4,
+              "complete": true
+            },
+            "sdkCalls": 4,
+            "sdkCallCap": null,
+            "toolCalls": 6,
+            "elapsedMs": 27699.6162,
+            "startupMs": 1544.3208,
+            "generationMs": 26155.2967,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 6,
+              "readBytes": 4092,
+              "writtenBytes": 211
+            },
+            "systemPromptSha256": "19eec5e37643743718cc29d3973f1debbd8228e37d3ab35c8148ec733e44356c",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 28381.5248,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-6-astra",
+          "thinking": "max"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.016499999997904524,
+          "phaseWallMs": 10556.110700000005,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q825-fixed_strong-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0016262,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 8954.5799,
+            "startupMs": 2153.6517999999996,
+            "generationMs": 6800.9293,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 4070,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "fd094ecb465082b3843e4bcffabb89d3ddbf44743d5c58e2b02c5bb1fd7f93f8",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9471.007400000002,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": true,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 825,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "goldRows": 1,
+        "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "databaseSha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.0281999129801989,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 825,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "goldRows": 1,
+        "goldSetSha256": "0c5f45a9dde891ef81dd68c2e28df83cb8d216e1cefa3ce32494a5357075c69a",
+        "databaseSha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.0395999997854233,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 89.10100000000966,
+      "finalVerificationMs": 82.11569999999483,
+      "totalWallMs": 51381.903600000005,
+      "workflowContractPass": true,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 8,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.07874779999999999,
+      "querySha256": "b6ed4e48961fdb50659a9af265d5d0a539290a9d0b3ced6a52a4a0ea8f8a8a75",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q247-fixed_cheap",
+      "index": 3,
+      "arm": "fixed_cheap",
+      "questionId": 247,
+      "dbId": "toxicology",
+      "difficulty": "challenging",
+      "requestReadyAt": "2026-10-26T03:50:33.517Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.013500000000931323,
+          "phaseWallMs": 11851.171199999997,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-fixed_cheap-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.001361,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 10074.0878,
+            "startupMs": 1554.6931,
+            "generationMs": 8519.3958,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 1653,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "f3b24199962724360321308f66948417f63811ec22569fa8e190485511fa6b3b",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 10756.025399999999,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.01620000001275912,
+          "phaseWallMs": 15853.46119999999,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-fixed_cheap-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0016454,
+              "assistantMessages": 3,
+              "complete": true
+            },
+            "sdkCalls": 3,
+            "sdkCallCap": null,
+            "toolCalls": 5,
+            "elapsedMs": 14130.3398,
+            "startupMs": 2614.2382,
+            "generationMs": 11516.1028,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 5,
+              "readBytes": 2751,
+              "writtenBytes": 147
+            },
+            "systemPromptSha256": "92f092926767f28e8722f3a5f10a22ae564f0bbfc8282a3f41927c5df46ee4ce",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 14660.206200000015,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.02750000002561137,
+          "phaseWallMs": 11431.486600000004,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-fixed_cheap-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0012035600000000002,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 9510.4725,
+            "startupMs": 2026.2594,
+            "generationMs": 7484.214300000001,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 2876,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "d9eb731b9b747bb37550616d1d4151517c01b1be86540ae9be1502e1a6d610b0",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 10185.953599999979,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": false,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 247,
+        "status": "evaluated",
+        "executionMatch": false,
+        "predictedRows": 38,
+        "predictedSetSha256": "d8472649f1c61c6c4593e9a4e188e9b8b4a134079a6ca2e2672407e1179a9fbd",
+        "goldRows": 3,
+        "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+        "databaseSha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 3417.735500028357,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 247,
+        "status": "evaluated",
+        "executionMatch": false,
+        "predictedRows": 38,
+        "predictedSetSha256": "d8472649f1c61c6c4593e9a4e188e9b8b4a134079a6ca2e2672407e1179a9fbd",
+        "goldRows": 3,
+        "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+        "databaseSha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 3388.1729999557137,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 3511.147399999987,
+      "finalVerificationMs": 3477.989499999996,
+      "totalWallMs": 46126.82010000001,
+      "workflowContractPass": false,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 7,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.0042099600000000004,
+      "querySha256": "d895d89167b457406988de70abff3db32cadbb5c89f8cd4ad6d6b7d19eb902a1",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q247-fixed_strong",
+      "index": 4,
+      "arm": "fixed_strong",
+      "questionId": 247,
+      "dbId": "toxicology",
+      "difficulty": "challenging",
+      "requestReadyAt": "2026-10-26T03:51:19.651Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.014699999999720603,
+          "phaseWallMs": 12426.945699999982,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-fixed_strong-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.001258,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 10721.3277,
+            "startupMs": 2266.8923,
+            "generationMs": 8454.4365,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 1653,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "dcf205a9a5c51ef98afd0c9fa6fda4cb5292fbb4f195a45570754ae6a8f9c33a",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 11249.639600000024,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker_strong",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.015499999979510903,
+          "phaseWallMs": 34893.3958,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-fixed_strong-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.082452,
+              "assistantMessages": 4,
+              "complete": true
+            },
+            "sdkCalls": 4,
+            "sdkCallCap": null,
+            "toolCalls": 6,
+            "elapsedMs": 31909.4317,
+            "startupMs": 1737.4388,
+            "generationMs": 30171.9949,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 6,
+              "readBytes": 2697,
+              "writtenBytes": 90
+            },
+            "systemPromptSha256": "df86c22e5c62d1a29ec89b6b899bea0f121d56477343ff3c79743a3f2fa1bb91",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 32909.05109999998,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-6-astra",
+          "thinking": "max"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.018299999996088445,
+          "phaseWallMs": 11329.012300000002,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-fixed_strong-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0015536,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 9221.5006,
+            "startupMs": 2611.5901000000003,
+            "generationMs": 6609.9117,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 2675,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "1e98fb94c9bdb66d1771eca8129eb8c1820d142872d18bfcd0a96b2232a6ebf3",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9834.736300000019,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": false,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 247,
+        "status": "evaluated",
+        "executionMatch": false,
+        "predictedRows": 38,
+        "predictedSetSha256": "d8472649f1c61c6c4593e9a4e188e9b8b4a134079a6ca2e2672407e1179a9fbd",
+        "goldRows": 3,
+        "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+        "databaseSha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 3.6732000298798084,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 247,
+        "status": "evaluated",
+        "executionMatch": false,
+        "predictedRows": 38,
+        "predictedSetSha256": "d8472649f1c61c6c4593e9a4e188e9b8b4a134079a6ca2e2672407e1179a9fbd",
+        "goldRows": 3,
+        "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+        "databaseSha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 3.720100037753582,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 94.8926999999967,
+      "finalVerificationMs": 120.55710000000545,
+      "totalWallMs": 58866.32559999998,
+      "workflowContractPass": false,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 8,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.0852636,
+      "querySha256": "cf7b570348b71918a4e09f435f4a72d2b5b770a1d7d58b2d02c337d81aec301b",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q247-routed",
+      "index": 5,
+      "arm": "routed",
+      "questionId": 247,
+      "dbId": "toxicology",
+      "difficulty": "challenging",
+      "requestReadyAt": "2026-10-26T03:52:18.523Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 1,
+            "observedUsdEstimate": 0.000023646,
+            "model": "jev-1.13.0",
+            "confidence": 0.77,
+            "usage": {
+              "inputTokens": 563,
+              "outputTokens": 42
+            }
+          },
+          "selectionMs": 249.04389999998966,
+          "phaseWallMs": 13001.449499999988,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-routed-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0013482000000000001,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 11165.1183,
+            "startupMs": 2605.8745,
+            "generationMs": 8559.245799999999,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 1653,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "ec8c9524ea36f009f3240027866e79d73e207bf940e906dc2b0c2ed5e1cce423",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 11679.009099999996,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker",
+            "requests": 1,
+            "observedUsdEstimate": 0.000021504000000000003,
+            "model": "jev-1.13.0",
+            "confidence": 0.78,
+            "usage": {
+              "inputTokens": 512,
+              "outputTokens": 33
+            }
+          },
+          "selectionMs": 156.87760000000708,
+          "phaseWallMs": 12346.364399999991,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-routed-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00190212,
+              "assistantMessages": 3,
+              "complete": true
+            },
+            "sdkCalls": 3,
+            "sdkCallCap": null,
+            "toolCalls": 5,
+            "elapsedMs": 9794.9365,
+            "startupMs": 1026.6862,
+            "generationMs": 8768.2515,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 5,
+              "readBytes": 2442,
+              "writtenBytes": 149
+            },
+            "systemPromptSha256": "0ce1bfcad479e481b7856475b9041a078eb642ef6262bfaebf198a99984ce11e",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 10791.84699999998,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 1,
+            "observedUsdEstimate": 0.000023646,
+            "model": "jev-1.13.0",
+            "confidence": 0.55,
+            "usage": {
+              "inputTokens": 563,
+              "outputTokens": 42
+            }
+          },
+          "selectionMs": 163.83730000001378,
+          "phaseWallMs": 12895.746300000028,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q247-routed-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0017846,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 10959.4028,
+            "startupMs": 2058.56,
+            "generationMs": 8900.8439,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 2569,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "9836fa4b1ae6b1a413ba97d390ab3ab560c44cb06c583c96e557c86c5955e40b",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 11491.847300000023,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": false,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 247,
+        "status": "evaluated",
+        "executionMatch": false,
+        "predictedRows": 38,
+        "predictedSetSha256": "d8472649f1c61c6c4593e9a4e188e9b8b4a134079a6ca2e2672407e1179a9fbd",
+        "goldRows": 3,
+        "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+        "databaseSha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 3355.438599945046,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 247,
+        "status": "evaluated",
+        "executionMatch": false,
+        "predictedRows": 38,
+        "predictedSetSha256": "d8472649f1c61c6c4593e9a4e188e9b8b4a134079a6ca2e2672407e1179a9fbd",
+        "goldRows": 3,
+        "goldSetSha256": "42a5c0a8f77a8740057ba2904d3905663a612feaf335e28d96430085e67a6011",
+        "databaseSha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 3412.0292000006884,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 3616.436799999996,
+      "finalVerificationMs": 3500.3584000000264,
+      "totalWallMs": 45361.98799999998,
+      "workflowContractPass": false,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 7,
+      "selectorRequests": 3,
+      "observedUsdEstimate": 0.005103716,
+      "querySha256": "189a28e18299b13237e209b9264eb3988365dd6172d47056257092a442411715",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q1368-fixed_strong",
+      "index": 6,
+      "arm": "fixed_strong",
+      "questionId": 1368,
+      "dbId": "student_club",
+      "difficulty": "simple",
+      "requestReadyAt": "2026-10-26T03:53:03.892Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.014699999999720603,
+          "phaseWallMs": 10743.629199999967,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-fixed_strong-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.001594,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 9146.7738,
+            "startupMs": 2474.5311,
+            "generationMs": 6672.244000000001,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 2920,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "f984307af1bbfd710cf25d1336e21f435eb50ab3c29b39e02655f6a5dc8524d5",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9670.788899999985,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker_strong",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.025400000042282045,
+          "phaseWallMs": 26291.464299999992,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-fixed_strong-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.068714,
+              "assistantMessages": 4,
+              "complete": true
+            },
+            "sdkCalls": 4,
+            "sdkCallCap": null,
+            "toolCalls": 6,
+            "elapsedMs": 24199.654199999997,
+            "startupMs": 2211.6486,
+            "generationMs": 21988.007599999997,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 6,
+              "readBytes": 3838,
+              "writtenBytes": 121
+            },
+            "systemPromptSha256": "c83f1e61b159581678bfaff0c843fae20aec327a0fd97b4902d4bf60e92a3e5d",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 24886.87220000004,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-6-astra",
+          "thinking": "max"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.01959999999962747,
+          "phaseWallMs": 9360.598299999954,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-fixed_strong-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00103396,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 7577.104200000001,
+            "startupMs": 844.9087999999999,
+            "generationMs": 6732.1966,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 3816,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "c2c48b1bd7edcc0cf2373e5920d70107d05ddecdcbfe9ed378f29cf04bd0fe78",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 8265.987599999993,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": true,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 1368,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "goldRows": 1,
+        "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "databaseSha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.935299951583147,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 1368,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "goldRows": 1,
+        "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "databaseSha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.9296000245958567,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 87.98219999996945,
+      "finalVerificationMs": 89.249599999981,
+      "totalWallMs": 46574.5306,
+      "workflowContractPass": true,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 8,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.07134196,
+      "querySha256": "cd2ac66178ec39f4e85e18cf78a50afb276275fd7eb82735b377bdaa60674783",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q1368-routed",
+      "index": 7,
+      "arm": "routed",
+      "questionId": 1368,
+      "dbId": "student_club",
+      "difficulty": "simple",
+      "requestReadyAt": "2026-10-26T03:53:50.472Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 1,
+            "observedUsdEstimate": 0.000023772000000000002,
+            "model": "jev-1.13.0",
+            "confidence": 0.69,
+            "usage": {
+              "inputTokens": 566,
+              "outputTokens": 42
+            }
+          },
+          "selectionMs": 168.84210000000894,
+          "phaseWallMs": 10861.425300000003,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-routed-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0011588,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 8749.1793,
+            "startupMs": 1886.4872,
+            "generationMs": 6862.694100000001,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 2920,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "db571e072ca4e411c0f8ef221dcf3f4033cc1bc28f3a2537368d401aa9e89ddc",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9269.154700000014,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker",
+            "requests": 1,
+            "observedUsdEstimate": 0.00002163,
+            "model": "jev-1.13.0",
+            "confidence": 0.74,
+            "usage": {
+              "inputTokens": 515,
+              "outputTokens": 33
+            }
+          },
+          "selectionMs": 160.5976999999839,
+          "phaseWallMs": 12478.489199999953,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-routed-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00120936,
+              "assistantMessages": 3,
+              "complete": true
+            },
+            "sdkCalls": 3,
+            "sdkCallCap": null,
+            "toolCalls": 5,
+            "elapsedMs": 9944.6681,
+            "startupMs": 2502.5233,
+            "generationMs": 7442.1458999999995,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 5,
+              "readBytes": 3651,
+              "writtenBytes": 126
+            },
+            "systemPromptSha256": "886bc1f4ca66484e84b08dc0583597eaef5c7971f4cf56ba33b00c76742f134b",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 10634.037000000011,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 1,
+            "observedUsdEstimate": 0.000023772000000000002,
+            "model": "jev-1.13.0",
+            "confidence": 0.58,
+            "usage": {
+              "inputTokens": 566,
+              "outputTokens": 42
+            }
+          },
+          "selectionMs": 175.17090000002645,
+          "phaseWallMs": 10425.626099999994,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-routed-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00107136,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 8419.9874,
+            "startupMs": 1965.0549999999998,
+            "generationMs": 6454.9337000000005,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 3755,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "138fa96f05e24bb37c789727756b5e09e881db9487e1bbdc46cdc8f939ce8826",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9113.057900000014,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": true,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 1368,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "goldRows": 1,
+        "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "databaseSha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 1.972900005057454,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 1368,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "goldRows": 1,
+        "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "databaseSha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 2.015699981711805,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 92.72079999995185,
+      "finalVerificationMs": 88.9829000000027,
+      "totalWallMs": 33948.73610000004,
+      "workflowContractPass": true,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 7,
+      "selectorRequests": 3,
+      "observedUsdEstimate": 0.003508694,
+      "querySha256": "384946715c01fefe6a08b058fb7ddd8fca102dc99c09aa8941e849c3befdef07",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    },
+    {
+      "id": "q1368-fixed_cheap",
+      "index": 8,
+      "arm": "fixed_cheap",
+      "questionId": 1368,
+      "dbId": "student_club",
+      "difficulty": "simple",
+      "requestReadyAt": "2026-10-26T03:54:24.427Z",
+      "status": "completed",
+      "phases": [
+        {
+          "phase": "investigate",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.014100000029429793,
+          "phaseWallMs": 10455.418500000029,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-fixed_cheap-investigate",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00109,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 2,
+            "elapsedMs": 8769.198,
+            "startupMs": 2345.0303,
+            "generationMs": 6424.169,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 2,
+              "readBytes": 2920,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "a0134d154518b45824b4c74677e7c5942afdc755d62f56c73697ee50dde00345",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 9364.028099999996,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "implement",
+          "selection": {
+            "profile": "worker",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.02000000001862645,
+          "phaseWallMs": 12010.431299999997,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-fixed_cheap-implement",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.0012175600000000001,
+              "assistantMessages": 3,
+              "complete": true
+            },
+            "sdkCalls": 3,
+            "sdkCallCap": null,
+            "toolCalls": 5,
+            "elapsedMs": 10349.339,
+            "startupMs": 3005.7788,
+            "generationMs": 7343.561300000001,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": true,
+              "operations": 5,
+              "readBytes": 3585,
+              "writtenBytes": 126
+            },
+            "systemPromptSha256": "46e586d3d479d3fd62d61539f24c26e24a63b8eefe53766ef12113567ac1f1a6",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "mutation",
+            "effectiveToolNames": [
+              "scope_edit",
+              "scope_read",
+              "scope_write"
+            ],
+            "parentOwnedElapsedMs": 10916.881300000008,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        },
+        {
+          "phase": "review",
+          "selection": {
+            "profile": "scout",
+            "requests": 0,
+            "observedUsdEstimate": 0
+          },
+          "selectionMs": 0.0181999999913387,
+          "phaseWallMs": 12007.136200000008,
+          "result": {
+            "type": "direct_sdk_result",
+            "id": "q1368-fixed_cheap-review",
+            "status": "completed_unverified",
+            "accounting": {
+              "status": "reported_complete",
+              "observedUsdEstimate": 0.00112876,
+              "assistantMessages": 2,
+              "complete": true
+            },
+            "sdkCalls": 2,
+            "sdkCallCap": null,
+            "toolCalls": 4,
+            "elapsedMs": 9939.5983,
+            "startupMs": 2762.6202,
+            "generationMs": 7176.979300000001,
+            "disposed": true,
+            "files": {
+              "ioFinished": true,
+              "changed": false,
+              "operations": 4,
+              "readBytes": 3689,
+              "writtenBytes": 0
+            },
+            "systemPromptSha256": "72297b4518ca1a4c051a4e33900f4702aea0b5282fb42e03de7cdffe45276574",
+            "sdkDirect": true,
+            "jevExecutionCalls": 0,
+            "injectedOfflineSdk": false,
+            "stageMode": "read",
+            "effectiveToolNames": [
+              "scope_read"
+            ],
+            "parentOwnedElapsedMs": 10664.222400000028,
+            "cleanupConfirmed": true,
+            "childExitConfirmed": true,
+            "leaderExitCode": 0,
+            "transportFailure": false,
+            "deadlineReached": false
+          },
+          "profileSystemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+          "protectedInputsUnchanged": true,
+          "configuredProviderModel": "openai-codex/gpt-5.6-luna",
+          "thinking": "low"
+        }
+      ],
+      "reviewFormatValid": true,
+      "reviewNeedsFix": false,
+      "reviewCorrectness": true,
+      "correctionStageUsed": false,
+      "initialValidation": {
+        "questionId": 1368,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "goldRows": 1,
+        "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "databaseSha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 2.033199998550117,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "finalValidation": {
+        "questionId": 1368,
+        "status": "evaluated",
+        "executionMatch": true,
+        "predictedRows": 1,
+        "predictedSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "goldRows": 1,
+        "goldSetSha256": "cb44bf138dcf820e8e7eb9c9b4487e98d876eb5b4267de0068369252420dd608",
+        "databaseSha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77",
+        "databaseUnchanged": true,
+        "readOnlyAuthorizer": true,
+        "validationMs": 2.014600089751184,
+        "metric": "single-database result-set EX; restricted SELECT-only pilot",
+        "modelCalls": 0
+      },
+      "initialVerificationMs": 96.42440000001807,
+      "finalVerificationMs": 247.39490000001388,
+      "totalWallMs": 34818.4338,
+      "workflowContractPass": true,
+      "allCleanupAndAccountingKnown": true,
+      "sdkCalls": 7,
+      "selectorRequests": 0,
+      "observedUsdEstimate": 0.00343632,
+      "querySha256": "384946715c01fefe6a08b058fb7ddd8fca102dc99c09aa8941e849c3befdef07",
+      "humanReviewWaitMs": 0,
+      "hiddenGradeFeedbackShared": false,
+      "rawDatasetReportsOrSqlPublished": false,
+      "executionAuthority": false
+    }
+  ]
+}
