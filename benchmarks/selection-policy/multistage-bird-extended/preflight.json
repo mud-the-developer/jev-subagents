@@ -1,0 +1,62 @@
+{
+  "equivalence": {
+    "originalSixFrozenSourceHashesVerified": true,
+    "modelPromptsRubricsScoringAndSafetyUnchanged": true,
+    "newDistinctQuestions": 7,
+    "previousCasesNotRerun": 3,
+    "finalQuestionCount": 10,
+    "profilesUnchanged": true,
+    "workerCalls": 0,
+    "selectorRequests": 0
+  },
+  "referenceControls": {
+    "newQuestionControls": [
+      {
+        "questionId": 1323,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 1460,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 745,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 744,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 248,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 232,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 1411,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      }
+    ],
+    "modelCalls": 0,
+    "previousCasesNotRerun": 3
+  },
+  "realExtensionWorkerCalls": 0,
+  "realExtensionSelectorRequests": 0
+}

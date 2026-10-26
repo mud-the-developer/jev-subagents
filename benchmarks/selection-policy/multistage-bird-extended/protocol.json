@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 1,
+  "status": "sequential_extension_registered_before_new_seven_outcomes",
+  "executionAuthority": false,
+  "question": "Does role routing per declared stage improve full-time/quality over the same fixed multi-stage structures?",
+  "profiles": {
+    "scout": {
+      "systemSha256": "2374e2055e2522751a64a723a3b2519ec7c42005d6ba53b53779c3fefb13133f",
+      "tools": "read, grep, find, ls",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low"
+    },
+    "worker": {
+      "systemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "tools": "read, bash, edit, write, grep, find, ls",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low"
+    },
+    "worker_strong": {
+      "systemSha256": "d009bdc4a296721cf22d40779a60a9fac2abc26e1fb04f8c704c8a3d7aef56df",
+      "tools": "read, bash, edit, write, grep, find, ls",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max"
+    }
+  },
+  "distinctConfiguredModels": 2,
+  "scoutAndWorkerSameModelThinkingDifferentRolePromptAndRights": true,
+  "cases": [
+    {
+      "questionId": 1323,
+      "dbId": "student_club",
+      "difficulty": "moderate",
+      "inputSha256": {
+        "TASK.md": "6c84a3916046afaf5e57ad9a99f6e9173938e921585afe2d7e6e65fc2c4db6bd",
+        "SCHEMA.md": "392b8a2d6079a6e2b13364744568eea5184f2949d5920400e5ad5debfae1cce2",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 8,
+      "goldSetSha256": "6b60ba97d567b8a5f4ac9ae5025510de7467b144b7b1e3880e3c3e1e7a8d7da6",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 1460,
+      "dbId": "student_club",
+      "difficulty": "challenging",
+      "inputSha256": {
+        "TASK.md": "81fdedfcc29cacc701635f83b5203e697a1e99925f286b065145c70d4a2f6c26",
+        "SCHEMA.md": "392b8a2d6079a6e2b13364744568eea5184f2949d5920400e5ad5debfae1cce2",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "3d7641304fa1e04a8fa533f6c678021e3e0b7d75c0a015ad5a23a7816e8a11c8",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 745,
+      "dbId": "superhero",
+      "difficulty": "simple",
+      "inputSha256": {
+        "TASK.md": "4207350b4123edded77d6cb9c2a711d71fbbfe6323a07f2e8ae2b16ee7e2f4c8",
+        "SCHEMA.md": "75527512da7bdbb7b36704d6e5c4c39a3e663b6e666f4278053e298c8c0ae05c",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "49e165525ebdb26f765e7bbab7689c4772a55771dd3ce3b1786d75188895cf03",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 744,
+      "dbId": "superhero",
+      "difficulty": "challenging",
+      "inputSha256": {
+        "TASK.md": "f32efa352d9ceb90f80a8bb61b90b1ea070be56c7d7af38da8e8ed619de2d476",
+        "SCHEMA.md": "75527512da7bdbb7b36704d6e5c4c39a3e663b6e666f4278053e298c8c0ae05c",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 1,
+      "goldSetSha256": "1b748b3c3fa6380768a50c3abf1d5460f608c9925c002aa2fce8ab8920f2489a",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 248,
+      "dbId": "toxicology",
+      "difficulty": "simple",
+      "inputSha256": {
+        "TASK.md": "4b15f8da9ccf441943c2aae5c870f6508aebc0fe6cf910eb006ef1bff5fbbb31",
+        "SCHEMA.md": "56747642ec5114c1a04eebe15bfdef3346f10bf44b510efad85003db7a0a6952",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 4,
+      "goldSetSha256": "0cdb48e96d5373efd6a1e1c11508baa2a68fbc468a75f69544bdb40cf1edc0eb",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 232,
+      "dbId": "toxicology",
+      "difficulty": "moderate",
+      "inputSha256": {
+        "TASK.md": "fcbec8e06ecc8c4e02c78a13decf3b9d2b15b3cabafd727db7758e4ddce3daa3",
+        "SCHEMA.md": "56747642ec5114c1a04eebe15bfdef3346f10bf44b510efad85003db7a0a6952",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 3,
+      "goldSetSha256": "135e135176bceec356ae17bc0148844e5edc84c4b00d36ea11ca751250818953",
+      "referenceQualified": true
+    },
+    {
+      "questionId": 1411,
+      "dbId": "student_club",
+      "difficulty": "simple",
+      "inputSha256": {
+        "TASK.md": "74ef194a1cfbb4e1b72f47482d6b027867fe416f559aac5a53986931e3d26a2f",
+        "SCHEMA.md": "392b8a2d6079a6e2b13364744568eea5184f2949d5920400e5ad5debfae1cce2",
+        "query.sql": "d5bb2211c636b06eecb50d0befa20c79054e11403cfee05515ab4c6126f74260"
+      },
+      "goldRows": 12,
+      "goldSetSha256": "f8b6c7800f6133d6e637fbd4e0f4549155d44b317ab7f94734a827390bbacc45",
+      "referenceQualified": true
+    }
+  ],
+  "excludedPreviousQuestionIds": [
+    228,
+    247,
+    263,
+    773,
+    791,
+    825,
+    1317,
+    1368,
+    1380
+  ],
+  "holdoutSeed": "multistage-role-extension-10-3c6ef372",
+  "privateSampleSha256": "656843ce90bfef3b77bb258d375782f7d062b6d87695b298a09510dccf89c493",
+  "orderSeed": "extension7-order-a54ff53a",
+  "order": [
+    {
+      "id": "q248-routed",
+      "questionId": 248,
+      "arm": "routed"
+    },
+    {
+      "id": "q248-fixed_cheap",
+      "questionId": 248,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q248-fixed_strong",
+      "questionId": 248,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q232-fixed_cheap",
+      "questionId": 232,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q232-fixed_strong",
+      "questionId": 232,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q232-routed",
+      "questionId": 232,
+      "arm": "routed"
+    },
+    {
+      "id": "q745-fixed_strong",
+      "questionId": 745,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q745-routed",
+      "questionId": 745,
+      "arm": "routed"
+    },
+    {
+      "id": "q745-fixed_cheap",
+      "questionId": 745,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q1323-routed",
+      "questionId": 1323,
+      "arm": "routed"
+    },
+    {
+      "id": "q1323-fixed_cheap",
+      "questionId": 1323,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q1323-fixed_strong",
+      "questionId": 1323,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q744-fixed_cheap",
+      "questionId": 744,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q744-fixed_strong",
+      "questionId": 744,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q744-routed",
+      "questionId": 744,
+      "arm": "routed"
+    },
+    {
+      "id": "q1411-fixed_strong",
+      "questionId": 1411,
+      "arm": "fixed_strong"
+    },
+    {
+      "id": "q1411-routed",
+      "questionId": 1411,
+      "arm": "routed"
+    },
+    {
+      "id": "q1411-fixed_cheap",
+      "questionId": 1411,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q1460-routed",
+      "questionId": 1460,
+      "arm": "routed"
+    },
+    {
+      "id": "q1460-fixed_cheap",
+      "questionId": 1460,
+      "arm": "fixed_cheap"
+    },
+    {
+      "id": "q1460-fixed_strong",
+      "questionId": 1460,
+      "arm": "fixed_strong"
+    }
+  ],
+  "arms": {
+    "fixed_cheap": [
+      "scout",
+      "worker",
+      "scout",
+      "worker if review requests one correction"
+    ],
+    "fixed_strong": [
+      "scout",
+      "worker_strong",
+      "scout",
+      "worker_strong if review requests one correction"
+    ],
+    "routed": {
+      "investigate": [
+        "scout",
+        "worker",
+        "worker_strong"
+      ],
+      "implement": [
+        "worker",
+        "worker_strong"
+      ],
+      "review": [
+        "scout",
+        "worker",
+        "worker_strong"
+      ],
+      "correct": [
+        "worker",
+        "worker_strong"
+      ]
+    }
+  },
+  "stageModes": {
+    "investigate": "read",
+    "implement": "mutation",
+    "review": "read",
+    "correct": "mutation"
+  },
+  "handoff": {
+    "analysisReportMaxUtf8Bytes": 8192,
+    "reviewExactJson": [
+      "needsFix:boolean",
+      "issues:string[]"
+    ],
+    "issueCountMax": 8,
+    "issueUtf8BytesMax": 512,
+    "needsFixRequiresConcreteIssue": true,
+    "malformedReviewTriggersCorrection": false,
+    "fullPriorWorkerHistoryShared": false,
+    "reportsAreUntrustedData": true,
+    "rawReportsOrDatasetPublished": false
+  },
+  "correction": {
+    "max": 1,
+    "condition": "valid reviewer JSON needsFix true with nonempty issues",
+    "newDeclaredStageNotNativeRetry": true,
+    "hiddenTestGradeShared": false,
+    "automaticModelOrProviderFailureRetry": false
+  },
+  "limits": {
+    "workflows": 21,
+    "baseWorkerStages": 63,
+    "maxWorkerStages": 84,
+    "baseJevRequests": 21,
+    "maxJevRequests": 28,
+    "workersPerStage": 1,
+    "secondsPerStage": 300,
+    "sdkCallCap": null,
+    "hardUsdCap": false,
+    "maxStagesPerWorkflow": 4
+  },
+  "clock": {
+    "singleParent": true,
+    "start": "before investigate selection",
+    "end": "all executed stage sessions/fileIO/Job children plus final readonly SQL verification complete",
+    "includes": [
+      "stage selections",
+      "artifact handoff creation",
+      "all stage preparations",
+      "SDK/tool/Job cleanup",
+      "hidden initial and final SQL grade"
+    ],
+    "humanReviewWaitMs": 0,
+    "oneTimeCorpusEligibilityDownloadExcluded": true
+  },
+  "grading": {
+    "primary": "final readonly SQL result-set EX",
+    "secondary": [
+      "workflow format and scope contract",
+      "initial EX vs final EX",
+      "review flags vs withheld initial EX",
+      "per-stage role/model/tools and routing latency",
+      "bounded correction use",
+      "full wall/cost/calls"
+    ],
+    "oldResultsNeverModified": true,
+    "difficultyOrGoldGivenToWorkerOrSelector": false,
+    "invalidReviewRetainedNoRetry": true,
+    "publicDataset": "BIRD Mini-Dev HFf65faf4ae3b638c1fa6df1d3370c8d92c8366301 CC-BY-SA4.0",
+    "full500OrStatisticalRanking": false
+  },
+  "sharedSourceSha256": {
+    "effects.ts": "1a89c378b8489246d095fbc4248ece21ff657a9e709e800bb23718c58adc9237",
+    "machine.ts": "947fd19f8e45e9a167da093d9b29983ba977af57abd3c39aced472a0d5497bff",
+    "choice.ts": "cfa1cbf5f96564cca8259ef619fb227aec8438f59dc0535e86a858100182e466",
+    "jev-config.ts": "f8dc4f51e34a194896a6e2f1d8e1440b100e953906c138d060ed831c38136c5f",
+    "goal-files.ts": "4190226eab309a55b3e2f063850eccc1788466806bd25599c4ee048693709f32",
+    "goal-file-effects.ts": "c52b022679e8600a4b4687c07e7d60e86255a3c02683e786b008e96dce5fefc6",
+    "goal-run-effects.ts": "8e85961419507fdcbc8419336ffdc8ff6bf96bc2dd8c06af899822279abab231",
+    "windows-goal-files.ts": "3ccfefc04a540fd5d4092fb8ab075c7e7eaff3f27be33f85156d01c0bbaf25f5",
+    "windows-job.ts": "527587ba77aaeb1968cfa2f6177c5e2b34e5c93d1a2b350b1b2f4d9e0efece7e",
+    "worker-runtime.ts": "bfe3ecebde3b89579b23e5e84b277be85cd2777bb9b25e32964bc7c8cbe9e2ad"
+  },
+  "sharedSqlEvaluatorSha256": "d904e9e21ae267f3458240f37186bf3780cedc48f44d1963fcd4441a94e33132",
+  "productChanged": false,
+  "selector": {
+    "backend": "typesafe",
+    "model": "jev-1.13.0",
+    "interactiveSessionSelectionRestored": false
+  },
+  "stopOn": [
+    "native/SDK/provider/selector failure",
+    "unknown accounting/cleanup",
+    "scope or profile freshness failure",
+    "oversized report; never silently truncate"
+  ],
+  "extension": {
+    "request": "Increase three-question multistage pilot to ten distinct questions",
+    "previousCommit": "b37d53153a89340edc76f009ffde267354e8a940",
+    "previousResultsSha256": "66fb6b9f624e868141d18b05704080fa623446317b152f9e8f38d0ac7134f8d1",
+    "previousCasesRetainedNotRerun": 3,
+    "newCases": 7,
+    "totalCases": 10,
+    "oldPilotOutcomesAlreadyKnown": true,
+    "initialSampleWasNotPreregisteredAsTen": true,
+    "promptsAndRoutingRubricsAndScoringUnchanged": true,
+    "combinedCaseIds": [
+      1368,
+      825,
+      247,
+      1323,
+      1460,
+      745,
+      744,
+      248,
+      232,
+      1411
+    ],
+    "combinedDifficultyCounts": {
+      "simple": 4,
+      "moderate": 3,
+      "challenging": 3
+    },
+    "combinedDatabaseCounts": {
+      "student_club": 4,
+      "superhero": 3,
+      "toxicology": 3
+    },
+    "baseCombinedWorkerStages": 90,
+    "maxCombinedWorkerStagesGivenOldZeroCorrections": 111,
+    "baseCombinedSelectorRequests": 30,
+    "maxCombinedSelectorRequestsGivenOldZeroCorrections": 37
+  },
+  "sharedPhaseWorkerSha256": "7bb02742dfda81998395eefc2103b91e5aaca9f64da2814c9f4096fa349bfe4c"
+}

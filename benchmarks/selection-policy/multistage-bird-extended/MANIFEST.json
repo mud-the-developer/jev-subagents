@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "frozenBeforeExtensionWorkerOrSelectorRequests": true,
+  "files": {
+    "run-workflow.mjs": "009e9fcc80dbf055ab9e8ba6c40ee06b87aa7b5a1c53fbb143bf01023b51293c",
+    "prepare.py": "c3f601f536c9eaf112faf541f4db4f2d593ba38b89c4eba9a9283b389fb00a5f",
+    "offline-check.mjs": "9403ab63491abf29d5d047268acc620d51a64a1a7d27de00e5fe7c2a01be781e",
+    "protocol.json": "57c6b2f6bf1f2e4f98730adb8ca9cabbebda415095d3e5423150564d2edb3c61"
+  },
+  "executionAuthority": false
+}
