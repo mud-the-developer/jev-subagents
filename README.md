@@ -14,6 +14,8 @@ JEV-assisted subagents for [Pi](https://pi.dev), with native terminal plans, exp
 
 **Stable source release: `v1.0.0`.** This release covers the documented bounded execution and verification contracts, not a claim of general task correctness, physical TUI certification or real-provider quality/billing. Runtime source, scripts and all regression tests are preserved in this public snapshot; private development history, personal-path reports and internal screenshots are not distributed.
 
+**Development resume (Arch Linux):** use the [Arch Linux handoff](docs/ARCH-LINUX-HANDOFF.md) for the current evidence branch, pinned setup/offline checks, benchmark interpretation corrections and Windows-only runner limitations. It is not a new release or a Linux certification.
+
 **Security notice:** the immutable RC1 ZIP still contains `undici8.10.2`, affected by newly published advisories. `v1.0.0` pins the SDK-scoped dependency to `8.12.2`; the original RC1 tag and assets are not retroactively patched. See [security status](docs/security.md#dependency-security-status).
 
 ## See each model's job in a three-level tree
