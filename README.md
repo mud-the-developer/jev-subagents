@@ -106,6 +106,8 @@ Use the exact release commit and [existing validation commands](docs/verificatio
 
 **Per-stage role-routing follow-up:** the [multistage fresh-holdout pilot](benchmarks/selection-policy/multistage-bird-pilot/RESULTS.md) used investigation ->implementation ->read-only review, with one bounded correction only if requested. Across9matched workflows/27worker stages, all policies scored2/3EX. JEV's9actual choices always yielded scout ->worker ->scout; the reviewer missed the failing query and no correction activated. This changes the benchmark workflow, not per-SDK-turn product model switching, and provides no observed gain over the fixed cheap role path on these3holdouts.
 
+**Extended to ten questions:** the [sequential multistage extension](benchmarks/selection-policy/multistage-bird-extended/RESULTS.md) retained the3pilot cases and added7new holdouts under unchanged prompts/scoring/safety. Across30workflows/91worker stages, fixed cheap8/10EX/364.34s, fixed strong implementation8/10/600.95s, routed7/10/391.76s. JEV made31stage choices but never selected worker_strong; one correction did not improve EX. These observational/small-sample and post-pilot-extension limits are explicit; there is still no observed gain over the cheap matched control.
+
 Retired Goal/sequence/managed-context/SoL-Pi integration code and small historical fixtures remain solely for regression coverage; they are not additional public tool APIs or current execution instructions. The two historical diagrams are [archived with their editable sources](docs/figures/README.md), not advertised as current features. Standalone SoL-Pi remains separate.
 
 ## License

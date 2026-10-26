@@ -1,4 +1,6 @@
-# Multistage BIRD extension: ten distinct questions
+# Multistage BIRD extension: ten distinct questions — completed
+
+**10questions/30workflows completed**, retaining the original3without reruns. Final EX: fixed cheap8/10/364.34s, fixed strong implementation8/10/600.95s, routed7/10/391.76s (full workflow sums). JEV made31stage choices with0strong selections; one correction ran without improving EX. See [RESULTS.md](RESULTS.md) and [results.json](results.json) for separate pilot/extension/pooled observations and limits. The unfavorable result is retained without test/rubric changes.
 
 This extends the [completed3-question role pilot](../multistage-bird-pilot/RESULTS.md) to **10questions ×3matched policies =30workflows**. The original3cases/9workflows remain included unchanged and are **not rerun**. Only7new cases/21workflows execute here. The user requested expansion after seeing the pilot; therefore this is a **sequential extension**, not a claim that n=10was preregistered before the original pilot. Original and extension cohorts will be reported separately as well as pooled.
 
