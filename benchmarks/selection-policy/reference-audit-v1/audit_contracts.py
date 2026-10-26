@@ -72,7 +72,7 @@ def main():
               "source_results_sha256": original_digest, "frozen_evaluator_sha256": protocol["sharedSqlEvaluatorSha256"],
               "original_scores_changed": False, "new_semantic_accuracy_computed": False, "initial_pre_correction_sql_replayed": False,
               "raw_questions_sql_results_reports_or_paths_published": False, "provider_calls": 0, "execution_authority": False}
-    (HERE / "contract-audit.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf8")
+    (HERE / "contract-audit.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf8", newline="\n")
     print(json.dumps({"case_specific_checks": len(diagnostics), "new_semantic_score": None, "original_ex_unchanged": True, "provider_calls": 0}))
 
 

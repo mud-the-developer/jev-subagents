@@ -193,7 +193,7 @@ def main():
     assert args.output.resolve() != INPUT.resolve(), "Audit output must not overwrite historical evidence."
     report = analyze(data, digest)
     assert hashlib.sha256(INPUT.read_bytes()).hexdigest() == digest
-    args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf8")
+    args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf8", newline="\n")
     print(json.dumps({"questions": report["questions"], "workflows": report["completed_workflows"], "provider_calls": 0,
                       "paired_tests": {key: row["exact_mcnemar"]["exact_two_sided_p"] for key, row in report["paired_comparisons"].items()},
                       "pgr": report["route_llm_metrics"]["pgr"], "new_model_or_coding_benchmark": False}))
