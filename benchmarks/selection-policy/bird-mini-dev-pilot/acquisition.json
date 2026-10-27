@@ -1,0 +1,49 @@
+{
+  "dataset": "BIRD Mini-Dev SQLite",
+  "hfRevision": "f65faf4ae3b638c1fa6df1d3370c8d92c8366301",
+  "license": "CC-BY-SA-4.0",
+  "attribution": "BIRD-SQL team / bird-bench/mini_dev / birdsql/bird_mini_dev",
+  "questionsUrl": "https://huggingface.co/datasets/birdsql/bird_mini_dev/resolve/f65faf4ae3b638c1fa6df1d3370c8d92c8366301/data/mini_dev_sqlite-00000-of-00001.json",
+  "questionBytes": 278513,
+  "questionsSha256": "88ceb0710163cae46a256ecea8f0a8c98286599530b60587fda5c3cfe57d45d2",
+  "rows": 500,
+  "difficultyCounts": {
+    "simple": 148,
+    "moderate": 250,
+    "challenging": 102
+  },
+  "databaseArchive": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip",
+  "archiveBytes": 800943648,
+  "archiveETag": "\"7BEB6DAB11E65F0FDE563E644A1EA319\"",
+  "rangeBytesDownloaded": 1387964,
+  "fullArchiveSha256Available": false,
+  "availabilityRule": "Three smallest official SQLite members up to32MiB; chosen before model outcomes",
+  "databases": [
+    {
+      "db_id": "superhero",
+      "member": "minidev/MINIDEV/dev_databases/superhero/superhero.sqlite",
+      "bytes": 237568,
+      "compressedBytes": 104094,
+      "crc32": 2175838638,
+      "sha256": "75e94a2c3236ee3bb2c01fb97a1c4b4c1c269bcefd4eab1d04be323d2d0825b1"
+    },
+    {
+      "db_id": "student_club",
+      "member": "minidev/MINIDEV/dev_databases/student_club/student_club.sqlite",
+      "bytes": 2641920,
+      "compressedBytes": 614801,
+      "crc32": 3943193338,
+      "sha256": "eb89bcfe97eefa386a27904ec5aa15159811a7eac894ec659a36e48fa9f76b77"
+    },
+    {
+      "db_id": "toxicology",
+      "member": "minidev/MINIDEV/dev_databases/toxicology/toxicology.sqlite",
+      "bytes": 2678784,
+      "compressedBytes": 652028,
+      "crc32": 2133487963,
+      "sha256": "35ef27ae6bdfda530e125ed369666ac0abb8bc8c0bcc0ad09407f547ecb61a93"
+    }
+  ],
+  "modelCalls": 0,
+  "rawDatasetRedistributedInMitRepo": false
+}

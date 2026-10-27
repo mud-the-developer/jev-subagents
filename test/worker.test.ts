@@ -7,7 +7,7 @@ import { test, type TestContext } from "node:test";
 import type { CreateAgentSessionOptions } from "@earendil-works/pi-coding-agent";
 import { MAX_OUTPUT, WORKER_ERROR, MODEL_CALL_LIMIT_ERROR, estimateCost, initialState, reduceWorker,
   type Event, type Run, type WorkerEvent, type WorkerState } from "../src/delegate-machine.ts";
-import { executeWorker } from "../src/subagent-worker.ts";
+import { diagnose, executeWorker } from "../src/subagent-worker.ts";
 import { workerPrompt } from "../src/assessment.ts";
 import { runSubagent } from "../src/delegate-effects.ts";
 
@@ -291,6 +291,23 @@ test("worker completeness requires valid usage on every response, but preserves 
   assert.ok(free.report.accounting.status === "reported" && free.report.accounting.complete);
 });
 
+test("automatic worker entry preserves canonical non-Codex thinking and refuses target changes or aliases", async t => {
+  const { run, session, sdk, io } = await fixture(t);
+  const selected = { ...run.model, api: "openai-responses", baseUrl: "http://127.0.0.1:1/v1", reasoning: true };
+  let available = true, alias = false, changedTarget = false;
+  t.mock.method(sdk, "createModelRuntime", async () => ({ getModel: () => ({ ...selected, ...(alias ? { thinkingLevelMap: { minimal: "low" } } : {}),
+    baseUrl: changedTarget ? "http://127.0.0.1:2/v1" : selected.baseUrl }), getAvailableSnapshot: () => available ? [selected] : [] }));
+  Object.assign(session, { thinkingLevel: "minimal" });
+  const request: Run = { ...run, agent: { ...run.agent, thinking: "minimal" }, modelTarget: { api: selected.api, endpoint: selected.baseUrl } };
+  assert.equal((await executeWorker(request, io)).type, "completed");
+  const started = sdk.createAgentSession.mock.callCount();
+  for (const mode of ["target", "availability", "alias"] as const) {
+    changedTarget = mode === "target"; available = mode !== "availability"; alias = mode === "alias";
+    assertFailed(await executeWorker(request, io));
+    assert.equal(sdk.createAgentSession.mock.callCount(), started, "An unavailable, changed or aliased selection must stop before SDK session setup.");
+  }
+});
+
 test("worker diagnostics whitelist HTTP status and categories, preserving callbacks and clearing stale status", async (t) => {
   const { run, session, io } = await fixture(t);
   let status: number | undefined;
@@ -328,6 +345,17 @@ test("worker diagnostics whitelist HTTP status and categories, preserving callba
   assert.deepEqual(reply.report!.diagnostic, { category: "transport", httpStatus: null, stage: "model_request" });
   assert.equal(reply.report!.modelCalls, 2); // Stream invocations, not the single mocked assistant message.
   assert.equal(reply.report!.roundsCoverage, "partial");
+});
+
+test("only pinned SDK incomplete Responses errors receive a finite diagnostic without implying HTTP success", () => {
+  for (const message of ["OpenAI Responses stream ended before a terminal response event", "OpenAI Responses stream ended without a stop reason"]) {
+    assert.deepEqual(diagnose(Error(message), 200, false), { category: "response_incomplete", httpStatus: 200 });
+    assert.deepEqual(diagnose(message, 200, true), { category: "cancelled", httpStatus: 200 });
+    assert.deepEqual(diagnose(message, 401, false), { category: "authentication", httpStatus: 401 });
+    assert.deepEqual(diagnose(message, 500, false), { category: "provider_error", httpStatus: 500 });
+    assert.deepEqual(diagnose(`${message} PRIVATE_PROVIDER_BODY`, 200, false), { category: "unknown", httpStatus: 200 });
+  }
+  assert.deepEqual(diagnose("PRIVATE_PROVIDER_BODY", 200, false), { category: "unknown", httpStatus: 200 });
 });
 
 test("a failed model request with no assistant response keeps an explicitly partial empty trace", async t => {

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "liveExecutionAuthority": false,
+  "registeredBeforeProviderRequests": true,
+  "files": {
+    "direct-worker.mjs": "a3ce42468f8758b6c03dfd867ac8411be0732cdaecd9526b1acaf9c861499167",
+    "offline-probe.mjs": "8f76d85a60c6a980f5f842f0b766750fa397cee15cdaa1e4549774632b54b24a",
+    "offline-tests.mjs": "0f022ef2ec2838f1fe0d57988754febe182364ef42548be6ff87509680dedf96",
+    "owned-run.mjs": "9891e4d47d7875a704857bee8434fbe72443d90eb7264d1b7cc2e01a638f6ecc",
+    "protocol.json": "ae86b8d3970b278a9d531958a5bd59f3ea9fdeecb143aafcf378f04b4f4187b2",
+    "runner.mjs": "ac5d17c5d124de0ddfefe89dcc2ac1e430b430ccacec6e70501fcceda9098f6f",
+    "scope-tools.mjs": "0c78770af107b490c91f1fae40d71779625875525c9522e9a5782084d75c71a4"
+  }
+}

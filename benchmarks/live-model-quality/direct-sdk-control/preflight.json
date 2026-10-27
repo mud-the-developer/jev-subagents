@@ -1,0 +1,54 @@
+{
+  "offlineChecks": [
+    "real_job_owned_guarded_io_and_exit",
+    "read_only_write_refused",
+    "unknown_file_id_refused",
+    "closed_schema_refused",
+    "file_freshness_change_refused",
+    "instruction_freshness_change_refused",
+    "cancel_before_io_refused",
+    "deadline_job_cleanup_without_model",
+    "offline_accounting_missing_usage_and_count_refused",
+    "fake_sdk_direct_wiring_and_disposal"
+  ],
+  "offlinePassed": 10,
+  "offlineRealProviderCalls": 0,
+  "actualSdkSessions": [
+    {
+      "condition": "A",
+      "model": "openai-codex/gpt-5.6-luna",
+      "thinking": "low",
+      "sdkCalls": 0,
+      "checks": [
+        "pinned_sdk_session",
+        "exact_model_thinking_system",
+        "file_tools_only",
+        "no_prompt_started"
+      ],
+      "disposed": true,
+      "fileIoFinished": true,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0
+    },
+    {
+      "condition": "B",
+      "model": "openai-codex/gpt-6-astra",
+      "thinking": "max",
+      "sdkCalls": 0,
+      "checks": [
+        "pinned_sdk_session",
+        "exact_model_thinking_system",
+        "file_tools_only",
+        "no_prompt_started"
+      ],
+      "disposed": true,
+      "fileIoFinished": true,
+      "cleanupConfirmed": true,
+      "childExitConfirmed": true,
+      "leaderExitCode": 0
+    }
+  ],
+  "realProviderCalls": 0,
+  "mockAccountingIsLiveEvidence": false
+}

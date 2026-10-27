@@ -14,6 +14,8 @@ JEV-assisted subagents for [Pi](https://pi.dev), with native terminal plans, exp
 
 **Stable source release: `v1.0.0`.** This release covers the documented bounded execution and verification contracts, not a claim of general task correctness, physical TUI certification or real-provider quality/billing. Runtime source, scripts and all regression tests are preserved in this public snapshot; private development history, personal-path reports and internal screenshots are not distributed.
 
+**Development resume (Arch Linux):** use the [Arch Linux handoff](docs/ARCH-LINUX-HANDOFF.md) for the current evidence branch, pinned setup/offline checks, benchmark interpretation corrections and Windows-only runner limitations. It is not a new release or a Linux certification.
+
 **Security notice:** the immutable RC1 ZIP still contains `undici8.10.2`, affected by newly published advisories. `v1.0.0` pins the SDK-scoped dependency to `8.12.2`; the original RC1 tag and assets are not retroactively patched. See [security status](docs/security.md#dependency-security-status).
 
 ## See each model's job in a three-level tree
@@ -59,7 +61,7 @@ Download **`jev-subagents-1.0.0-source.zip`** and **`SHA256SUMS`** from the [rel
 - An existing Pi installation and standalone **Bun 1.4.3**. No automatic runtime upgrade or Node fallback.
 - Workers use pinned **Pi SDK 0.85.1 / TypeBox 1.3.7**. A Node-hosted Pi may have its own host requirements.
 - Linux and normal-user native Windows are the intended runtime targets. Windows requires PowerShell/Add-Type, local fixed NTFS and the existing Job/SID/DACL/file-identity checks. Elevated Windows execution is refused.
-- Model authentication and supported fixed model/thinking/tool profiles are prepared separately. A profile name does not guarantee provider access. JEV decision backends are separate from the worker model.
+- Worker model authentication and permission templates are prepared separately. Automatic execution selects actual available provider/model and canonical supported thinking from the offline worker catalog using reviewed current-task code/state, not profile model headers. Availability is not quota or inference proof. Explicit fixed-profile requests remain supported; JEV decision backends are separate.
 
 ## Commands and tools
 
@@ -79,10 +81,26 @@ The command is **`/jev-subagents`**; `/jev` is not registered.
 | --- | --- |
 | `jev_route` | Recommend among explicit candidates; no execution authority |
 | `jev_decide` | Bounded option advice; mandatory human approvals stay human |
-| `jev_delegate` | Execute explicit fixed-profile workers under approved scopes and limits |
+| `jev_delegate` | Prefer `auto` for context-aware available-model/thinking selection; explicit fixed scopes remain available |
 | `jev_memory` | Explicit parent-only SQLite memory administration |
 
 Single workers, sequential scoped jobs, dependency trees, read-only fanout and bounded parent/child reference sharing use the existing source-approval and ownership contracts. A task tree executes at most three workers total; read lanes may overlap, but scoped mutations remain exclusive. There is no automatic retry, model/provider fallback or restored execution authority.
+
+### Automatic model selection
+
+Native `/jev-subagents run` defaults to automatic selection. The parent can use `jev_delegate({auto:{task,files,constraints?,observations?,role?}})`; users need not prepare candidate lists. Roles control tools, not models. The automatic catalog is bounded to128models and their canonical supported thinking levels (at most7per model /896eligible pairs). The public TypeSafe choice schema allows255criteria per question, so routing first selects a model (at most128criteria), then only its supported thinking (at most7criteria), using at most2dependent requests. It fails rather than truncating. The older explicit fixed-profile pool retains its128-plan bound. A unique combination bypasses JEV, not execution approval.
+
+| Selection state | Event | Next state / effect |
+| --- | --- | --- |
+| idle | Valid task context and catalog | reviewing / exact context+catalog source review |
+| reviewing | Genuine positive review of the conditional two-request plan | selecting_model / one model choice, or singleton-model bypass |
+| reviewing | Decline or cancellation | stopped / no routing or worker |
+| selecting_model | Eligible model recommendation | selecting_thinking / only this model's supported levels; support<0.5 marks explicit human worker review as mandatory |
+| selecting_thinking | Eligible supported level recommendation | selected / pin provider, model, thinking and target; retain weak support without authorizing execution |
+| either selection stage | Invalid, failed or cancelled result | stopped / no replacement model, re-selection or retry |
+| selected | Scoped execution requested | existing freshness/ownership checks; any weak model/thinking recommendation forces genuine explicit worker review, even in Full Access |
+
+Current-task context includes approved existing-file content, constraints and relevant observations, not ambient conversation or auth. The source disclosure gets its native review even in Full Access; Reviewed execution separately reviews the actual selected worker. Explicit `modelSelection:"fixed"` on native `run` retains the profile model. Existing explicit `scope`, `graph`, `tree` and legacy fixed-profile requests retain their original contracts; this does not silently replace models inside an already approved multi-stage job. See [usage](docs/usage.md).
 
 ## Safety and cost
 
@@ -95,6 +113,20 @@ Completion is unverified until the declared checks and human review say otherwis
 ## Verification and source provenance
 
 Use the exact release commit and [existing validation commands](docs/verification.md). The release notes record the actual observed gates; they do not certify physical UI interaction, live-provider billing or arbitrary tasks. The public snapshot keeps all runtime/script/test files byte-identical to the reviewed development snapshot; only version metadata and public documentation/distribution inputs differ. See [RELEASE-SOURCE.json](RELEASE-SOURCE.json).
+
+**Additional live-profile evidence:** the [integer-ranges pilot](benchmarks/live-model-quality/integer-ranges-v1/README.md) compares an original buggy negative control with one real Luna/low and one real Astra/max repair, using the same held-out assertions and seeded oracle. Both recorded outputs passed12/12contract groups and1000/1000oracle cases; thinking differs and n=1per profile, so this is not a general model ranking or billing certificate. The checked-in evidence can be reproduced offline with0new provider calls; it is newer than the immutable v1.0.0 release ZIP.
+
+**Completed registered comparison:** [multi-module suite v2](benchmarks/live-model-quality/suite-v2/RESULTS.md) used three task specs,48contract groups, positive/negative/mutant controls and a fixed counterbalanced12-trial order. Both operational profiles passed6/6task trials (96/96groups), so this suite showed no correctness separation. SDK round counts were uncapped by operator request; time bounds remained300seconds. Full per-trial code/hashes/checks and offline reproduction are included, with thinking/load/sample-size/billing limitations stated explicitly.
+
+**Direct SDK follow-up control:** the [matched execution-layer ablation](benchmarks/live-model-quality/direct-sdk-control/RESULTS.md) also passed6/6task trials per profile, with the same29/48SDK-round totals as JEV-on. No correctness/round-count benefit from JEV was observed on this suite. Safety utilities were deliberately shared, and full historical prompt/timing-boundary equivalence was not proven; this is not evidence that all JEV-derived code/guards can be removed or a general superiority claim.
+
+**Actual selector / end-to-end follow-up:** the [official BIRD Mini-Dev subset pilot](benchmarks/selection-policy/bird-mini-dev-pilot/RESULTS.md) measured one continuous parent clock from policy choice through validation/cleanup on6public SQL tasks ×3policies. Luna3/6EX/65.96s, Astra5/6/160.55s, JEV-selected3/6/66.40s (all6choices Luna): no observed benefit over always-Luna and no preserved-Astra-accuracy speedup. Data license, sampling, hashes, per-phase metadata and small-sample/metric/privacy limits are explicit; raw CC-BY-SA dataset/SQL is not relicensed under MIT.
+
+**Per-stage role-routing follow-up:** the [multistage fresh-holdout pilot](benchmarks/selection-policy/multistage-bird-pilot/RESULTS.md) used investigation ->implementation ->read-only review, with one bounded correction only if requested. Across9matched workflows/27worker stages, all policies scored2/3EX. JEV's9actual choices always yielded scout ->worker ->scout; the reviewer missed the failing query and no correction activated. This changes the benchmark workflow, not per-SDK-turn product model switching, and provides no observed gain over the fixed cheap role path on these3holdouts.
+
+**Extended to ten questions:** the [sequential multistage extension](benchmarks/selection-policy/multistage-bird-extended/RESULTS.md) retained the3pilot cases and added7new holdouts under unchanged prompts/scoring/safety. Across30workflows/91worker stages, fixed cheap8/10EX/364.34s, fixed strong implementation8/10/600.95s, routed7/10/391.76s. JEV made31stage choices but never selected worker_strong; one correction did not improve EX. These observational/small-sample and post-pilot-extension limits are explicit; there is still no observed gain over the cheap matched control.
+
+**Reference-grounded interpretation correction:** the [primary-source audit](benchmarks/selection-policy/reference-audit-v1/RESULTS.md) keeps all historical EX/timing/cost records intact but documents output-contract/gold inconsistencies: strict8/8/7EX is not semantic answer accuracy or proof of product-harness regression. The executed zero-provider paired analysis gives McNemar p=1.0for routed vscheap; task-bootstrap mean-time difference+2.74s has95%interval[−0.44,+6.67]s. PGR is undefined when fixed-workflow quality baselines tie, and a replayed oracle is only a diagnostic. Nine primary references, reproducible code and gates for a valid next study are linked; no new live/canonical coding score is claimed because the required Docker environment is absent.
 
 Retired Goal/sequence/managed-context/SoL-Pi integration code and small historical fixtures remain solely for regression coverage; they are not additional public tool APIs or current execution instructions. The two historical diagrams are [archived with their editable sources](docs/figures/README.md), not advertised as current features. Standalone SoL-Pi remains separate.
 

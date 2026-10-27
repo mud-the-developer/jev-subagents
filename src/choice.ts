@@ -53,7 +53,9 @@ export function readProbabilities(value: unknown, ids: readonly string[], provid
   const roundedBackend = provider === "clef" || provider === "openjev" && model === "laya-1.0";
   const fourDecimals = roundedBackend && Object.values(probabilities).every(p => Math.abs(p * 10000 - Math.round(p * 10000)) < 1e-7);
   const tolerance = fourDecimals ? Math.max(1e-6, ids.length * 0.00005 + 1e-12) : 1e-6;
-  if (Math.abs(total - 1) > tolerance) throw new Error("Invalid JEV probability total.");
+  if (Math.abs(total - 1) > tolerance) throw Object.assign(new Error("Invalid JEV probability total."), {
+    probabilityTotal: total, probabilityTolerance: tolerance, candidateCount: ids.length,
+  });
   return probabilities;
 }
 export function readChoice(answer: unknown, ids: readonly string[], requireProbabilities = false, provider?: JevReport["provider"], model?: string): Choice {

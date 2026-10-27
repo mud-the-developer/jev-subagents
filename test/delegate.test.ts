@@ -579,7 +579,8 @@ test("delegate pi tool is sequential and has no approval bypass parameter", asyn
   const tool = tools.find((tool) => tool.name === "jev_delegate")!;
   assert.equal(tool.executionMode, "sequential");
   assert.deepEqual(tool.parameters, DelegateToolInputSchema);
-  assert.deepEqual(DelegateToolInputSchema.anyOf[0], OrdinaryDelegateInputSchema);
+  assert.equal("auto" in DelegateToolInputSchema.anyOf[0]!.properties, true);
+  assert.deepEqual(DelegateToolInputSchema.anyOf[1], OrdinaryDelegateInputSchema);
   for (const key of ["approved", "grant", "restore", "state", "reviewText", "receipt", "execution_reply", "fullAccess"]) {
     assert.equal(Value.Check(tool.parameters, { ...input, [key]: true }), false);
     assert.equal(Value.Check(tool.parameters, { scope: {}, [key]: true }), false);

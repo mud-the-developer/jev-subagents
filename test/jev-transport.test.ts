@@ -94,6 +94,25 @@ test("native JEV HTTP rejects redirects, oversized bodies and HTTP failures with
   }
 });
 
+test("JEV diagnostics preserve safe HTTP/response/transport distinctions without error bodies or extra fetches", async t => {
+  for (const mode of ["http", "invalid_response", "response_limit"] as const) {
+    const { http } = await fixture(t, (_req, res) => {
+      res.writeHead(mode === "http" ? 413 : 200, { "Content-Type": "application/json" });
+      res.end(mode === "response_limit" ? "x".repeat(65537) : "PRIVATE_RESPONSE_MARKER");
+    });
+    const observed: unknown[] = [];
+    const result = await requestJev("Explicit offline task", {}, undefined, undefined, undefined, value => { observed.push(value); });
+    assert.equal(result.type, "failed"); assert.equal(http.mock.callCount(), 1);
+    assert.deepEqual(observed, [mode === "http" ? { category: "http", httpStatus: 413 } : { category: mode }]);
+    assert.doesNotMatch(JSON.stringify({ result, observed }), /PRIVATE_RESPONSE_MARKER/); http.mock.restore();
+  }
+  const http = t.mock.method(globalThis, "fetch", async () => { throw Error("PRIVATE_TRANSPORT_EXCEPTION"); });
+  const observed: unknown[] = [];
+  const result = await requestJev("Explicit offline task", {}, undefined, undefined, undefined, value => { observed.push(value); throw Error("PRIVATE_DIAGNOSTIC_CALLBACK"); });
+  assert.equal(result.type, "failed"); assert.equal(http.mock.callCount(), 1); assert.deepEqual(observed, [{ category: "transport" }]);
+  assert.doesNotMatch(JSON.stringify(result), /PRIVATE_TRANSPORT_EXCEPTION|PRIVATE_DIAGNOSTIC_CALLBACK/);
+});
+
 test("native JEV HTTP aborts stalled response bodies on caller cancellation and the configured deadline", { timeout: 5_000 }, async (t) => {
   for (const timedOut of [false, true]) {
     const controller = new AbortController();

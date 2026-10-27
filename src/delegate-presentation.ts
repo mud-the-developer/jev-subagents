@@ -6,6 +6,7 @@ import { WorkerRoundsSchema, WorkerRoundCoverageSchema, workerRoundsText } from 
 import { directoryIssueRows } from "./directory-diagnostics.ts";
 import { durationText } from "./task-review-machine.ts";
 import { validPlanReceipt } from "./plan-state.ts";
+import { workerDiagnosticView } from "./worker-diagnostic-view.ts";
 
 export type DelegateView = { readonly text: string; readonly tone: "muted" | "warning" | "error" };
 export type DelegateViewOptions = ToolRenderResultOptions & { readonly isError: boolean };
@@ -14,11 +15,6 @@ const phases: Readonly<Record<string, string | undefined>> = {
   preparing: "Preparing scope", selecting: "Selecting an approved worker", checking: "Rechecking permissions and scope",
   awaiting_approval: "Awaiting execution approval", running: "Worker running", verifying: "Running declared verification",
   awaiting_assessment_approval: "Awaiting assessment-transmission approval", judging: "Assessing approved evidence",
-};
-const diagnosticLabels: Readonly<Record<string, string | undefined>> = {
-  authentication: "Check authentication", rate_limited: "Check request limits", model_unavailable: "Check model availability",
-  unsupported_setting: "Check model settings", request_rejected: "Check request settings", provider_error: "Provider error",
-  transport: "Connection error", cancelled: "Request cancelled", unknown: "Unknown cause",
 };
 const ordinaryPhaseLabels: Readonly<Record<string, string | undefined>> = {
   interface: "Approval UI support", preparing: "Preparation", awaiting_approval: "Exact-source approval", selecting: "Worker selection",
@@ -36,13 +32,10 @@ const label = (value: unknown): string | undefined => typeof value === "string" 
   /^[\p{L}\p{N}_.:/+-]+$/u.test(value) ? value : undefined;
 const amount = (value: unknown): number | undefined => typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined;
 const money = (value: number | undefined) => value === undefined ? "unknown" : `$${value === 0 ? 0 : Number(value.toPrecision(8))}`;
-const workerStages: Readonly<Record<string, string | undefined>> = { input: "Approved input", model_loading: "Fixed-model loading",
-  session_setup: "SDK setup", model_request: "Model request", model_response: "Model response/stop format", internal_report: "Internal English report boundary",
-  accounting: "Usage accounting", cleanup: "Worker cleanup" };
 function workerFailureRows(data: Record<string, unknown>): readonly string[] {
-  const metrics = record(data.metrics), worker = record(metrics?.worker), profile = record(metrics?.profile), diagnostic = record(worker?.diagnostic);
-  const category = typeof diagnostic?.category === "string" && Object.hasOwn(diagnosticLabels, diagnostic.category) ? diagnosticLabels[diagnostic.category] : undefined;
-  const stage = typeof diagnostic?.stage === "string" && Object.hasOwn(workerStages, diagnostic.stage) ? workerStages[diagnostic.stage] : undefined;
+  const metrics = record(data.metrics), worker = record(metrics?.worker), profile = record(metrics?.profile);
+  const diagnostic = workerDiagnosticView(Object.getOwnPropertyDescriptor(worker ?? {}, "diagnostic")?.value);
+  const category = diagnostic.cause, stage = diagnostic.stage;
   const error: unknown = data.error;
   const seconds = typeof profile?.seconds === "number" && Number.isSafeInteger(profile.seconds) && profile.seconds >= 1 && profile.seconds <= MAX_RUN_SECONDS ? profile.seconds : undefined;
   const timeout = error === executionTimeoutMessage(seconds === undefined ? {} : { seconds });
@@ -51,7 +44,7 @@ function workerFailureRows(data: Record<string, unknown>): readonly string[] {
       : record(data.verification)?.status === "failed" ? "Declared verification command failed" : category ?? (error === WORKER_ERROR ? "Worker error / private details withheld" : "Cause unavailable");
   const validCount = (value: unknown) => typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? value : undefined;
   const calls = validCount(worker?.modelCalls), cap = validCount(profile?.maxModelCalls), accounting = record(worker?.accounting);
-  const http = typeof diagnostic?.httpStatus === "number" && Number.isSafeInteger(diagnostic.httpStatus) && diagnostic.httpStatus >= 100 && diagnostic.httpStatus <= 599 ? diagnostic.httpStatus : undefined;
+  const http = diagnostic.httpStatus;
   return [`Stop reason · ${reason}${stage ? ` · ${stage}` : ""}${http ? ` · HTTP ${http}` : ""}`,
     ...(calls !== undefined ? [`Worker SDK ${calls}${cap !== undefined ? `/${cap}` : profile?.maxModelCalls === null ? " · no round cap" : ""} · accounting ${accounting?.status === "reported" && accounting.complete === true ? "reported" : "partial/unknown"}`] : []),
   ];
@@ -108,7 +101,22 @@ export function delegateResultView(input: unknown, options: DelegateViewOptions)
         `Workers ${count("workersStarted", 3)} · reported SDK ${count("modelCalls", Number.MAX_SAFE_INTEGER)} · reserved ${data.reservedModelCalls === null ? "pending / no round cap" : count("reservedModelCalls", Number.MAX_SAFE_INTEGER)} · JEV requests ${count("jevRequests", validPlanReceipt(data.plan) && data.plan.version === 2 ? 16 : 3)}`,
         `Observed estimate ${money(observed)} · delegation total ${money(observed !== undefined && total !== undefined && total >= observed ? total : undefined)} (parent excluded / not an invoice)`];
       if (approval) lines.push(approval);
-      if (data.reason === "undecided") lines.push("JEV branch support below threshold / no alternative executed / fresh review required.");
+      const automatic = record(Object.getOwnPropertyDescriptor(data, "automaticSelection")?.value), selected = record(automatic?.model);
+      const selectedProvider = label(selected?.provider), selectedId = label(selected?.id);
+      if (selectedProvider && selectedId) lines.push(`Selected model ${selectedProvider}/${selectedId} · thinking ${label(automatic?.thinking) ?? "unconfirmed"}`);
+      const recommendations = Object.getOwnPropertyDescriptor(data, "automaticRecommendations")?.value;
+      if (Array.isArray(recommendations) && recommendations.length <= 2) for (const raw of recommendations) {
+        const item = record(raw), model = record(item?.model), provider = label(model?.provider), id = label(model?.id), support = item?.support;
+        if (item?.executionAuthorized === false && provider && id && typeof support === "number" && Number.isFinite(support) && support >= 0 && support < 0.5) {
+          lines.push(`Weak JEV advice ${provider}/${id} · support ${support} · explicit worker review required`);
+        }
+      }
+      const advice = record(Object.getOwnPropertyDescriptor(data, "automaticAdvice")?.value), recommended = record(advice?.model);
+      const recommendedProvider = label(recommended?.provider), recommendedId = label(recommended?.id), support = advice?.support;
+      if (advice?.executionAuthorized === false && recommendedProvider && recommendedId && typeof support === "number" && Number.isFinite(support) && support >= 0 && support <= 1) {
+        lines.push(`JEV recommendation only ${recommendedProvider}/${recommendedId} · support ${support} · not executed`);
+      }
+      if (data.reason === "undecided") lines.push("JEV selection support below threshold / no alternative executed / fresh review required.");
       if (!complete) {
         const diagnostic = record(Object.getOwnPropertyDescriptor(data, "diagnostic")?.value);
         const stage: unknown = diagnostic ? Object.getOwnPropertyDescriptor(diagnostic, "preparationStage")?.value : undefined;
@@ -116,6 +124,9 @@ export function delegateResultView(input: unknown, options: DelegateViewOptions)
         const preparation = typeof stage === "string" && Object.hasOwn(ordinaryPreparationLabels, stage) ? ordinaryPreparationLabels[stage] : undefined;
         const operation = typeof phase === "string" && Object.hasOwn(ordinaryPhaseLabels, phase) ? ordinaryPhaseLabels[phase] : undefined;
         if (preparation ?? operation) lines.push(`Diagnostic: stopped during ${preparation ?? operation}; private error details withheld.`);
+        const worker = workerDiagnosticView(Object.getOwnPropertyDescriptor(data, "workerFailure")?.value);
+        const reported = [worker.cause, worker.stage, worker.httpStatus === undefined ? undefined : `HTTP ${worker.httpStatus}`].filter(value => value !== undefined);
+        if (reported.length) lines.push(`Reported worker diagnostic · ${reported.join(" · ")}`);
         const issues = directoryIssueRows(Object.getOwnPropertyDescriptor(diagnostic ?? {}, "directoryIssues")?.value);
         lines.push(...issues);
         if (stage === "directories" && !issues.length) lines.push("No recorded cause code. Use /jev-subagents doctor for current read-only checks; no historical cause is inferred.");
@@ -157,8 +168,8 @@ export function delegateResultView(input: unknown, options: DelegateViewOptions)
     const total = observed !== undefined && candidateTotal !== undefined && candidateTotal >= observed ? candidateTotal : undefined;
     lines.push(`Observed estimate ${money(observed)} · delegation total ${money(total)} (parent excluded / not an invoice)`);
     if (options.expanded) {
-      const worker = record(metrics?.worker), diagnostic = record(worker?.diagnostic);
-      const category = typeof diagnostic?.category === "string" && Object.hasOwn(diagnosticLabels, diagnostic.category) ? diagnosticLabels[diagnostic.category] : undefined;
+      const worker = record(metrics?.worker);
+      const category = workerDiagnosticView(Object.getOwnPropertyDescriptor(worker ?? {}, "diagnostic")?.value).cause;
       if (category) lines.push(`Diagnostic: ${category}`);
       const rounds = worker?.rounds, coverage = worker?.roundsCoverage;
       if (Value.Check(WorkerRoundsSchema, rounds) && (rounds.length || Value.Check(WorkerRoundCoverageSchema, coverage))) {

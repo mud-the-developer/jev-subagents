@@ -1,0 +1,459 @@
+{
+  "schema_version": 1,
+  "kind": "reference_grounded_retrospective_metadata_audit_not_new_model_benchmark",
+  "input_sha256": "714f847dc3e3b4e3586df49d70405cbcfcf91498b4417f4c4c26f5fe4e0151ff",
+  "input_source_commit": "6a35c27a38594ada1b43506eeb3b35b2e88a9cc6",
+  "question_ids": [
+    232,
+    247,
+    248,
+    744,
+    745,
+    825,
+    1323,
+    1368,
+    1411,
+    1460
+  ],
+  "questions": 10,
+  "completed_workflows": 30,
+  "arm_summary": {
+    "fixed_cheap": {
+      "tasks": 10,
+      "trials_per_task_per_policy": 1,
+      "strict_ex_correct": 8,
+      "strict_ex_accuracy": 0.8,
+      "not_semantic_accuracy": true,
+      "observed_cost_estimate_usd": 0.04338148,
+      "cost_estimate_per_task_usd": 0.004338148,
+      "cost_estimate_per_strict_ex_success_usd": 0.005422685,
+      "workflow_wall_ms": {
+        "sum": 364344.1409999999,
+        "mean": 36434.41409999999,
+        "p50": 35538.257649999985,
+        "p95_descriptive_only": 43113.874125
+      },
+      "disjoint_recorded_time_components_ms": {
+        "selector_phase_not_pure_api": 0.5788999998403597,
+        "parent_prepare_and_persist": 37496.123399999895,
+        "owned_process_envelope_not_pure_job": 17185.486900000207,
+        "child_session_tools_freshness_cleanup": 300767.58150000003,
+        "external_initial_and_final_oracle_grading": 8877.90510000001,
+        "outer_bookkeeping": 16.465199999940523
+      },
+      "nested_child_time_not_additive_to_components_ms": {
+        "startup": 65485.5264,
+        "generation_tools_freshness_cleanup_not_pure_inference": 235282.0964
+      },
+      "wall_minus_recorded_oracle_grading_ms_descriptive_not_a_new_clock": 355466.23589999985,
+      "worker_cost_estimate_usd": 0.04338148,
+      "selector_cost_estimate_usd": 0,
+      "sdk_rounds_not_trials": 70,
+      "selector_requests": 0,
+      "worker_stages": 30,
+      "routed_strong_stage_fraction": 0.0,
+      "stage_role_counts": {
+        "investigate:scout": 10,
+        "implement:worker": 10,
+        "review:scout": 10
+      },
+      "stages": {
+        "investigate": {
+          "stages": 10,
+          "phase_wall_ms": 115111.17110000015,
+          "worker_cost_estimate_usd": 0.013339
+        },
+        "implement": {
+          "stages": 10,
+          "phase_wall_ms": 126666.76179999983,
+          "worker_cost_estimate_usd": 0.01631552
+        },
+        "review": {
+          "stages": 10,
+          "phase_wall_ms": 113671.83779999995,
+          "worker_cost_estimate_usd": 0.01372696
+        },
+        "correct": {
+          "stages": 0,
+          "phase_wall_ms": 0,
+          "worker_cost_estimate_usd": 0
+        }
+      },
+      "runtime_errors": 0,
+      "known_cleanup_and_accounting": true
+    },
+    "fixed_strong": {
+      "tasks": 10,
+      "trials_per_task_per_policy": 1,
+      "strict_ex_correct": 8,
+      "strict_ex_accuracy": 0.8,
+      "not_semantic_accuracy": true,
+      "observed_cost_estimate_usd": 0.9242924800000001,
+      "cost_estimate_per_task_usd": 0.092429248,
+      "cost_estimate_per_strict_ex_success_usd": 0.11553656000000001,
+      "workflow_wall_ms": {
+        "sum": 600952.4336,
+        "mean": 60095.24336,
+        "p50": 56358.44609999997,
+        "p95_descriptive_only": 76581.787795
+      },
+      "disjoint_recorded_time_components_ms": {
+        "selector_phase_not_pure_api": 0.48800000036135316,
+        "parent_prepare_and_persist": 38117.054999999615,
+        "owned_process_envelope_not_pure_job": 17356.849300000038,
+        "child_session_tools_freshness_cleanup": 543682.4476,
+        "external_initial_and_final_oracle_grading": 1779.979700000069,
+        "outer_bookkeeping": 15.613999999899534
+      },
+      "nested_child_time_not_additive_to_components_ms": {
+        "startup": 61026.2618,
+        "generation_tools_freshness_cleanup_not_pure_inference": 482656.2318
+      },
+      "wall_minus_recorded_oracle_grading_ms_descriptive_not_a_new_clock": 599172.4539,
+      "worker_cost_estimate_usd": 0.92429248,
+      "selector_cost_estimate_usd": 0,
+      "sdk_rounds_not_trials": 80,
+      "selector_requests": 0,
+      "worker_stages": 30,
+      "routed_strong_stage_fraction": 0.3333333333333333,
+      "stage_role_counts": {
+        "investigate:scout": 10,
+        "implement:worker_strong": 10,
+        "review:scout": 10
+      },
+      "stages": {
+        "investigate": {
+          "stages": 10,
+          "phase_wall_ms": 131022.25249999997,
+          "worker_cost_estimate_usd": 0.0145832
+        },
+        "implement": {
+          "stages": 10,
+          "phase_wall_ms": 360243.79799999995,
+          "worker_cost_estimate_usd": 0.8972800000000001
+        },
+        "review": {
+          "stages": 10,
+          "phase_wall_ms": 107890.78940000008,
+          "worker_cost_estimate_usd": 0.012429280000000001
+        },
+        "correct": {
+          "stages": 0,
+          "phase_wall_ms": 0,
+          "worker_cost_estimate_usd": 0
+        }
+      },
+      "runtime_errors": 0,
+      "known_cleanup_and_accounting": true
+    },
+    "routed": {
+      "tasks": 10,
+      "trials_per_task_per_policy": 1,
+      "strict_ex_correct": 7,
+      "strict_ex_accuracy": 0.7,
+      "not_semantic_accuracy": true,
+      "observed_cost_estimate_usd": 0.044102956000000006,
+      "cost_estimate_per_task_usd": 0.004410295600000001,
+      "cost_estimate_per_strict_ex_success_usd": 0.006300422285714286,
+      "workflow_wall_ms": {
+        "sum": 391762.99889999995,
+        "mean": 39176.299889999995,
+        "p50": 36549.130600000004,
+        "p95_descriptive_only": 51225.08743999998
+      },
+      "disjoint_recorded_time_components_ms": {
+        "selector_phase_not_pure_api": 5722.25869999986,
+        "parent_prepare_and_persist": 43869.457500000106,
+        "owned_process_envelope_not_pure_job": 18627.210599999948,
+        "child_session_tools_freshness_cleanup": 314269.4352,
+        "external_initial_and_final_oracle_grading": 9256.752399999914,
+        "outer_bookkeeping": 17.884500000127446
+      },
+      "nested_child_time_not_additive_to_components_ms": {
+        "startup": 62619.219900000004,
+        "generation_tools_freshness_cleanup_not_pure_inference": 251650.2597
+      },
+      "wall_minus_recorded_oracle_grading_ms_descriptive_not_a_new_clock": 382506.2465,
+      "worker_cost_estimate_usd": 0.043377280000000004,
+      "selector_cost_estimate_usd": 0.0007256760000000001,
+      "sdk_rounds_not_trials": 73,
+      "selector_requests": 31,
+      "worker_stages": 31,
+      "routed_strong_stage_fraction": 0.0,
+      "stage_role_counts": {
+        "investigate:scout": 10,
+        "implement:worker": 10,
+        "review:worker": 3,
+        "review:scout": 7,
+        "correct:worker": 1
+      },
+      "stages": {
+        "investigate": {
+          "stages": 10,
+          "phase_wall_ms": 127775.9877,
+          "worker_cost_estimate_usd": 0.0131454
+        },
+        "implement": {
+          "stages": 10,
+          "phase_wall_ms": 127287.36949999988,
+          "worker_cost_estimate_usd": 0.015469360000000001
+        },
+        "review": {
+          "stages": 10,
+          "phase_wall_ms": 113006.10680000004,
+          "worker_cost_estimate_usd": 0.0129684
+        },
+        "correct": {
+          "stages": 1,
+          "phase_wall_ms": 14418.897999999994,
+          "worker_cost_estimate_usd": 0.0017941200000000002
+        }
+      },
+      "runtime_errors": 0,
+      "known_cleanup_and_accounting": true
+    }
+  },
+  "paired_comparisons": {
+    "routed_minus_fixed_cheap": {
+      "sign": "candidate minus reference",
+      "task_pairs": 10,
+      "strict_ex_accuracy_difference": {
+        "mean_difference": -0.1,
+        "percentile_95_ci": [
+          -0.3,
+          0.0
+        ]
+      },
+      "workflow_mean_seconds_difference": {
+        "mean_difference": 2.7418857900000067,
+        "percentile_95_ci": [
+          -0.4369726377499883,
+          6.671696767499999
+        ]
+      },
+      "mean_cost_estimate_usd_difference": {
+        "mean_difference": 7.214760000000004e-05,
+        "percentile_95_ci": [
+          -0.00044573453499999996,
+          0.0006389985200000002
+        ]
+      },
+      "exact_mcnemar": {
+        "both_pass": 7,
+        "reference_only_pass": 1,
+        "candidate_only_pass": 0,
+        "both_fail": 2,
+        "discordant": 1,
+        "exact_two_sided_p": 1.0,
+        "null": "equal paired marginal strict-EX proportions",
+        "not_proof_of_equivalence": true,
+        "reference": "R8"
+      },
+      "discordant_question_ids": [
+        248
+      ]
+    },
+    "routed_minus_fixed_strong": {
+      "sign": "candidate minus reference",
+      "task_pairs": 10,
+      "strict_ex_accuracy_difference": {
+        "mean_difference": -0.1,
+        "percentile_95_ci": [
+          -0.4,
+          0.2
+        ]
+      },
+      "workflow_mean_seconds_difference": {
+        "mean_difference": -20.91894347,
+        "percentile_95_ci": [
+          -28.425147373499996,
+          -14.379159576250009
+        ]
+      },
+      "mean_cost_estimate_usd_difference": {
+        "mean_difference": -0.0880189524,
+        "percentile_95_ci": [
+          -0.09983620901,
+          -0.078015651095
+        ]
+      },
+      "exact_mcnemar": {
+        "both_pass": 6,
+        "reference_only_pass": 2,
+        "candidate_only_pass": 1,
+        "both_fail": 1,
+        "discordant": 3,
+        "exact_two_sided_p": 1.0,
+        "null": "equal paired marginal strict-EX proportions",
+        "not_proof_of_equivalence": true,
+        "reference": "R8"
+      },
+      "discordant_question_ids": [
+        248,
+        744,
+        1460
+      ]
+    },
+    "fixed_strong_minus_fixed_cheap": {
+      "sign": "candidate minus reference",
+      "task_pairs": 10,
+      "strict_ex_accuracy_difference": {
+        "mean_difference": 0.0,
+        "percentile_95_ci": [
+          -0.3,
+          0.3
+        ]
+      },
+      "workflow_mean_seconds_difference": {
+        "mean_difference": 23.660829260000007,
+        "percentile_95_ci": [
+          17.219309222249997,
+          30.874974804749993
+        ]
+      },
+      "mean_cost_estimate_usd_difference": {
+        "mean_difference": 0.0880911,
+        "percentile_95_ci": [
+          0.07797474010000001,
+          0.099952362
+        ]
+      },
+      "exact_mcnemar": {
+        "both_pass": 7,
+        "reference_only_pass": 1,
+        "candidate_only_pass": 1,
+        "both_fail": 1,
+        "discordant": 2,
+        "exact_two_sided_p": 1.0,
+        "null": "equal paired marginal strict-EX proportions",
+        "not_proof_of_equivalence": true,
+        "reference": "R8"
+      },
+      "discordant_question_ids": [
+        744,
+        1460
+      ]
+    }
+  },
+  "bootstrap": {
+    "method": "paired task-level percentile",
+    "confidence": 0.95,
+    "resamples": 10000,
+    "seed": 1779033703,
+    "references": [
+      "R7",
+      "R9"
+    ],
+    "same_resampled_indices_within_each_pair_and_metric": true,
+    "nominal_not_multiplicity_adjusted": true,
+    "conditional_on_recorded_trials_not_model_sampling_uncertainty": true,
+    "not_causal_or_equivalence_evidence": true
+  },
+  "route_llm_metrics": {
+    "reference": "R1",
+    "pgr": null,
+    "apgr": null,
+    "cpt": null,
+    "pgr_reason": "Fixed-workflow cheap and strong strict-EX accuracy both 0.8, so the quality-gap denominator is zero.",
+    "apgr_cpt_reason": "No nonzero baseline gap, held-out threshold sweep or calibrated quality-cost operating curve; JEV choice confidence is not success probability.",
+    "not_a_canonical_binary_model_routing_evaluation": true
+  },
+  "offline_bank_diagnostic": {
+    "kind": "counterfactual_recorded_fixed_workflow_bank_only",
+    "reference": "R2",
+    "not_official_routerbench_score": true,
+    "not_model_response_bank_or_history_dependent_stage_replay": true,
+    "no_new_model_calls_cost_or_measured_latency": true,
+    "predictor_service_cost_not_included": true,
+    "random_half_half": {
+      "exact_enumerated_routes": 1024,
+      "expected_accuracy": 0.8,
+      "expected_recorded_cost_estimate_usd": 0.48383698,
+      "expected_strong_workflow_fraction": 0.5,
+      "probability_by_correct_count": {
+        "7": 0.25,
+        "8": 0.5,
+        "9": 0.25
+      }
+    },
+    "oracle_test_label_cheapest_tie_upper_bound_not_deployable": {
+      "strict_ex_correct": 9,
+      "accuracy": 0.9,
+      "recorded_cost_estimate_usd": 0.14267188,
+      "question_ids_using_strong": [
+        1460
+      ]
+    },
+    "oracle_minimum_recorded_cost_by_target_successes": [
+      {
+        "at_least_correct": 0,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 1,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 2,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 3,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 4,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 5,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 6,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 7,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 8,
+        "minimum_cost_estimate_usd": 0.04338148
+      },
+      {
+        "at_least_correct": 9,
+        "minimum_cost_estimate_usd": 0.14267188
+      },
+      {
+        "at_least_correct": 10,
+        "minimum_cost_estimate_usd": null
+      }
+    ],
+    "warning": "Shared recorded whole-workflow bank is an ex-post diagnostic, not a measured live router or its latency; actual routed runs used different generations."
+  },
+  "current_live_evaluation_blocker": {
+    "reference": "R6",
+    "host": "Windows",
+    "docker_command_available": false,
+    "canonical_swe_bench_executed": false,
+    "coding_benchmark_score": null,
+    "runtime_installation_or_cloud_job_started": false
+  },
+  "interpretation": {
+    "strict_ex_not_semantic_quality": true,
+    "known_contract_gold_audit_issues": [
+      247,
+      248,
+      744,
+      1460
+    ],
+    "no_posthoc_rescore_or_dropped_question": true,
+    "sequential_extension_after_pilot_not_initial_ten_preregistration": true,
+    "token_cache_breakdown_and_invoices_not_available": true,
+    "provider_calls": 0,
+    "sql_calls_from_this_metadata_analysis": 0,
+    "original_sources_data_scores_and_security_guards_changed": false,
+    "execution_authority": false
+  }
+}

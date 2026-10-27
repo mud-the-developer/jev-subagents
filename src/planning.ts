@@ -8,6 +8,7 @@ export const THINKING_LEVELS = ["low", "medium", "high", "xhigh", "max"] as cons
 export const ThinkingSchema = Type.Union([
   Type.Literal("low"), Type.Literal("medium"), Type.Literal("high"), Type.Literal("xhigh"), Type.Literal("max"),
 ]);
+export const ExecutionThinkingSchema = Type.Union([ThinkingSchema, Type.Literal("off"), Type.Literal("minimal")]);
 export type Thinking = Static<typeof ThinkingSchema>;
 export const MAX_PLANS = 128;
 export const PoolSchema = Type.Object({
@@ -50,7 +51,7 @@ export function buildPlans(agents: readonly AgentDefinition[], capabilities: rea
     for (const model of pool?.models ?? [base.model]) {
       const capability = capabilities.find((item) => item.model.provider === model.provider && item.model.id === model.id);
       for (const thinking of pool?.thinking ?? [base.thinking]) {
-        if (thinking && !capability?.thinking.includes(thinking)) continue;
+        if (thinking && !capability?.thinking.some(level => level === thinking)) continue;
         const agent = { ...base, model, ...(thinking ? { thinking } : {}) };
         const description = pool || thinking ? planDescription(agent, capability) : agent.description;
         plans.push({ id: expanded ? `plan_${plans.length}` : agent.name, agent, description });

@@ -3,7 +3,7 @@ import { Value } from "typebox/value";
 import { AGENT_NAME_PATTERN, JEV_MODEL, LIMITS, SoftRoutingSchema, reduce as reduceRoute,
   type Decision, type BaselineDecision, type Effect as RouteEffect, type State as RouteState, type Transition as RouteTransition } from "./machine.ts";
 import { JevReportSchema, readChoice, reportData, estimateJevUsd, type JevReport } from "./choice.ts";
-import { ModelSchema, PoolSchema, ThinkingSchema, CapabilitySchema, buildPlans, type Capability, type Plan } from "./planning.ts";
+import { ModelSchema, PoolSchema, ThinkingSchema, ExecutionThinkingSchema, CapabilitySchema, buildPlans, type Capability, type Plan } from "./planning.ts";
 import { CriteriaSchema, AssessmentPacketSchema, AssessmentReplySchema, MAX_REVIEW_SUMMARY, workerPrompt,
   type Assessment, type AssessmentPacket, type AssessmentReply } from "./assessment.ts";
 import { SolPiInputSchema, SolPiPreparedSchema, SolPiReportSchema, validSolOptions, solReportComplete, solHash, SOL_ERROR, type SolPiInput, type SolPiPrepared } from "./sol-pi.ts";
@@ -58,11 +58,12 @@ export const AgentSchema = Type.Object({
   tools: Type.Array(Type.String({ enum: ["read", "bash", "edit", "write", "grep", "find", "ls"] }), {
     minItems: 1, maxItems: 7, uniqueItems: true,
   }),
-  model: ModelSchema, thinking: Type.Optional(ThinkingSchema), file: text(4_096),
+  model: ModelSchema, thinking: Type.Optional(ExecutionThinkingSchema), file: text(4_096),
 }, closed);
 export const AgentDefinitionSchema = Type.Object({ ...AgentSchema.properties, pool: Type.Optional(PoolSchema) }, closed);
 export const RunSchema = Type.Object({
-  task: text(LIMITS.task), cwd: text(4_096), agent: AgentSchema, model: ModelSchema, maxModelCalls: ModelCallLimitSchema,
+  task: text(LIMITS.task), cwd: text(4_096), agent: AgentSchema, model: ModelSchema,
+  modelTarget: Type.Optional(Type.Object({ api: text(128), endpoint: text(2048) }, closed)), maxModelCalls: ModelCallLimitSchema,
   seconds: Type.Optional(ExecutionSecondsSchema),
   verification: Type.Optional(VerificationCommandSchema), acceptanceCriteria: Type.Optional(CriteriaSchema),
   solPi: Type.Optional(SolPiPreparedSchema),
@@ -95,7 +96,7 @@ export const WorkerReportSchema = Type.Object({
     category: Type.Union([
       Type.Literal("authentication"), Type.Literal("rate_limited"), Type.Literal("model_unavailable"),
       Type.Literal("unsupported_setting"), Type.Literal("request_rejected"), Type.Literal("provider_error"),
-      Type.Literal("transport"), Type.Literal("cancelled"), Type.Literal("unknown"),
+      Type.Literal("transport"), Type.Literal("response_incomplete"), Type.Literal("cancelled"), Type.Literal("unknown"),
     ]),
     httpStatus: Type.Union([Type.Integer({ minimum: 100, maximum: 599 }), Type.Null()]),
     stage: Type.Optional(Type.Union([Type.Literal("input"), Type.Literal("model_loading"), Type.Literal("session_setup"), Type.Literal("extension_loading"),

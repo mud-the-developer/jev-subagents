@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "status": "amended_before_first_live_trial_no_sdk_cap",
+  "liveExecutionAuthority": false,
+  "algorithm": "SHA256 of exact UTF-8/source bytes",
+  "files": {
+    "TASK.md": "3cecc5f9fa125cb94e9cceb5942edf0b5e6de7c4c287716a09ebda02ae1dc99d",
+    "protocol.json": "901e9f4ae2fc557cb3c15623e44e5d5ae537f571d50f407a698e31d1d4fe6222",
+    "tasks/async-cache/SPEC.md": "8fa6fb578c2add5db3d26de59344c011f96b55bc5a16ce4b99f58e7fdca382c6",
+    "tasks/async-cache/checks.mjs": "d18ce17f4138c51972da0c0eaf7d2d5ab5776a263ac0f8f0ae1631b30ed9005f",
+    "tasks/async-cache/initial/cache.mjs": "5d4f15f9e0738427879d4d2e1b1a2c1d8d5284d84714193e71676f4c655b1eb8",
+    "tasks/async-cache/initial/client.mjs": "0da638c14cb1766378cb5defe808c81aa7828f7f9edcd9c6d13d3b8775b7b75c",
+    "tasks/async-cache/reference/cache.mjs": "2efab07104f5176d464595b5715b847d9ec5fe03e02779442e3671c54ae85a00",
+    "tasks/async-cache/reference/client.mjs": "880538d78c115379ec45d5ed58bfdb3e050beab91e22e8f05aa756a89c0f6d61",
+    "tasks/dependency-plan/SPEC.md": "0ea65db7f47f78980108cadb2c37a02cf18c426197203087b7c36ff17caaf9b6",
+    "tasks/dependency-plan/checks.mjs": "22d6400e26aa9fb8d68ea00c5c416bc7bba0770f20358a180c999758c6c354a7",
+    "tasks/dependency-plan/initial/planner.mjs": "d798d21fc063d26dca61a70f755f5fdd2d14572cb9b752a1c1b90bbd5336898a",
+    "tasks/dependency-plan/initial/summary.mjs": "30c4b237e0734827e54cb241efb4b74f62eae5e340f76165e88897f21fd96970",
+    "tasks/dependency-plan/reference/planner.mjs": "7c578d67ff1532268fac997df599a26346c3acba0f38015082042df2a6e25b3b",
+    "tasks/dependency-plan/reference/summary.mjs": "7d5900a37a80e0b6862d85134e90b7789273ed774eb9b83440b20b67fcfb4f13",
+    "tasks/record-gateway/SPEC.md": "39d0ca78e401d724f099b11b026adbe785bd9918866ba92d9961637185351662",
+    "tasks/record-gateway/checks.mjs": "93b39a03ae9cbd401566399a7b5504690394a59fdb8e8811c4aa0a72173e5783",
+    "tasks/record-gateway/initial/gateway.mjs": "acd41c63ab5962ea280cc9639da8fd29d07d5ecb75072b0787ce431ff0fdd902",
+    "tasks/record-gateway/initial/policy.mjs": "db4e0ad2a87722665da7210bb43fc18ee7379ed5184e9db3421ca82d74359da9",
+    "tasks/record-gateway/reference/gateway.mjs": "edd91b1c3e77512c1c210ad9b8ff27a4c149fed506cc890183e645c8e493bad6",
+    "tasks/record-gateway/reference/policy.mjs": "80919eaffe13cb50864f09ed30cf1b81b57c4b8e9cafc129d7f4ba3fe240b68b",
+    "verify-controls.mjs": "bf91cc050b83682dcdaf233722d35a8d62bbf8a42ab0816307fca31b3f7a4ca1"
+  }
+}

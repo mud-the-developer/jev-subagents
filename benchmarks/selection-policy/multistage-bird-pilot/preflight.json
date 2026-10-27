@@ -1,0 +1,107 @@
+{
+  "rolePermissions": {
+    "kind": "multistage_role_permissions_preflight",
+    "rows": [
+      {
+        "profile": "scout",
+        "mode": "read",
+        "status": "offline_probe",
+        "tools": [
+          "scope_read"
+        ],
+        "modelCalls": 0,
+        "cleanupConfirmed": true,
+        "queryUnchanged": true
+      },
+      {
+        "profile": "worker",
+        "mode": "read",
+        "status": "offline_probe",
+        "tools": [
+          "scope_read"
+        ],
+        "modelCalls": 0,
+        "cleanupConfirmed": true,
+        "queryUnchanged": true
+      },
+      {
+        "profile": "worker_strong",
+        "mode": "read",
+        "status": "offline_probe",
+        "tools": [
+          "scope_read"
+        ],
+        "modelCalls": 0,
+        "cleanupConfirmed": true,
+        "queryUnchanged": true
+      },
+      {
+        "profile": "worker",
+        "mode": "mutation",
+        "status": "offline_probe",
+        "tools": [
+          "scope_edit",
+          "scope_read",
+          "scope_write"
+        ],
+        "modelCalls": 0,
+        "cleanupConfirmed": true,
+        "queryUnchanged": true
+      },
+      {
+        "profile": "scout",
+        "mode": "mutation",
+        "status": "failed",
+        "tools": [
+          "scope_read",
+          "scope_edit",
+          "scope_write"
+        ],
+        "modelCalls": 0,
+        "cleanupConfirmed": true,
+        "queryUnchanged": true
+      }
+    ],
+    "eligibilityChecksPassed": true,
+    "malformedReviewDoesNotTriggerRepair": true,
+    "workerCalls": 0,
+    "selectorCalls": 0,
+    "scoutMutationRejectedBeforeModel": true,
+    "existingProfilesChanged": false
+  },
+  "selectorMock": {
+    "stageRoleCatalogsCorrect": true,
+    "readOnlyStagesOfferThreeRoles": true,
+    "mutationNeverOffersScout": true,
+    "fixedArmsMakeNoSelectorRequest": true,
+    "mockedRequests": 4,
+    "realSelectorOrWorkerCalls": 0,
+    "mockAccountingIsLiveEvidence": false
+  },
+  "realWorkerCalls": 0,
+  "realSelectorRequests": 0,
+  "holdoutControls": {
+    "holdoutControls": [
+      {
+        "questionId": 1368,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 825,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      },
+      {
+        "questionId": 247,
+        "goldReferencePass": true,
+        "emptyInitialRejected": true,
+        "databaseUnchanged": true
+      }
+    ],
+    "modelCalls": 0,
+    "oldCasesExcluded": true
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "frozenBeforeAnyStageWorkerOrSelectorRequest": true,
+  "files": {
+    "offline-selector.mjs": "feac0b16dcaa9577ce005312a9835d9ec4985e32949b4b584c32183379975938",
+    "phase-worker.mjs": "7bb02742dfda81998395eefc2103b91e5aaca9f64da2814c9f4096fa349bfe4c",
+    "preflight.mjs": "a6c8779044b1ae5f0e50c179e3d35fdec53aaa451daab6d91e7db25143af8adc",
+    "prepare.py": "17bc89aafc109ee5684cf047c72294128a130d53929822f1e90eeab6e3b98985",
+    "protocol.json": "d942cd2152b3b427995817353d64ae47ec52b7fc3aad11afd20cc7a0b165d322",
+    "run-workflow.mjs": "8e6ed00417415ed23e26a785f525ee623b067a1bd7e21dc998004809763a6989"
+  },
+  "executionAuthority": false
+}

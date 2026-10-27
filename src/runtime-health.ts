@@ -1,6 +1,7 @@
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { canConfirmContextPacket } from "./context-approval.ts";
 import { APPROVAL_UI_TRACE_VERSION } from "./approval-ui-diagnostics.ts";
+import type { RuntimeIdentity } from "./runtime-identity-effects.ts";
 
 type Visibility = "scoped_visible" | "legacy_visible" | "not_registered" | "inconclusive";
 export type RuntimeHealth = { readonly feature: "ordinary-scoped/v1"; readonly catalog: Visibility;
@@ -30,7 +31,7 @@ export function inspectDelegateCatalog(tools: unknown): Visibility {
     const schema = own(matches[0], "parameters");
     if (!schema || typeof schema !== "object") return "inconclusive";
     const branches = own(schema, "anyOf");
-    if (Array.isArray(branches) && branches.length > 0 && branches.length <= 7 && branches.some(scopedBranch)) return "scoped_visible";
+    if (Array.isArray(branches) && branches.length > 0 && branches.length <= 8 && branches.some(scopedBranch)) return "scoped_visible";
     const properties = own(schema, "properties");
     return own(properties, "task") !== undefined && own(properties, "agents") !== undefined ? "legacy_visible" : "inconclusive";
   } catch { return "inconclusive"; }
@@ -53,7 +54,18 @@ export function readRuntimeHealth(pi: Pick<ExtensionAPI, "getAllTools" | "getAct
   } catch { approvalApi = "unsupported"; mode = "unknown"; /* No raw errors or fallback. */ }
   return { feature: "ordinary-scoped/v1", catalog, active, approvalApi, mode };
 }
-export function runtimeHealthText(health: RuntimeHealth): string {
+export function runtimeIdentityRows(identity?: RuntimeIdentity): string[] {
+  if (!identity) return [];
+  // JSON escapes C0 controls, but file names can also contain C1 and bidi controls.
+  const root = identity.packageRoot === null ? "unconfirmed" : JSON.stringify(identity.packageRoot).replace(/[\u007f-\u009f\u202a-\u202e\u2066-\u2069]/g,
+    char => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`);
+  return ["", "📦 Diagnostic code", `  Package version (metadata) · ${identity.packageVersion ?? "unconfirmed"}`,
+    "  Package path ·", `  ${root}`,
+    "  Identifies this diagnostic, not the active tool owner",
+    "  Metadata does not verify loaded code or freshness",
+    "  Check pi list; changing cwd does not reload a package"];
+}
+export function runtimeHealthText(health: RuntimeHealth, identity?: RuntimeIdentity): string {
   const catalog = { scoped_visible: "✅ New scope input visible in the current catalog", legacy_visible: "⚠️ Only legacy single delegation visible / check reload",
     not_registered: "⛔ jev_delegate is not registered", inconclusive: "❔ Inconclusive / not assumed successful" }[health.catalog];
   const active = { yes: "✅ jev_delegate active", no: "⏸️ jev_delegate inactive", unknown: "❔ Active tools unconfirmed" }[health.active];
@@ -71,6 +83,7 @@ export function runtimeHealthText(health: RuntimeHealth): string {
     `  Approval UI API · ${health.approvalApi === "supported" ? "supported interface available" : "support unconfirmed"}`,
     "  ⚠️ Physical display/acceptance unverified",
     `  Approval instrumentation · ${APPROVAL_UI_TRACE_VERSION}`,
+    ...runtimeIdentityRows(identity),
     "",
     "🔎 Diagnostic scope",
     "  Registration metadata / active tools / UI API shape",
@@ -80,6 +93,9 @@ export function runtimeHealthText(health: RuntimeHealth): string {
     "🔐 Separate validation required",
     "  Physical GUI/user approval / renderer parity",
     "  Model inference / complete supported acceptance",
-    "  Every scoped job requires fresh exact approval",
+    "  Reviewed · genuine exact-source approval required",
+    "  Full Access · explicit live-session acknowledgement",
+    "  Mode not inspected; check /jev-subagents access",
+    "  Diagnostic metadata grants neither mode",
   ].join("\n");
 }

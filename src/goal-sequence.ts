@@ -165,6 +165,7 @@ function selectedWorker(grant: SequenceGrant, selection?: RoutingEvidence, crite
 }
 export function sequencePlan(grant: SequenceGrant, selection?: RoutingEvidence, criterionIds?: readonly string[]): Static<typeof PlanSummarySchema> {
   const agent = selectedWorker(grant, selection, criterionIds);
+  if (agent.thinking === "minimal") throw new Error(GOAL_ROUTING_ERROR);
   return { agent: agent.name, model: structuredClone(agent.model), thinking: agent.thinking ?? "off",
     source: selection ? "jev" : grant.body.request.input.dispatch ? "parent" : grant.body.request.input.routing ? "single_candidate" : "fixed" };
 }
@@ -348,6 +349,7 @@ export function sequenceProgress(state: SequenceState) {
   if (!view) return null;
   const ledger = "ledger" in view.core ? view.core.ledger : null, operation = view.operation;
   const planner = view.grant.body.planner;
+  if (planner.thinking === "minimal") return null;
   const plan: Static<typeof PlanSummarySchema> | null = operation?.kind === "planner" ? { agent: planner.name, model: structuredClone(planner.model),
     thinking: planner.thinking ?? "off", source: "fixed" as const } :
     operation && ["worker", "repair"].includes(operation.kind) ? sequencePlan(view.grant, operation.selection) : null;

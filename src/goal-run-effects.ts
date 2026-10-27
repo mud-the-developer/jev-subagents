@@ -164,7 +164,7 @@ export async function loadGoalProfile(name: string, agentDirectory: string, sign
     ...(signal ? { signal } : {}) });
   const model = runtime.getModel(agent.model.provider, agent.model.id);
   if (!model || model.provider !== agent.model.provider || model.id !== agent.model.id ||
-    (agent.thinking ? !codexThinkingLevels(model).includes(agent.thinking) : model.provider === "openai-codex")) fail();
+    (agent.thinking ? !codexThinkingLevels(model).some(level => level === agent.thinking) : model.provider === "openai-codex")) fail();
   const nativeAfter = process.platform === "win32" ? await goalControlFileIO.snapshot([profile, modelsPath], signal) : undefined;
   if (!isDeepStrictEqual((nativeAfter ? nativeAfter[0] : await snapshotGoalText(profile, signal))?.version, before.version) ||
     !isDeepStrictEqual((nativeAfter ? nativeAfter[1] : await snapshotGoalText(modelsPath, signal))?.version ?? null, modelConfiguration)) fail();

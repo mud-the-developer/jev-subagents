@@ -4,7 +4,8 @@ import { BasicRunInputSchema, basicRunScope, basicRunSummary } from "./basic-exe
 import type { OrdinaryScopeInput } from "./ordinary-authorization.ts";
 import type { OrdinaryPublicResult } from "./ordinary-effects.ts";
 import type { SetupReport } from "../scripts/setup.ts";
-import type { RuntimeHealth } from "./runtime-health.ts";
+import { runtimeIdentityRows, type RuntimeHealth } from "./runtime-health.ts";
+import type { RuntimeIdentity } from "./runtime-identity-effects.ts";
 import { workerRoundsText } from "./worker-rounds.ts";
 import { directoryIssueRows, type DirectoryIssue } from "./directory-diagnostics.ts";
 
@@ -16,7 +17,7 @@ export const DOCTOR_HELP = [
   "JEV Doctor · execution diagnostics",
   "/jev-subagents doctor last — last recorded failure/SDK count in this session (no new execution)",
   "/jev-subagents doctor — environment, current tools, workspace permissions and standalone Bun worker SDK import (no live model call)",
-  '/jev-subagents doctor run {"agent":"scout","file":"sample.txt"} — real worker read test after fresh exact-source approval',
+  '/jev-subagents doctor run {"agent":"scout","file":"sample.txt"} — real worker read test under Reviewed approval or explicitly active Full Access',
   "Execution test: one existing non-sensitive file/read only / one explicit fixed profile / one worker / at most two SDK rounds / 60 seconds",
   "Check success and actual execution success are separate. No installation, edits, permission restoration, JEV selection, automatic retry or fallback.",
   "Live-model cost/authentication may remain unknown. A diagnostic click or environment check creates no execution authority.",
@@ -33,6 +34,7 @@ export function parseDoctorRun(text: string): OrdinaryScopeInput | undefined {
 }
 export type DoctorEnvironment = {
   readonly runtime: RuntimeHealth;
+  readonly identity?: RuntimeIdentity;
   readonly workspace: "passed" | "refused_or_unconfirmed";
   readonly agentDirectory?: "passed" | "refused_or_unconfirmed";
   readonly directoryIssues?: readonly DirectoryIssue[];
@@ -45,6 +47,7 @@ export type DoctorEnvironment = {
 export function doctorEnvironmentText(result: DoctorEnvironment): string {
   const setup = result.setup;
   return ["JEV Doctor · environment check / not execution approval",
+    ...runtimeIdentityRows(result.identity),
     ...(result.lastFailure ? ["Last recorded stop in this session:", result.lastFailure] : ["No recorded failure receipt (historical transcripts are not collected automatically)"]),
     `Current scope tool · ${result.runtime.catalog === "scoped_visible" && result.runtime.active === "yes" ? "confirmed" : "unconfirmed/inactive"}`,
     `Exact-source approval UI · ${result.runtime.approvalApi === "supported" ? "interface shape confirmed (physical display unverified)" : "support unconfirmed"}`,
@@ -54,12 +57,22 @@ export function doctorEnvironmentText(result: DoctorEnvironment): string {
     setup ? `Host Pi · ${setup.piVersion} · Bun ${setup.bun} · pinned worker SDK ${setup.testedVersion}` : "Environment/CLI check incomplete",
     `Standalone Bun worker SDK import · ${!setup ? "not reported (environment/CLI check incomplete)" : setup.workerVersion ? setup.workerVersion === setup.testedVersion ? "passed" : "pinned version mismatch" : "failed/unconfirmed"}`,
     ...(setup?.profiles.map(profile => `Profile ${profile.name} · ${profile.status === "valid" ? "explicit configuration shape confirmed (model/authentication unverified)" : profile.status === "missing" ? "missing" : "format/permissions unknown"}`) ?? []),
-    ...(result.blocked ? [result.blocked === "uncertain" ? "Execution ownership/accounting unknown / records retained / new execution blocked" : "Execution owner closed / no automatic recovery"] : []),
+    ...(result.blocked ? [result.blocked === "uncertain" ? "Execution ownership/accounting unknown / records retained / new execution blocked" : "Execution owner closed / no automatic recovery",
+      "Preserve retained files/locks. Inspect /jev-subagents doctor last; do not force cleanup or retry."] : []),
     ...(result.cancelled ? ["Diagnostic cancelled / no automatic rerun"] : []),
     "Real worker/model/file read test: not requested",
-    '/jev-subagents doctor run {"agent":"scout","file":"sample.txt"} — requires fresh exact-source approval',
+    '/jev-subagents doctor run {"agent":"scout","file":"sample.txt"} — Reviewed approval or explicitly active Full Access required',
+    "This diagnostic does not inspect or restore permission mode; check /jev-subagents access.",
     "Live provider, price, file contents and physical TUI success require separate checks. No installation/configuration/file/permission changes.",
   ].join("\n");
+}
+export function doctorLastText(last: string | undefined, identity?: RuntimeIdentity): string {
+  return [last ? "JEV Doctor · Last recorded stop / no execution" : "JEV Doctor · No recorded failure",
+    ...runtimeIdentityRows(identity),
+    last ?? "Pre-reload/navigation transcripts are not collected automatically.",
+    "Current diagnostic metadata is not proof of the recorded failure's code.",
+    "Inspect /jev-subagents runtime and pi list before changing registration.",
+    "Preserve retained files/locks. Never automatically retry a failed task."].join("\n");
 }
 export function doctorRunText(result: OrdinaryPublicResult): string {
   return ["JEV Doctor · real worker read test",

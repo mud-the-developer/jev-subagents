@@ -1,0 +1,10 @@
+{
+  "source": "https://api.typesafe.ai/openapi.json",
+  "schema": "components.schemas.ChoiceQuestion",
+  "questionType": "choice",
+  "criteriaMinProperties": 1,
+  "criteriaMaxProperties": 255,
+  "required": ["type", "criteria"],
+  "stateAccepts": ["string", "object", "array"],
+  "note": "A bounded public-schema excerpt for offline request-shape regression, not a live inference receipt or execution authority. Dependent thinking is requested only after a validated model selection."
+}

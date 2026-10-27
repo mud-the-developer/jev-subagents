@@ -36,7 +36,7 @@ function fixture(t: TestContext) {
   const api = { events: bus, appendEntry: append, registerCommand: (_name: string, def: typeof command) => { command = def; },
     on: (event: string, fn: (event: unknown, ctx: ExtensionContext) => Promise<unknown>) => { hooks.set(event, [...(hooks.get(event) ?? []), fn]); } } as unknown as ExtensionAPI;
   const select = t.mock.fn(async (_title: string, choices: string[], _options?: unknown) => choices.find(c => c.startsWith("Laya ·")) ?? choices.at(-1));
-  const ctx = { mode: "rpc", hasUI: true, isIdle: () => idle, cwd: "/offline",
+  const ctx = { mode: "print", hasUI: true, isIdle: () => idle, cwd: "/offline",
     sessionManager: { getSessionId: () => id, getLeafId: () => leaf, getBranch: () => entries.slice(branchStart), getEntries: () => entries },
     ui: { select, notify: (text: string) => notices.push(text), setStatus: (_key: string, value?: string) => statuses.push(value),
       custom: () => assert.fail("No HTML or custom dashboard/TUI"), confirm: () => assert.fail("Picker is selection only; no second setup confirmation") },
@@ -145,8 +145,27 @@ test("/jev-subagents setup and old studio alias use only the picker, status/doct
   assert.deepEqual((await f.command().getArgumentCompletions?.(""))?.map(c => c.value), ["run", "doctor", "result", "help"]);
 });
 
+test("RPC startup returns before requesting native input so the host can attach its RPC reader", async t => {
+  const f = fixture(t), http = t.mock.method(globalThis, "fetch"); f.ctx.mode = "rpc";
+  await f.emit("session_start");
+  assert.equal(f.select.mock.callCount(), 0); assert.equal(http.mock.callCount(), 0);
+  await new Promise<void>(resolve => setImmediate(resolve));
+  assert.equal(f.select.mock.callCount(), 1); assert.equal(http.mock.callCount(), 2);
+});
+
+test("queued RPC setup is consumed by lifecycle cancellation before metadata or UI", async t => {
+  const f = fixture(t), http = t.mock.method(globalThis, "fetch"); f.ctx.mode = "rpc";
+  await f.emit("session_start"); await f.emit("session_shutdown");
+  await new Promise<void>(resolve => setImmediate(resolve));
+  assert.equal(http.mock.callCount(), 0); assert.equal(f.select.mock.callCount(), 0); assert.equal(f.entries.length, 0);
+});
+
 test("native TUI/RPC/desktop selectors require no custom component, second confirmation or HTML", async t => {
-  for (const mode of ["tui", "rpc", "print"] as const) { const f = fixture(t); f.ctx.mode = mode; await f.emit("session_start"); assert.equal(f.select.mock.callCount(), 1); }
+  for (const mode of ["tui", "rpc", "print"] as const) {
+    const f = fixture(t); f.ctx.mode = mode; await f.emit("session_start");
+    if (mode === "rpc") await new Promise<void>(resolve => setImmediate(resolve));
+    assert.equal(f.select.mock.callCount(), 1);
+  }
 });
 
 test("no local servers offers a separate GPU installation invitation and off, never unprepared Clef or implicit installation", async t => {

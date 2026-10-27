@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen_before_any_real_selector_or_worker_request",
+  "files": {
+    "download.py": "aff41be50cc8ed55dfba9eb66425b39bf663d8ca138e1038b2415ba4a1fe638a",
+    "offline-selector.mjs": "ace7f4cc6879abc6b4f8ea2a63ba7d8a2ee8199c3945fc127455bbd8723359a1",
+    "offline_sql_tests.py": "2d3d0c0bd8d43acaff749c10a1065bea2840552eda719bdc3612abb9cda9119d",
+    "prepare.py": "e4ce69f57c8f6c1e5ab4275dd3a5711c0d0d1c887338a3091ae8dd4dbaf56a2e",
+    "protocol.json": "103366eeb03d8ec3c9b8801822d47f795f7511bea2c8bc443eea40f87ca74589",
+    "run-policy.mjs": "02c6bffc333fc20cbc5760c79312bf3273d3323cd90c2fad600009c106f33aee",
+    "safe_sql.py": "d904e9e21ae267f3458240f37186bf3780cedc48f44d1963fcd4441a94e33132"
+  },
+  "executionAuthority": false
+}
