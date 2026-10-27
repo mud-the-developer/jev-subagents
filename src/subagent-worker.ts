@@ -5,7 +5,7 @@ import { Value } from "typebox/value";
 import { progressEmitter, sendWorkerProgress, type WorkerProgressObserver } from "./worker-progress.ts";
 import { MAX_OUTPUT, RunSchema, RunStatsSchema, WorkerReplySchema, WORKER_ERROR, MODEL_CALL_LIMIT_ERROR,
   reduceWorker, type WorkerState, type WorkerReply, type WorkerReport } from "./delegate-machine.ts";
-import { codexThinkingLevels } from "./planning.ts";
+import { availableThinkingLevels } from "./available-models.ts";
 import { workerPrompt } from "./assessment.ts";
 import { englishModelData, englishProse } from "./internal-language.ts";
 import { summarizeWorkerRound, workerRoundCoverage, MAX_RECORDED_WORKER_ROUNDS, type WorkerRound, type WorkerRoundCoverage } from "./worker-rounds.ts";
@@ -24,6 +24,7 @@ export function diagnose(error: unknown, httpStatus: number | null, aborted: boo
   else if (/\b(model_not_found|unsupported_model)\b|\bmodel\b.{0,100}\b(not supported|not available|does not exist)\b/i.test(message)) category = "model_unavailable";
   else if (/\bunsupported[_ ](parameter|value)\b|\b(reasoning|thinking)\b.{0,100}\b(not supported|unsupported|invalid)\b/i.test(message)) category = "unsupported_setting";
   else if (httpStatus !== null && httpStatus >= 400) category = "request_rejected";
+  else if (message === "OpenAI Responses stream ended before a terminal response event" || message === "OpenAI Responses stream ended without a stop reason") category = "response_incomplete";
   else if (/\b(fetch failed|ECONNRESET|ECONNREFUSED|ETIMEDOUT|network error|connection error|timed out)\b/i.test(message)) category = "transport";
   return { category, httpStatus };
 }
@@ -106,7 +107,9 @@ export async function executeWorker(input: unknown, io = sdk, signal?: AbortSign
     signal?.throwIfAborted();
     const model = modelRuntime.getModel(input.model.provider, input.model.id);
     if (!model) return failed(); // Never silently choose a different/paid fallback model.
-    if (input.agent.thinking && !codexThinkingLevels(model).includes(input.agent.thinking)) return failed();
+    if (input.modelTarget && (model.api !== input.modelTarget.api || model.baseUrl !== input.modelTarget.endpoint ||
+      !modelRuntime.getAvailableSnapshot().some(candidate => candidate.provider === model.provider && candidate.id === model.id))) return failed();
+    if (input.agent.thinking && !availableThinkingLevels(model).includes(input.agent.thinking)) return failed();
     failureStage = "session_setup";
     const resourceLoader = new DefaultResourceLoader({
       cwd: input.cwd, agentDir, settingsManager,

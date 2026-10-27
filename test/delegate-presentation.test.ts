@@ -136,6 +136,29 @@ test("ordinary failure stages use only fixed human labels in collapsed and expan
   assert.match(safe.text, /stopped during Preparation/); assert.doesNotMatch(safe.text, /Inspect display state|PRIVATE/);
 });
 
+test("ordinary scoped failures show safe worker causes in both collapsed and expanded views", () => {
+  const details = { kind: "ordinary_scope", status: "stopped", taskAcceptance: "needs_human_review", workersStarted: 1,
+    modelCalls: 1, reservedModelCalls: 0, jevRequests: 0, cleanupConfirmed: false, lockRetained: true, reports: [{ text: "PRIVATE_WORKER_CLAIM" }],
+    diagnostic: { phase: "running" }, workerFailure: { category: "authentication", httpStatus: 401, stage: "extension_loading", message: "PRIVATE_RAW_ERROR" } };
+  for (const expanded of [false, true]) {
+    const text = delegateResultView({ details }, { ...normal, expanded, isError: true }).text;
+    assert.match(text, /Check authentication/); assert.match(text, /HTTP 401/); assert.match(text, /Extension loading/);
+    assert.doesNotMatch(text, /PRIVATE|cleanup confirmed|Execution ended/);
+  }
+});
+test("worker diagnostic getters remain unread in ordinary and legacy failure views", () => {
+  let getters = 0;
+  const diagnostic = Object.defineProperties({}, Object.fromEntries(["category", "stage", "httpStatus"].map(key => [key, { get() { getters++; throw new Error("PRIVATE_DIAGNOSTIC_GETTER"); } }])));
+  const records = [
+    { kind: "ordinary_scope", status: "stopped", diagnostic: { phase: "running" }, workerFailure: diagnostic },
+    { status: "failed", metrics: { worker: { diagnostic } } },
+  ];
+  for (const details of records) for (const expanded of [false, true]) {
+    const text = delegateResultView({ details }, { ...normal, expanded, isError: true }).text;
+    assert.doesNotMatch(text, /PRIVATE|Inspect display state|function|\[object Object\]/);
+  }
+  assert.equal(getters, 0);
+});
 test("native error flag cannot be hidden by partial rendering or forged success details", () => {
   for (const isPartial of [false, true]) {
     const value = delegateResultView(final, { ...normal, isError: true, isPartial });

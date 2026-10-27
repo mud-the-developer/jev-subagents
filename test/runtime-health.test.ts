@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import childProcess from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 import type { ExtensionAPI, ExtensionCommandContext, ExtensionContext, ToolDefinition } from "@earendil-works/pi-coding-agent";
 import { DelegateInputSchema } from "../src/delegate-machine.ts";
@@ -38,7 +39,10 @@ test("current public tool activation and native API availability are separate ob
   assert.equal(readRuntimeHealth({ ...pi, getActiveTools: () => [] }, ctx).active, "no");
   assert.equal(readRuntimeHealth(pi, { ...ctx, hasUI: false }).approvalApi, "unsupported");
   const text = runtimeHealthText(health);
-  assert.match(text, /Physical display\/acceptance unverified/); assert.match(text, /Every scoped job requires fresh exact approval/);
+  assert.match(text, /Physical display\/acceptance unverified/);
+  assert.match(text, /Reviewed · genuine exact-source approval required/);
+  assert.match(text, /Full Access · explicit live-session acknowledgement/);
+  assert.match(text, /Diagnostic metadata grants neither mode/);
   assert.equal(text.includes("PRIVATE_PROMPT"), false);
 });
 
@@ -61,7 +65,10 @@ test("styled runtime states preserve negative, unknown and unverified distinctio
       for (const approvalApi of ["supported", "unsupported"] as const) {
         const text = runtimeHealthText({ ...base, catalog, active, approvalApi, mode: "unknown" });
         assert.match(text, /Mode · unconfirmed \(unknown\)/);
-        assert.match(text, /Physical display\/acceptance unverified/); assert.match(text, /Every scoped job requires fresh exact approval/);
+        assert.match(text, /Physical display\/acceptance unverified/);
+        assert.match(text, /Reviewed · genuine exact-source approval required/);
+        assert.match(text, /Full Access · explicit live-session acknowledgement/);
+        assert.match(text, /Diagnostic metadata grants neither mode/);
         assert.match(text, /No execution/); assert.match(text, /No request\/change/);
         assert.doesNotMatch(text, /preparation complete|overall success|approval complete/i);
         if (catalog === "legacy_visible") assert.match(text, /⚠️ Only legacy single delegation visible \/ check reload/);
@@ -84,7 +91,7 @@ test("missing/throwing host and UI APIs stay unknown/unsupported without raw err
   assert.equal(readRuntimeHealth({} as ExtensionAPI, ctx).catalog, "inconclusive");
 });
 
-test("runtime command reads only the live catalog; no setup, sessions, models, HTTP, child, approval or settings", async t => {
+test("runtime command reads the live catalog and own package metadata; no setup, sessions, models, HTTP, child, approval or settings", async t => {
   const registered: ToolDefinition[] = [], notifications: string[] = [];
   let command!: Parameters<ExtensionAPI["registerCommand"]>[1];
   const calls: string[] = [];
@@ -105,6 +112,9 @@ test("runtime command reads only the live catalog; no setup, sessions, models, H
   await command.handler("runtime", context);
   assert.deepEqual(calls, ["catalog", "active"]); assert.deepEqual(registered.map(tool => tool.name), ["jev_route", "jev_decide", "jev_delegate", "jev_memory"]); assert.equal(notifications.length, 1);
   assert.match(notifications[0]!, /New scope input visible in the current catalog/);
+  assert.ok(notifications[0]!.includes(JSON.stringify(fileURLToPath(new URL("../", import.meta.url)))));
+  assert.match(notifications[0]!, /Package version \(metadata\) · \d+\.\d+\.\d+/);
+  assert.match(notifications[0]!, /not the active tool owner/);
   assert.equal(http.mock.callCount(), 0); assert.equal(fork.mock.callCount(), 0);
   const completions = await command.getArgumentCompletions?.("run");
   assert.ok(completions?.some(item => item.value === "runtime"));

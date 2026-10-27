@@ -1,5 +1,6 @@
 import { getAgentDir, type ExtensionAPI, type ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { fileURLToPath } from "node:url";
+import { readRuntimeIdentity } from "./runtime-identity-effects.ts";
 import { runSetup, type SetupReport } from "../scripts/setup.ts";
 import { confirmContextPacket } from "./context-approval.ts";
 import { describeJevTarget, readJevConnection, withJevSession } from "./jev-config.ts";
@@ -11,9 +12,9 @@ import { backendStatus, backendResultText, runBackendCommand } from "./jev-backe
 import { readRuntimeHealth, runtimeHealthText } from "./runtime-health.ts";
 import { UI_PROBE_HELP, uiProbeText } from "./ui-probe.ts";
 import { registerUiProbe } from "./ui-probe-effects.ts";
-import { BASIC_RUN_HELP, parseBasicRun, basicRunSummary, basicRunOutput, basicRunProgress, type NativeExecutionHarness } from "./basic-execution.ts";
+import { BASIC_RUN_HELP, parseBasicRun, parseAutomaticRun, fixedBasicRun, basicRunSummary, basicRunOutput, basicRunProgress, type NativeExecutionHarness } from "./basic-execution.ts";
 import type { OrdinaryPublicResult } from "./ordinary-effects.ts";
-import { DOCTOR_HELP, parseDoctorRun, doctorRunText, doctorEnvironmentText } from "./doctor.ts";
+import { DOCTOR_HELP, parseDoctorRun, doctorRunText, doctorEnvironmentText, doctorLastText } from "./doctor.ts";
 import { canonicalDirectory } from "./goal-run-effects.ts";
 import { directoryError, type DirectoryIssue, type DirectoryTarget } from "./directory-diagnostics.ts";
 
@@ -91,6 +92,7 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
   pi.on("session_before_tree", clearResult); pi.on("session_before_compact", clearResult); pi.on("session_shutdown", clearResult);
   // Lifecycle ownership only: reducers decide selection, discovery and persistence.
   const pending = new Map<AbortController, Promise<void>>(), opened = new Set<string>();
+  let deferredRpcStartup: ReturnType<typeof setImmediate> | undefined;
   const uiProbe = registerUiProbe(pi);
   const gpu = createGpuInstaller((ctx, packet, signal) => confirmOnboardingPacket(ctx, "Approve Laya GPU installation/server start", packet, Date.now() + 60000, signal));
   // Human configuration waiting is not execution. Start the unchanged finite
@@ -100,6 +102,8 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
     return gpu.activate(ctx, active, () => !active.aborted && current());
   } };
   const stop = async () => {
+    if (deferredRpcStartup) clearImmediate(deferredRpcStartup);
+    deferredRpcStartup = undefined;
     for (const controller of pending.keys()) controller.abort();
     await Promise.allSettled(pending.values());
   };
@@ -128,7 +132,17 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
       if (text) ctx.ui.notify(text, state.status === "failed" ? "warning" : "info");
     } finally { setSessionSetupStatus(ctx, undefined); pending.delete(controller); done(); }
   }
-  pi.on("session_start", async (_event, ctx) => { await sessionPicker(ctx, true); });
+  pi.on("session_start", (_event, ctx) => {
+    if (ctx.mode !== "rpc") return sessionPicker(ctx, true);
+    // The host attaches its RPC stdin reader after bindExtensions/session_start returns.
+    if (deferredRpcStartup) clearImmediate(deferredRpcStartup);
+    let id: string; try { id = ctx.sessionManager.getSessionId(); } catch { return; }
+    deferredRpcStartup = setImmediate(() => {
+      deferredRpcStartup = undefined;
+      try { if (ctx.sessionManager.getSessionId() !== id) return; } catch { return; }
+      void sessionPicker(ctx, true).catch(() => { try { ctx.ui.notify("JEV session setup stopped; no request or fallback.", "warning"); } catch { /* No authority from output. */ } });
+    });
+  });
   pi.registerCommand("jev-subagents", {
     description: "Choose this session's JEV method / local discovery",
     getArgumentCompletions: prefix => (prefix ? ["access", "access full", "access reviewed", "run", "cancel", "result", "setup", "status", "runtime", "ui-test", "ui-test confirm", "ui-test select", "ui-test custom", "profiles", "doctor", "doctor run", "doctor last", "doctor help", "help", "on", "on laya", "on openjev", "on clef", "on clef-flash", "on typesafe", "off", "reset", "backend", "backend detect"] : ["run", "doctor", "result", "help"])
@@ -155,8 +169,10 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
       }
       const doctorRun = /^doctor run(?:\s|$)/.test(action);
       if (/^run(?:\s|$)/.test(action) || doctorRun) {
-        const scope = doctorRun ? parseDoctorRun(action.slice("doctor run".length).trim()) : parseBasicRun(action.slice(3).trim());
-        if (!scope || !execution) { try { ctx.ui.notify(doctorRun ? DOCTOR_HELP : BASIC_RUN_HELP, "info"); } catch { /* Fixed help only. */ } return; }
+        const raw = action.slice(doctorRun ? "doctor run".length : 3).trim();
+        const automatic = !doctorRun && execution?.automatic && !fixedBasicRun(raw) ? parseAutomaticRun(raw) : undefined;
+        const scope = doctorRun ? parseDoctorRun(raw) : execution?.automatic && !fixedBasicRun(raw) ? undefined : parseBasicRun(raw);
+        if ((!scope && !automatic) || !execution) { try { ctx.ui.notify(doctorRun ? DOCTOR_HELP : BASIC_RUN_HELP, "info"); } catch { /* Fixed help only. */ } return; }
         const blocked = execution.blockedReason();
         if (blocked) {
           const message = blocked === "uncertain" ? "JEV · Ownership/accounting unknown / new execution blocked / retain existing locks/records for human inspection."
@@ -187,7 +203,9 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
           } catch { /* Plain progress cannot fail execution or trigger another UI. */ }
         };
         try {
-          const result = await execution.run(scope, ctx, signal, progress);
+          const result = automatic && execution.automatic ? await execution.automatic(automatic, ctx, signal, progress)
+            : scope ? await execution.run(scope, ctx, signal, progress) : undefined;
+          if (!result) return;
           if (resultGeneration !== generation || ctx.sessionManager.getSessionId() !== sessionId) return;
           lastRun = { sessionId, result: structuredClone(result) };
           try { ctx.ui.notify(doctorRun ? doctorRunText(result) : basicRunSummary(result), result.status === "completed_unverified" ? "info" : "warning"); } catch { /* Reporting failure never retries execution. */ }
@@ -199,8 +217,7 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
       if (/^doctor(?:\s|$)/.test(action)) {
         if (action === "doctor last") {
           const last = execution?.lastFailure(ctx);
-          try { ctx.ui.notify(last ? `JEV Doctor · Last recorded stop / no execution\n${last}`
-            : "JEV Doctor · No recorded failure. Pre-reload/navigation transcripts are not collected automatically. Never automatically retry a failed task.", "info"); } catch { /* No private transcript access. */ }
+          try { ctx.ui.notify(doctorLastText(last, readRuntimeIdentity(import.meta.url)), "info"); } catch { /* No private transcript access. */ }
           return;
         }
         if (action !== "doctor") { try { ctx.ui.notify(DOCTOR_HELP, "info"); } catch { /* No caller input echo. */ } return; }
@@ -226,7 +243,7 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
           const workspace = results[0]!.status === "fulfilled" ? "passed" : "refused_or_unconfirmed";
           const agentDirectory = results[1]!.status === "fulfilled" ? "passed" : "refused_or_unconfirmed";
           const lastFailure = execution?.lastFailure(ctx);
-          const text = doctorEnvironmentText({ runtime, workspace, agentDirectory, directoryIssues: issues, ...(state.status === "succeeded" && state.report ? { setup: state.report } : {}),
+          const text = doctorEnvironmentText({ runtime, identity: readRuntimeIdentity(import.meta.url), workspace, agentDirectory, directoryIssues: issues, ...(state.status === "succeeded" && state.report ? { setup: state.report } : {}),
             cancelled: signal.aborted || state.status === "cancelled", blocked: execution?.blockedReason(), ...(lastFailure ? { lastFailure } : {}) });
           try { ctx.ui.notify(text, state.status === "succeeded" && workspace === "passed" ? "info" : "warning"); } catch { /* Inspection result is not authority. */ }
         } catch {
@@ -237,7 +254,7 @@ export function registerOnboarding(pi: ExtensionAPI, execution?: NativeExecution
       if (action === "help") { ctx.ui.notify(JEV_HELP, "info"); return; }
       if (action === "runtime") {
         const health = readRuntimeHealth(pi, ctx);
-        try { ctx.ui.notify(runtimeHealthText(health), health.catalog === "scoped_visible" && health.active === "yes" ? "info" : "warning"); }
+        try { ctx.ui.notify(runtimeHealthText(health, readRuntimeIdentity(import.meta.url)), health.catalog === "scoped_visible" && health.active === "yes" ? "info" : "warning"); }
         catch { /* Unsupported presentation cannot certify host readiness or trigger fallback. */ }
         return;
       }

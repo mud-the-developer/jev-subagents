@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
-import { parseDoctorRun, doctorEnvironmentText, doctorRunText } from "../src/doctor.ts";
+import { parseDoctorRun, doctorEnvironmentText, doctorRunText, doctorLastText } from "../src/doctor.ts";
 import { MODEL_CALL_LIMIT_ERROR } from "../src/delegate-machine.ts";
 import { delegateResultView } from "../src/delegate-presentation.ts";
 import { registerOnboarding } from "../src/onboarding.ts";
-import type { NativeExecutionHarness } from "../src/basic-execution.ts";
+import { basicRunSummary, type NativeExecutionHarness } from "../src/basic-execution.ts";
 import type { OrdinaryPublicResult } from "../src/ordinary-effects.ts";
 const scope = parseDoctorRun('{"agent":"scout","file":"sample.txt"}');
 const view = { expanded: false, isPartial: false, isError: true } as const;
@@ -21,10 +22,14 @@ test("Doctor run is one fixed read-only worker with no caller task/model/grant/v
 });
 test("Doctor distinguishes metadata readiness from actual worker execution and keeps private fields out", () => {
   const text = doctorEnvironmentText({ runtime: { feature: "ordinary-scoped/v1", catalog: "scoped_visible", active: "yes", mode: "tui", approvalApi: "supported" },
+    identity: { packageRoot: "/fixture/loaded-package", packageVersion: "1.0.0" },
     workspace: "refused_or_unconfirmed", blocked: "uncertain", cancelled: false, lastFailure: "FIXED_FAILURE" });
   assert.match(text, /FIXED_FAILURE/); assert.match(text, /Workspace permissions.*refused/); assert.match(text, /Standalone Bun worker SDK import.*not reported/);
   assert.doesNotMatch(text, /Standalone Bun worker SDK import.*failed/);
   assert.match(text, /Real worker.*not requested/); assert.match(text, /new execution blocked/); assert.doesNotMatch(text, /overall success|preparation complete|approval complete/i);
+  assert.ok(text.includes("/fixture/loaded-package")); assert.match(text, /not the active tool owner/);
+  assert.match(text, /Preserve retained files\/locks/); assert.match(text, /do not force cleanup or retry/);
+  assert.match(text, /Reviewed approval or explicitly active Full Access required/);
 });
 test("Doctor distinguishes an absent environment report from an attempted SDK import", () => {
   for (const [workerVersion, expected] of [[null, "failed/unconfirmed"], ["0.0.0", "pinned version mismatch"], ["0.85.1", "passed"]] as const) {
@@ -33,6 +38,21 @@ test("Doctor distinguishes an absent environment report from an attempted SDK im
         testedVersion: "0.85.1", workerVersion, profiles: [], jevKeyPresent: false } });
     assert.ok(text.includes(`Standalone Bun worker SDK import · ${expected}`));
     assert.doesNotMatch(text, /not reported/);
+  }
+});
+test("native and cached Doctor failures preserve the reported authentication cause and HTTP status", () => {
+  const result = { kind: "ordinary_scope", status: "stopped", taskAcceptance: "needs_human_review", workersStarted: 1, modelCalls: 1,
+    reservedModelCalls: 0, jevRequests: 0, cleanupConfirmed: false, lockRetained: true, reports: [], reason: "failed", diagnostic: { phase: "running" },
+    workerFailure: { category: "authentication", httpStatus: 401, stage: "model_request", message: "PRIVATE_PROVIDER_KEY_AND_ERROR" } } as unknown as OrdinaryPublicResult;
+  const cached = basicRunSummary(result);
+  for (const text of [cached, doctorRunText(result), doctorLastText(cached)]) {
+    assert.match(text, /Check authentication/); assert.match(text, /HTTP 401/); assert.match(text, /Model request/);
+    assert.match(text, /retained files\/locks/); assert.doesNotMatch(text, /PRIVATE_PROVIDER_KEY_AND_ERROR|overall success|cleanup confirmed/i);
+  }
+  for (const reason of ["cancelled", "expired", "budget"] as const) {
+    const text = basicRunSummary({ ...result, reason });
+    assert.match(text, reason === "cancelled" ? /Cancelled/ : reason === "expired" ? /Deadline expired/ : /Round\/time limit reached/);
+    assert.match(text, /Check authentication/); assert.match(text, /HTTP 401/);
   }
 });
 test("collapsed legacy failure now shows exact call-limit cause, counts and partial accounting without private source", () => {
@@ -58,6 +78,9 @@ test("Doctor last reads only the fixed cached receipt and no transcript, model, 
   registerOnboarding({ on() {}, registerCommand(_name: string, value: typeof command) { command = value; } } as unknown as ExtensionAPI, harness);
   const ctx = { get sessionManager(): never { throw Error("No transcript"); }, ui: { notify: (text: string) => { notices.push(text); } } } as unknown as ExtensionCommandContext;
   await command.handler("doctor last", ctx); assert.match(notices.at(-1)!, /FIXED_CACHED_FAILURE/);
+  assert.ok(notices.at(-1)!.includes(JSON.stringify(fileURLToPath(new URL("../", import.meta.url)))));
+  assert.match(notices.at(-1)!, /not proof of the recorded failure's code/);
+  assert.match(notices.at(-1)!, /Preserve retained files\/locks/);
 });
 test("basic and Doctor commands do not let the preparation watchdog cancel a human approval wait", async t => {
   t.mock.timers.enable({ apis: ["Date", "setTimeout"] });
@@ -95,4 +118,6 @@ test("Doctor run shares native harness, reports incomplete execution, and invali
   await command.handler("doctor run PRIVATE_INPUT", ctx); assert.equal(started, 0); assert.ok(!notices.at(-1)!.includes("PRIVATE_INPUT"));
   await command.handler('doctor run {"agent":"scout","file":"sample.txt"}', ctx); assert.equal(started, 1); assert.match(notices.at(-1)!, /Execution path incomplete/);
   assert.match(doctorRunText(result), /Positive exact-source approval unconfirmed/);
+  assert.match(doctorRunText(result), /Next · inspect \/jev-subagents doctor last and runtime/);
+  assert.match(doctorRunText(result), /do not force cleanup or automatically retry/);
 });

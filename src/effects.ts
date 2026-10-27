@@ -3,6 +3,7 @@ import { reduce, type Decision, type Effect, type Event, type RouteRequest, type
 import { readChoice, readJevReport, reportData, record, type JevReport } from "./choice.ts";
 import { englishModelData, INTERNAL_LANGUAGE_ERROR } from "./internal-language.ts";
 import { skillQuestion, parseSkillSuggestion } from "./skill-suggestion.ts";
+import type { JevRequestFailure } from "./jev-request-diagnostics.ts";
 
 import { readJevConnection, sameJevConnection, validateJevEndpoint, type JevConnection } from "./jev-config.ts";
 const TIMEOUT_MS = 10_000;
@@ -21,19 +22,22 @@ type JevResponse = { type: "response"; body: unknown }
 
 // Internal transport only: raw successful bodies are validated before becoming domain events.
 export async function requestJev(state: unknown, questions: Record<string, unknown>, signal?: AbortSignal,
-  onRequest?: () => void, expectedConnection?: JevConnection): Promise<JevResponse> {
+  onRequest?: () => void, expectedConnection?: JevConnection, onFailure?: (failure: JevRequestFailure) => void): Promise<JevResponse> {
+  const observeFailure = (failure: JevRequestFailure) => { try { onFailure?.(failure); } catch { /* Diagnostics never change execution policy. */ } };
   if (signal?.aborted) return { type: "cancel" };
   try {
     if (!englishModelData(state) || !englishModelData(questions, 0, false)) return { type: "failed", error: INTERNAL_LANGUAGE_ERROR };
   } catch { return { type: "failed", error: INTERNAL_LANGUAGE_ERROR }; }
   const configuration = readJevConnection();
-  if (!configuration.ok) return { type: "failed", error: configuration.error };
+  if (!configuration.ok) { observeFailure({ category: "configuration" }); return { type: "failed", error: configuration.error }; }
   const connection = configuration.connection;
-  if (expectedConnection && !sameJevConnection(connection, expectedConnection)) return { type: "failed", error: "Selected JEV provider/model/credentials changed after approval. No request or fallback." };
+  if (expectedConnection && !sameJevConnection(connection, expectedConnection)) {
+    observeFailure({ category: "configuration" }); return { type: "failed", error: "Selected JEV provider/model/credentials changed after approval. No request or fallback." };
+  }
 
   const deadline = AbortSignal.timeout(TIMEOUT_MS);
   const requestSignal = signal ? AbortSignal.any([signal, deadline]) : deadline;
-  let jev: JevReport | undefined;
+  let jev: JevReport | undefined, failure: JevRequestFailure = { category: "transport" };
   try {
     const bodyText = JSON.stringify({ model: connection.model, state, questions });
     requestSignal.throwIfAborted();
@@ -49,9 +53,10 @@ export async function requestJev(state: unknown, questions: Record<string, unkno
     if (!response.ok) {
       await response.body?.cancel();
       requestSignal.throwIfAborted();
+      observeFailure({ category: "http", httpStatus: response.status });
       return { type: "failed", error: `JEV API returned HTTP ${response.status}. No automatic retry was attempted.` };
     }
-    if (!response.body) throw new Error("Missing response body.");
+    if (!response.body) { failure = { category: "invalid_response" }; throw new Error("Missing response body."); }
     const reader = response.body.getReader();
     const chunks: Uint8Array[] = [];
     let bytes = 0;
@@ -60,10 +65,11 @@ export async function requestJev(state: unknown, questions: Record<string, unkno
         const chunk = await reader.read();
         if (chunk.done) break;
         bytes += chunk.value.byteLength;
-        if (bytes > 65_536) { await reader.cancel(); throw new Error("Response bound exceeded."); }
+        if (bytes > 65_536) { failure = { category: "response_limit" }; await reader.cancel(); throw new Error("Response bound exceeded."); }
         chunks.push(chunk.value);
       }
     } finally { reader.releaseLock(); }
+    failure = { category: "invalid_response" };
     const raw: unknown = JSON.parse(Buffer.concat(chunks).toString("utf8"));
     // Client provenance cannot be supplied or forged by the wire response.
     let body: unknown = raw;
@@ -79,6 +85,7 @@ export async function requestJev(state: unknown, questions: Record<string, unkno
     return { type: "response", body };
   } catch {
     if (signal?.aborted) return { type: "cancel", ...(jev ? { jev } : {}) };
+    observeFailure(deadline.aborted ? { category: "timeout" } : failure);
     return {
       type: "failed", ...(jev ? { jev } : {}),
       error: deadline.aborted

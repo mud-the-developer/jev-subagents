@@ -96,6 +96,7 @@ export function validOrdinaryWorkerInput(value: unknown): value is OrdinaryWorke
     (task.alternatives ? !alternative || alternative.agent && alternative.agent !== agent.name : value.alternativeId !== undefined) ||
     !isDeepStrictEqual(agent, value.run.agent) ||
     value.run.cwd !== value.scope.files.root || value.run.task !== (alternative?.summary ?? task.summary) || value.run.verification || value.run.acceptanceCriteria || value.run.solPi ||
+    value.run.modelTarget !== undefined && !isDeepStrictEqual(value.run.modelTarget, (() => { const target = scope.workerTargets.find(item => item.agent === agent.name); return target && { api: target.api, endpoint: target.endpoint }; })()) ||
     value.run.seconds !== undefined && value.run.seconds !== value.scope.input.limits.seconds ||
     value.scope.input.limits.perWorkerCalls != null && (value.run.maxModelCalls === null || value.run.maxModelCalls > value.scope.input.limits.perWorkerCalls) ||
     value.scope.input.limits.modelCalls != null && (value.run.maxModelCalls === null || value.run.maxModelCalls > value.scope.input.limits.modelCalls) ||
@@ -111,5 +112,7 @@ export function ordinaryRun(scope: OrdinaryPreparedScope, taskId: string, agent:
   const task = scope.input.tasks.find(task => task.id === taskId)!;
   const alternative = task.alternatives?.find(choice => choice.id === alternativeId);
   if (task.alternatives && !alternative || !task.alternatives && alternativeId !== undefined) throw new Error("Invalid approved branch.");
-  return { cwd: scope.files.root, task: alternative?.summary ?? task.summary, agent, model: agent.model, maxModelCalls, seconds: scope.input.limits.seconds };
+  const target = scope.workerTargets.find(item => item.agent === agent.name);
+  return { cwd: scope.files.root, task: alternative?.summary ?? task.summary, agent, model: agent.model,
+    ...(target ? { modelTarget: { api: target.api, endpoint: target.endpoint } } : {}), maxModelCalls, seconds: scope.input.limits.seconds };
 }

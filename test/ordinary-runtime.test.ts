@@ -534,7 +534,7 @@ test("registered scoped adapter remains sequential, registers ordinary and paren
   await assert.rejects(tool.execute("scope", { scope: input }, undefined, undefined, ctx), /owner is closed/);
 });
 
-async function realOwnedSdk(t: TestContext, graphMode: boolean, jobMemoryMode = false) {
+async function realOwnedSdk(t: TestContext, graphMode: boolean, jobMemoryMode = false, responses?: "complete" | "truncated") {
   const began = performance.now(), timing: { phase: string; ms: number }[] = [];
   const boundaries: { check: string; startedMs: number; elapsedMs: number | null }[] = [];
   const measure = async <T>(check: string, run: () => Promise<T>): Promise<T> => {
@@ -552,9 +552,31 @@ async function realOwnedSdk(t: TestContext, graphMode: boolean, jobMemoryMode = 
   let requests = 0, approvals = 0, launches = 0, choices = 0, memoryChoices = 0; const toolNames: string[][] = [];
   const server = createServer(async (req, res) => {
     let raw = ""; for await (const chunk of req) raw += chunk;
-    const body = JSON.parse(raw); requests++; toolNames.push(body.tools.map((tool: { function: { name: string } }) => tool.function.name));
+    const body = JSON.parse(raw); requests++; toolNames.push(body.tools.map((tool: { name: string; function: { name: string } }) => responses ? tool.name : tool.function.name));
     if (graphMode) { assert.ok(JSON.stringify(body.messages).includes("B_SELECTED_INPUT")); assert.ok(JSON.stringify(body.messages).includes("READONLY_MEMORY_REFERENCE")); assert.doesNotMatch(JSON.stringify(body.messages), /UNSELECTED_A/); }
     if (jobMemoryMode) { assert.match(JSON.stringify(body.messages), /READONLY_JOB_MEMORY_REFERENCE/); assert.doesNotMatch(JSON.stringify(body.messages), /UNSELECTED_JOB_MEMORY_SOURCE|memory-backend-not-created/); }
+    if (responses) {
+      assert.match(req.url!, /\/responses$/);
+      if (requests === 2) assert.ok(body.input.some((item: { type: string }) => item.type === "function_call_output"));
+      const edit = requests === 1 && responses !== "truncated";
+      const text = responses === "truncated" ? "PRIVATE_TRUNCATED_STREAM_BODY" : "Edited the approved file. Completion is unverified.";
+      const item = edit ? { id: "fc_scoped", type: "function_call", call_id: "scoped-edit", name: "scope_edit",
+        arguments: JSON.stringify({ fileId: "file-1", oldText: "BEFORE", newText: "AFTER" }), status: "completed" }
+        : { id: "msg_scoped", type: "message", role: "assistant", status: "completed", content: [{ type: "output_text", text, annotations: [] }] };
+      const events: unknown[] = [
+        { type: "response.created", response: { id: "resp_scoped" } },
+        { type: "response.output_item.added", output_index: 0, item: { ...item, arguments: "", content: [], status: "in_progress" } },
+        ...(edit ? [{ type: "response.function_call_arguments.delta", output_index: 0, delta: item.arguments }]
+          : [{ type: "response.content_part.added", output_index: 0, content_index: 0, part: { type: "output_text", text: "", annotations: [] } },
+            { type: "response.output_text.delta", output_index: 0, content_index: 0, delta: text }]),
+      ];
+      if (responses !== "truncated") events.push({ type: "response.output_item.done", output_index: 0, item },
+        { type: "response.completed", response: { id: "resp_scoped", status: "completed", output: [item],
+          usage: { input_tokens: 20, output_tokens: 10, input_tokens_details: { cached_tokens: 0 } } } });
+      res.writeHead(200, { "Content-Type": "text/event-stream" });
+      res.end(events.map(event => `data: ${JSON.stringify(event)}\n\n`).join(""));
+      return;
+    }
     const delta = requests === 1 ? { role: "assistant", tool_calls: [{ index: 0, id: "scoped-edit", type: "function",
       function: { name: "scope_edit", arguments: JSON.stringify({ fileId: "file-1", oldText: "BEFORE", newText: "AFTER" }) } }] }
       : { role: "assistant", content: "Edited the approved file. Completion is unverified." };
@@ -564,7 +586,7 @@ async function realOwnedSdk(t: TestContext, graphMode: boolean, jobMemoryMode = 
   });
   server.listen(0, "127.0.0.1"); await once(server, "listening");
   const address = server.address(); assert.ok(address && typeof address !== "string");
-  await writeFile(path.join(agentDir, "models.json"), JSON.stringify({ providers: { offline: { api: "openai-completions", baseUrl: `http://127.0.0.1:${address.port}/v1`,
+  await writeFile(path.join(agentDir, "models.json"), JSON.stringify({ providers: { offline: { api: responses ? "openai-responses" : "openai-completions", baseUrl: `http://127.0.0.1:${address.port}/v1`,
     apiKey: "anonymous-offline-fixture", models: [{ id: "offline-worker", reasoning: false, contextWindow: 65536, maxTokens: 1024,
       cost: { input: 1, output: 3, cacheRead: 0.1, cacheWrite: 1 } }] } } }));
   let settled = false;
@@ -643,6 +665,17 @@ async function realOwnedSdk(t: TestContext, graphMode: boolean, jobMemoryMode = 
     workers: result.workersStarted, modelCalls: result.modelCalls, cleanupConfirmed: result.cleanupConfirmed, lockRetained: result.lockRetained,
   })}`);
   settled = result.cleanupConfirmed && !result.lockRetained;
+  if (responses === "truncated") {
+    assert.equal(result.status, "stopped"); assert.equal(result.workersStarted, 1); assert.equal(result.modelCalls, 1);
+    assert.equal(result.cleanupConfirmed, false); assert.equal(result.lockRetained, true); assert.equal(result.costEstimate.delegationTotalUsd, null);
+    assert.deepEqual(result.workerFailure, { category: "response_incomplete", httpStatus: 200, stage: "model_response" });
+    assert.match(basicRunSummary(result), /Incomplete model response/); assert.match(basicRunSummary(result), /HTTP 200/);
+    assert.equal(result.reports.length, 0); assert.equal(JSON.stringify(result).includes("PRIVATE_TRUNCATED_STREAM_BODY"), false);
+    assert.equal(launches, 1); assert.equal(requests, 1); assert.equal(approvals, 1); assert.equal(result.jevRequests, 0);
+    assert.equal(await readFile(path.join(cwd, "fixture.txt"), "utf8"), "BEFORE\n");
+    await access(path.join(cwd, ".jev-goal.lock"));
+    return;
+  }
   assert.equal(result.status, "completed_unverified", JSON.stringify(result)); assert.equal(settled, true);
   assert.equal(await readFile(path.join(cwd, "fixture.txt"), "utf8"), "AFTER\n");
   assert.equal(approvals, 1); assert.equal(launches, 1); assert.equal(requests, 2); assert.equal(result.modelCalls, 2); assert.equal(result.jevRequests, graphMode || jobMemoryMode ? 1 : 0);
@@ -667,4 +700,12 @@ test("real owned graph SDK process receives only selected B input, skips A tasks
 
 test("real owned SDK child receives only its selected job memory after one combined approval", { timeout: 30000 }, async t => {
   await realOwnedSdk(t, false, true);
+});
+
+test("real owned Responses SDK completes scoped tool use and a terminal response", { timeout: 30000 }, async t => {
+  await realOwnedSdk(t, false, false, "complete");
+});
+
+test("real owned Responses SDK rejects HTTP 200 without a terminal event and retains unknown accounting", { timeout: 30000 }, async t => {
+  await realOwnedSdk(t, false, false, "truncated");
 });

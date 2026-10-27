@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { AutomaticDelegateInputSchema } from "./automatic-input.ts";
 import type { FullAccessLease } from "./delegation-access-effects.ts";
 import path from "node:path";
 import { withWindowsGoalReadBatch } from "./windows-goal-files.ts";
@@ -43,7 +44,7 @@ import { TaskTreeInputSchema, TreeContinueSchema } from "./task-tree.ts";
 
 // Keep the standalone historical harness schema private to its regression code, not the public JEV tool.
 export const OrdinaryDelegateInputSchema = Type.Omit(DelegateInputSchema, ["solPi"], { additionalProperties: false });
-export const DelegateToolInputSchema = Type.Union([OrdinaryDelegateInputSchema, Type.Object({ scope: OrdinaryScopeInputSchema, memory: Type.Optional(DelegationMemoryInputSchema) }, { additionalProperties: false,
+export const DelegateToolInputSchema = Type.Union([Type.Object({ auto: AutomaticDelegateInputSchema }, { additionalProperties: false }), OrdinaryDelegateInputSchema, Type.Object({ scope: OrdinaryScopeInputSchema, memory: Type.Optional(DelegationMemoryInputSchema) }, { additionalProperties: false,
   description: "Optional one-job preapproval. Parent supplies English task/ordered subtask summaries, explicit existing files/access, fixed profiles and limits (workers<=3, optional finite SDK caps or null for SDK completion, explicit shared seconds<=86400). Parent sets task.agent or permits JEV selection; parent_only requires pins unless there is one candidate. One exact native review covers model/thinking/effective read/edit/write file-ID tools/public JEV target and task/skill metadata. No shell/discovery/new files/install/verifier/SoL/secret transmission or caller grant/state restoration. Unknown cleanup/accounting/failure/cancellation stops. Credentials stay effect-local; no automatic retry/fallback or final acceptance." }), Type.Object({ graph: OrdinaryGraphInputSchema, memory: Type.Optional(DelegationMemoryInputSchema) }, { additionalProperties: false,
   description: "Explicit DAG v2: closed task catalog plus task/choice/join nodes and conditional edges. One exact review; maximum path workers<=3, shared existing limits. JEV selects each reached binary choice once at >=0.5 support; skips and joins never start workers. No caller events/state/grants, fallback, verifier or retry." }), Type.Object({ memoryChoice: MemoryChoiceInputSchema }, { additionalProperties: false,
   description: "Select approved memory IDs for the same still-active job, or explicitly ask the user when the parent is also uncertain. An opaque live job ID is not persisted or restored authority. No new worker/model/provider, permission or deadline." }), Type.Object({ parallelRead: ParallelReadInputSchema }, { additionalProperties: false }),
@@ -158,6 +159,9 @@ export type OrdinaryPublicResult = { readonly kind: "ordinary_scope"; readonly s
   readonly diagnostic: OrdinaryDiagnostic | null;
   readonly plan?: PlanView;
   readonly memory?: { readonly selected: readonly string[]; readonly declaredWrites: number; readonly jevRequests: number; readonly parentLookup: boolean };
+  readonly automaticRecommendations?: readonly { readonly stage: "model" | "thinking"; readonly model: { readonly provider: string; readonly id: string }; readonly thinking?: string; readonly support: number; readonly executionAuthorized: false }[];
+  readonly automaticAdvice?: { readonly stage: "model" | "thinking"; readonly model: { readonly provider: string; readonly id: string }; readonly thinking?: string; readonly support: number; readonly executionAuthorized: false };
+  readonly automaticSelection?: { readonly model: { readonly provider: string; readonly id: string }; readonly thinking: string; readonly source: "only_choice" | "jev" };
   readonly workerFailure?: NonNullable<WorkerReport["diagnostic"]>;
   readonly workerRounds?: readonly WorkerRound[];
   readonly workerRoundsCoverage?: WorkerRoundCoverage;

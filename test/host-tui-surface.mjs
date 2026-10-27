@@ -33,6 +33,10 @@ try {
   await fs.writeFile(path.join(agentDir, 'sol-pi.json'), JSON.stringify({ version: 1, actionFusion: true }));
   const configBefore = await fs.readFile(path.join(agentDir, 'sol-pi.json'), 'utf8');
   const sdk = await import(pathToFileURL(path.join(hostRoot, 'dist/index.js')).href);
+  const { readWorkerModelCatalog } = await import(new URL('../src/worker-model-catalog-effects.ts', import.meta.url));
+  const workerCatalog = await readWorkerModelCatalog(agentDir, new AbortController().signal);
+  assert.equal(workerCatalog.sdkVersion, '0.85.1');
+  assert.equal(typeof workerCatalog.getAvailableSnapshot, 'function');
   const tui = await import(pathToFileURL(path.join(modules, '@earendil-works/pi-tui/dist/index.js')).href);
   const { InteractiveMode } = await import(pathToFileURL(path.join(hostRoot, 'dist/modes/interactive/interactive-mode.js')).href);
   const { ProgramStatusReporter } = await import(pathToFileURL(path.join(hostRoot, 'dist/modes/interactive/program-status-reporter.js')).href);
@@ -70,9 +74,42 @@ try {
   const keys = KeybindingsManager.create(); tui.setKeybindings(keys);
   const mode = Object.create(InteractiveMode.prototype);
   const editor = new CustomEditor(screen, theme.getEditorTheme(), keys, { paddingX: 0, autocompleteMaxVisible: 5 });
-  Object.assign(mode, { ui: screen, editor, editorContainer: new tui.Container(), keybindings: keys,
+  Object.assign(mode, { ui: screen, editor, editorContainer: new tui.Container(), chatContainer: new tui.Container(), keybindings: keys,
     programStatus: new ProgramStatusReporter(() => terminal, () => 'Synthetic only') });
-  mode.editorContainer.addChild(editor); screen.addChild(mode.editorContainer); screen.start();
+  mode.editorContainer.addChild(editor); screen.addChild(mode.chatContainer); screen.addChild(mode.editorContainer); screen.start();
+  const diagnosticNotices = [], command = jev.commands.get('jev-subagents'); assert.ok(command);
+  const diagnosticCtx = { ...ctx, hasUI: true, ui: {
+    confirm: mode.showExtensionConfirm.bind(mode), custom: mode.showExtensionCustom.bind(mode),
+    notify(message, type) { diagnosticNotices.push(message); mode.showExtensionNotify(message, type); },
+  } };
+  const diagnosticCommands = ['runtime', 'doctor last'];
+  for (const action of diagnosticCommands) {
+    mode.chatContainer.clear(); await command.handler(action, diagnosticCtx);
+    const notice = diagnosticNotices.at(-1); assert.ok(notice.includes(JSON.stringify(repo)));
+    assert.match(notice, /Package version \(metadata\) · 1\.0\.0/);
+    assert.match(notice, /not the active tool owner/);
+    for (const width of [48, 80, 120]) {
+      columns = width;
+      const rows = mode.chatContainer.render(width); assert.ok(rows.length > 0);
+      assert.ok(rows.every(row => tui.visibleWidth(row) <= width), `Diagnostic ${action} exceeds ${width} columns`);
+      screen.requestRender(true); await nextTurn();
+    }
+  }
+  assert.match(diagnosticNotices[0], /Reviewed · genuine exact-source approval required/);
+  assert.match(diagnosticNotices[0], /Full Access · explicit live-session acknowledgement/);
+  assert.match(diagnosticNotices[1], /not proof of the recorded failure's code/);
+  const { basicRunSummary } = await import(new URL('../src/basic-execution.ts', import.meta.url));
+  const { doctorLastText } = await import(new URL('../src/doctor.ts', import.meta.url));
+  const failure = basicRunSummary({ status: 'stopped', reason: 'failed', workersStarted: 1, modelCalls: 1, reservedModelCalls: 0,
+    jevRequests: 0, cleanupConfirmed: false, lockRetained: true, reports: [], diagnostic: { phase: 'running' },
+    workerFailure: { category: 'authentication', stage: 'model_request', httpStatus: 401, message: 'PRIVATE_PROVIDER_ERROR' } });
+  assert.match(failure, /Check authentication/); assert.match(failure, /HTTP 401/); assert.doesNotMatch(failure, /PRIVATE_PROVIDER_ERROR/);
+  mode.chatContainer.clear(); mode.showExtensionNotify(doctorLastText(failure), 'warning');
+  for (const width of [48, 80, 120]) {
+    const rows = mode.chatContainer.render(width); assert.ok(rows.every(row => tui.visibleWidth(row) <= width));
+    screen.requestRender(true); await nextTurn();
+  }
+  mode.chatContainer.clear();
   const nativeReview = loaded.extensions.find(entry => entry.commands.has('fixture-native-review')).commands.get('fixture-native-review');
   const confirmNativeTaskReview = (content, context, signal, observe) => nativeReview.handler(JSON.stringify(content), { ...context, signal, observeApproval: observe });
   const controller = new AbortController(), diagnostics = [];
@@ -144,8 +181,9 @@ try {
   assert.ok(treeText.includes('MODEL offline/inspect — Inspect approved source')); assert.match(treeText, /│ {6,}└─ ○ review/);
   assert.ok(frames.length > 0); assert.equal(fetches, 0);
   const receipt = { kind: 'fresh_installed_host_ordinary_surface_and_standalone_sol_pi', hostSdk: sdk.VERSION, workerSdk: pinned.VERSION,
-    probeEngine: process.versions.bun ? `Bun ${process.versions.bun}` : `Node ${process.versions.node}`, nativeReviewThroughHostLoader: true,
+    probeEngine: process.versions.bun ? `Bun ${process.versions.bun}` : `Node ${process.versions.node}`, nativeReviewThroughHostLoader: true, automaticWorkerCatalogSdk: workerCatalog.sdkVersion,
     jevTools: [...jev.tools.keys()], standaloneTools: [...sol.tools.keys()], duplicateTools: false, standaloneConfigUnchanged: true,
+    diagnostics: { commands: diagnosticCommands, nativeNotification: true, ownPackageIdentityVisible: true, historicalFailureIdentityNotInferred: true, reportedAuthentication401Visible: true, rawProviderErrorHidden: true, widths: [48, 80, 120], syntheticOnly: true },
     retiredSolPiInputRejected: true, metadataBytes, nativeUi: { methods: 'InteractiveMode', renderer: 'TuiMainScreen', syntheticTerminal: true,
       delayedReviewApproved: true, readableApprovedSeconds: 86_400, literalMultilineSources: true,
       planCard: { language: 'English', stages: 3, selectedBranch: 'replace_parser', observedSdkCalls: 8, syntheticOnly: true },

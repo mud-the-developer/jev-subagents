@@ -75,7 +75,9 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
     const runtime = await io.createModelRuntime({ authPath: path.join(agentDir, "auth.json"), modelsPath: path.join(agentDir, "models.json"),
       allowModelNetwork: false, signal: abortSignal });
     const model = runtime.getModel(run.model.provider, run.model.id);
-    if (!model || !run.agent.thinking || !codexThinkingLevels(model).includes(run.agent.thinking)) fail();
+    if (!model || !run.agent.thinking) fail();
+    const approvedThinking = codexThinkingLevels(model).find(level => level === run!.agent.thinking);
+    if (!approvedThinking) fail();
     const nativeStream = runtime.streamSimple.bind(runtime);
     const startCall = (kind: SolCallKind, selected: Model, packet: Packet, options?: Options) => {
       // Upstream deliberately aborts a turn at a compaction boundary. Do not spend
@@ -88,7 +90,7 @@ export async function executeSolPiWorker(input: unknown, signal?: AbortSignal, i
       if (!admitted || admitted.type !== "admit") fail();
       const remaining = Math.max(1, Math.min(30_000, state!.budget.deadline - Date.now()));
       const callSignal = AbortSignal.any([abortSignal, AbortSignal.timeout(remaining), ...(options?.signal ? [options.signal] : [])]);
-      const stream = nativeStream(selected, packet, { ...options, reasoning: run!.agent.thinking!,
+      const stream = nativeStream(selected, packet, { ...options, reasoning: approvedThinking,
         maxTokens: Math.min(options?.maxTokens ?? SOL_OUTPUT_TOKENS, SOL_OUTPUT_TOKENS), maxRetries: 0, maxRetryDelayMs: 0, transport: "sse",
         timeoutMs: remaining, signal: callSignal });
       const push = stream.push.bind(stream);

@@ -61,7 +61,7 @@ Download **`jev-subagents-1.0.0-source.zip`** and **`SHA256SUMS`** from the [rel
 - An existing Pi installation and standalone **Bun 1.4.3**. No automatic runtime upgrade or Node fallback.
 - Workers use pinned **Pi SDK 0.85.1 / TypeBox 1.3.7**. A Node-hosted Pi may have its own host requirements.
 - Linux and normal-user native Windows are the intended runtime targets. Windows requires PowerShell/Add-Type, local fixed NTFS and the existing Job/SID/DACL/file-identity checks. Elevated Windows execution is refused.
-- Model authentication and supported fixed model/thinking/tool profiles are prepared separately. A profile name does not guarantee provider access. JEV decision backends are separate from the worker model.
+- Worker model authentication and permission templates are prepared separately. Automatic execution selects actual available provider/model and canonical supported thinking from the offline worker catalog using reviewed current-task code/state, not profile model headers. Availability is not quota or inference proof. Explicit fixed-profile requests remain supported; JEV decision backends are separate.
 
 ## Commands and tools
 
@@ -81,10 +81,26 @@ The command is **`/jev-subagents`**; `/jev` is not registered.
 | --- | --- |
 | `jev_route` | Recommend among explicit candidates; no execution authority |
 | `jev_decide` | Bounded option advice; mandatory human approvals stay human |
-| `jev_delegate` | Execute explicit fixed-profile workers under approved scopes and limits |
+| `jev_delegate` | Prefer `auto` for context-aware available-model/thinking selection; explicit fixed scopes remain available |
 | `jev_memory` | Explicit parent-only SQLite memory administration |
 
 Single workers, sequential scoped jobs, dependency trees, read-only fanout and bounded parent/child reference sharing use the existing source-approval and ownership contracts. A task tree executes at most three workers total; read lanes may overlap, but scoped mutations remain exclusive. There is no automatic retry, model/provider fallback or restored execution authority.
+
+### Automatic model selection
+
+Native `/jev-subagents run` defaults to automatic selection. The parent can use `jev_delegate({auto:{task,files,constraints?,observations?,role?}})`; users need not prepare candidate lists. Roles control tools, not models. The automatic catalog is bounded to128models and their canonical supported thinking levels (at most7per model /896eligible pairs). The public TypeSafe choice schema allows255criteria per question, so routing first selects a model (at most128criteria), then only its supported thinking (at most7criteria), using at most2dependent requests. It fails rather than truncating. The older explicit fixed-profile pool retains its128-plan bound. A unique combination bypasses JEV, not execution approval.
+
+| Selection state | Event | Next state / effect |
+| --- | --- | --- |
+| idle | Valid task context and catalog | reviewing / exact context+catalog source review |
+| reviewing | Genuine positive review of the conditional two-request plan | selecting_model / one model choice, or singleton-model bypass |
+| reviewing | Decline or cancellation | stopped / no routing or worker |
+| selecting_model | Eligible model recommendation | selecting_thinking / only this model's supported levels; support<0.5 marks explicit human worker review as mandatory |
+| selecting_thinking | Eligible supported level recommendation | selected / pin provider, model, thinking and target; retain weak support without authorizing execution |
+| either selection stage | Invalid, failed or cancelled result | stopped / no replacement model, re-selection or retry |
+| selected | Scoped execution requested | existing freshness/ownership checks; any weak model/thinking recommendation forces genuine explicit worker review, even in Full Access |
+
+Current-task context includes approved existing-file content, constraints and relevant observations, not ambient conversation or auth. The source disclosure gets its native review even in Full Access; Reviewed execution separately reviews the actual selected worker. Explicit `modelSelection:"fixed"` on native `run` retains the profile model. Existing explicit `scope`, `graph`, `tree` and legacy fixed-profile requests retain their original contracts; this does not silently replace models inside an already approved multi-stage job. See [usage](docs/usage.md).
 
 ## Safety and cost
 

@@ -7,6 +7,7 @@ import { AGENT_NAME_PATTERN, LIMITS, SoftRoutingSchema } from "./machine.ts";
 import { delegate } from "./delegate-effects.ts";
 import { estimateCost } from "./delegate-machine.ts";
 import { DelegateToolInputSchema, ordinaryDelegate, type OrdinaryMemoryOptions, type OrdinaryPublicResult } from "./ordinary-effects.ts";
+import { automaticDelegate } from "./automatic-effects.ts";
 import type { OrdinaryInput } from "./ordinary-authorization.ts";
 import { delegateResultView } from "./delegate-presentation.ts";
 import { decide, DecisionInputSchema } from "./decision.ts";
@@ -130,6 +131,20 @@ function registerJevToolsWithHarness(pi: ExtensionAPI): GraphExecutionHarness {
     blockedReason: () => executionClosed ? "closed" : executionUncertain ? "uncertain" : undefined,
     lastFailure: ctx => { try { return lastFailure?.sessionId === ctx.sessionManager.getSessionId() ? lastFailure?.text : undefined; } catch { return undefined; } },
     cancel: stopExecutions,
+    automatic: async (input, ctx, signal, onProgress) => {
+      if (executionUncertain || activeExecutions.size > 0) throw new Error("Native execution is busy or uncertain; no task or retry.");
+      clearFailure(); const failureLease = failureGeneration;
+      return withActiveExecution(ctx, signal, (ownSignal, lease) => withJevSession(ctx, async () => {
+        const panel = openPlan(ctx, ownSignal);
+        try {
+          const result = await automaticDelegate(input, ctx, ownSignal, onProgress, undefined, view => { if (panel.isCurrent()) panel.update(view); }, lease);
+          if (!result.cleanupConfirmed || result.lockRetained) executionUncertain = true;
+          if (result.status === "stopped") captureFailure(ctx, basicRunSummary(result), failureLease);
+          return result;
+        } catch { executionUncertain = true; throw new Error("Automatic execution settlement unknown; no retry or recovery."); }
+        finally { panel.close(); }
+      }));
+    },
     run: async (input, ctx, signal, onProgress, observeUi, onPlan, memoryOptions) => {
       if (executionUncertain) throw new Error("Native execution ownership is uncertain; no new task or recovery.");
       if (activeExecutions.size > 0) throw new Error("Another native execution is active; no parallel task or retry.");
@@ -230,10 +245,10 @@ function registerJevToolsWithHarness(pi: ExtensionAPI): GraphExecutionHarness {
       "jev_delegate: Parent prepares candidates, files, trees/references and continuations; users delegate naturally, no JSON. Reviewed: exact job review. Only native /jev-subagents access full enables session execution/sharing/evidence; never config/history/tool grants.",
       "jev_delegate: Before parallelRead tasks, decide split/count via ordinary JEV advice/planning. Approved1..3 read-only tasks=1..3 lanes;3 is a safety ceiling. No pool JEV decision/extra width/planner call. scope/graph stay sequential; Reviewed retains tree/generated-body reviews.",
       "jev_delegate: prefer bounded delegation before doing the work yourself, without explicit request. Answer general questions directly; respect opt-outs. Clarify unclear/oversized tasks.",
-      "jev_delegate: Defaults unless restricted: scout alone for read-only investigation; [\"worker\",\"worker_strong\"] for implementation so JEV chooses. Never widen read-only work to writing roles. Missing profiles need /jev-subagents setup; no invented/automatic profiles.",
+      "jev_delegate: Default to auto: current code/state selects available model+thinking. Roles restrict tools only. Never widen read-only work to writing roles. Missing profiles need /jev-subagents setup; no invented/automatic profiles.",
       "jev_delegate: softRouting baseline:'worker', consultProbability=1 (not learned); invalid baseline stops.",
       "jev_delegate: Default Reviewed. SDK-native rounds (null/omitted); caps/seconds bind (default/max86400). No renewal; retain accounting/ownership. Full Access keeps tools/files/models/checks/limits.",
-      "jev_delegate: Fixed model/thinking; never secrets/history. do not call jev_route first. One plan skips routing, not approval. No duplicate route/planner/judge calls or model inheritance.",
+      "jev_delegate: Review code/state+catalog, then selected worker; never secrets/history. do not call jev_route first. One plan skips routing, not approval. No duplicate route/planner/judge calls or model inheritance.",
       "jev_delegate: No Goal/SoL-Pi control; standalone SoL-Pi stays separate. use only an agreed verification command/argv, no implicit shell. No verifier=unverified; no criteria=no assessment.",
       "jev_delegate: Criteria: passed verification.description; separate human approval to send bounded evidence in Reviewed, or live Full Access. Advice is not proof. stop on decline, cancellation, failure, incomplete or needs_review. No automatic retry/fallback/escalation/redelegation; fresh authorization required. No sandbox/rollback.",
     ],
@@ -269,6 +284,11 @@ function registerJevToolsWithHarness(pi: ExtensionAPI): GraphExecutionHarness {
         const text = approvalUiText(value);
         if (text) return onUpdate?.({ content: [{ type: "text", text: `JEV · ${text}` }], details: { kind: "approval_ui_diagnostic", approvalUi: value } });
       };
+      if ("auto" in params) {
+        const result = await execution.automatic!(params.auto, ctx, signal, status => updateProgress(onUpdate, status));
+        if (result.status === "stopped") throw new Error(`Automatic model selection/execution stopped; no retry or fallback.\n${JSON.stringify(result)}`);
+        return { content: [{ type: "text", text: JSON.stringify(result) }], details: result };
+      }
       if ("tree" in params || "treeContinue" in params) {
         const result = "treeContinue" in params ? await treeOwner.continue(params.treeContinue, ctx, signal, () => { void stopExecutions(); }) : await treeOwner.start(ctx, parent => {
           if (executionClosed || executionUncertain || activeExecutions.size > 0) throw new Error("Execution owner closed, busy or uncertain; no task tree admission or retry.");
